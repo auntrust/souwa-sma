@@ -1,0 +1,314 @@
+<script setup lang="ts">
+import DangerButton from '@/Components/DangerButton.vue';
+import TextInput from '@/Components/TextInput.vue';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { Head, Link, useForm } from '@inertiajs/vue3';
+import { ref, watch } from 'vue';
+
+const props = defineProps({
+    customers: { type: Object },
+    search_str: String,
+    successMessage: String,
+});
+
+// successMessageをrefでラップ
+const successMessage = ref(props.successMessage);
+
+watch(
+    () => props.successMessage,
+    (val) => {
+        successMessage.value = val;
+        if (val) {
+            setTimeout(() => {
+                successMessage.value = '';
+            }, 3000);
+        }
+    },
+    { immediate: true },
+);
+
+const form = useForm({
+    id: '',
+    search_str: props.search_str || '',
+});
+const deleteCustomer = (id: number, name: string) => {
+    if (
+        confirm(
+            '削除したデータは復元できません。\n本当に『' +
+                name +
+                '』を削除しますか？',
+        )
+    ) {
+        form.delete(route('customers.destroy', id));
+    }
+};
+
+const search_go = () => {
+    form.get(route('customers.index'));
+};
+</script>
+
+<template>
+    <Head title="顧客管理" />
+
+    <AuthenticatedLayout>
+        <template #header>
+            <h2
+                class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
+            >
+                顧客管理
+            </h2>
+        </template>
+
+        <Transition name="fade-pop">
+            <div
+                v-if="successMessage"
+                class="alert alert-success mx-auto mt-12 w-fit rounded-lg border-2 border-green-500 bg-green-100 px-8 py-4 text-center text-lg font-bold text-green-800 shadow-lg"
+                style="z-index: 1000"
+            >
+                <i class="fa-solid fa-circle-check mr-2"></i>
+                {{ successMessage }}
+            </div>
+        </Transition>
+
+        <div class="py-12">
+            <div class="m-3 mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <div
+                    class="overflow-hidden bg-white p-2 shadow-sm sm:rounded-lg"
+                >
+                    <div class="mb-3 ml-3 mt-3 flex">
+                        <Link
+                            :href="route('customers.create')"
+                            :class="'rounded-md border bg-gray-500 px-4 py-2 font-semibold text-white'"
+                        >
+                            <i class="fa-solid fa-plus-circle"></i> 顧客登録
+                        </Link>
+
+                        <div class="ml-3">
+                            <TextInput
+                                id="search_str"
+                                type="text"
+                                class="block w-full"
+                                v-model="form.search_str"
+                                autocomplete="search_str"
+                                @blur="search_go"
+                            />
+                        </div>
+                    </div>
+
+                    <div
+                        v-if="props.customers?.data.length === 0"
+                        class="m-2 p-4"
+                    >
+                        該当する顧客はありません。
+                    </div>
+
+                    <table
+                        class="m-3 w-10/12 table-auto border border-gray-400"
+                    >
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="px-4 py-2">ID</th>
+                                <th class="w-auto px-4 py-2">氏名</th>
+                                <th class="px-4 py-2">Email</th>
+                                <th class="px-4 py-2">都道府県</th>
+                                <th class="px-4 py-2"></th>
+                                <th class="px-4 py-2"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                v-for="customer in customers?.data"
+                                :key="customer.id"
+                                :class="{
+                                    'text-gray-400 line-through':
+                                        customer.is_delivery === 0,
+                                }"
+                            >
+                                <td
+                                    class="border border-gray-400 px-4 py-2 text-center"
+                                >
+                                    {{ customer.id }}
+                                </td>
+                                <td class="border border-gray-400 px-4 py-2">
+                                    {{ customer.name
+                                    }}<span v-if="customer.furigana"
+                                        >（{{ customer.furigana }}）</span
+                                    >
+                                    <div v-if="customer.co_name">
+                                        {{ customer.co_name }}
+                                    </div>
+                                </td>
+                                <td class="border border-gray-400 px-4 py-2">
+                                    {{ customer.email }}
+                                </td>
+                                <td class="border border-gray-400 px-4 py-2">
+                                    {{ customer.todofuken }}
+                                </td>
+                                <td
+                                    class="border border-gray-400 px-4 py-2 text-center"
+                                >
+                                    <Link
+                                        :href="
+                                            route('customers.edit', customer.id)
+                                        "
+                                        :class="'rounded-md border bg-yellow-400 px-4 py-2 text-xs text-white'"
+                                    >
+                                        <i class="fa-solid fa-edit"></i>
+                                    </Link>
+                                </td>
+                                <td
+                                    class="border border-gray-400 px-4 py-2 text-center"
+                                >
+                                    <DangerButton
+                                        @click="
+                                            deleteCustomer(
+                                                customer.id,
+                                                customer.name,
+                                            )
+                                        "
+                                    >
+                                        <i class="fa-solid fa-trash"></i>
+                                    </DangerButton>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Pagination -->
+                    <div class="">
+                        <nav
+                            class="mb-2 mt-2 flex items-center gap-x-1"
+                            aria-label="Pagination"
+                        >
+                            <div class="flex items-center gap-x-1">
+                                <div
+                                    v-for="(link, index) in customers?.links"
+                                    :key="index"
+                                >
+                                    <div v-if="index == 0">
+                                        <Link
+                                            :href="
+                                                route('customers.index', {
+                                                    page:
+                                                        customers?.current_page -
+                                                        1,
+                                                    search_str: form.search_str,
+                                                })
+                                            "
+                                            v-show="link['url'] != null"
+                                            type="button"
+                                            class="flex min-h-[38px] min-w-[38px] items-center justify-center rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10"
+                                        >
+                                            <svg
+                                                class="size-3.5 shrink-0"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            >
+                                                <path d="m15 18-6-6 6-6"></path>
+                                            </svg>
+                                            <span>Previous</span>
+                                        </Link>
+                                    </div>
+                                    <div
+                                        v-else-if="
+                                            index == customers?.last_page + 1
+                                        "
+                                    >
+                                        <Link
+                                            :href="
+                                                route('customers.index', {
+                                                    page:
+                                                        customers?.current_page +
+                                                        1,
+                                                    search_str: form.search_str,
+                                                })
+                                            "
+                                            v-show="link['url'] != null"
+                                            type="button"
+                                            class="flex min-h-[38px] min-w-[38px] items-center justify-center rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10"
+                                        >
+                                            <span>Next</span>
+                                            <svg
+                                                class="size-3.5 shrink-0"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            >
+                                                <path d="m9 18 6-6-6-6"></path>
+                                            </svg>
+                                        </Link>
+                                    </div>
+                                    <div v-else>
+                                        <Link
+                                            :href="
+                                                route('customers.index', {
+                                                    page: link['label'],
+                                                    search_str: form.search_str,
+                                                })
+                                            "
+                                            v-if="link['active'] === true"
+                                            v-show="link['url'] != null"
+                                            type="button"
+                                            class="flex min-h-[38px] min-w-[38px] items-center justify-center rounded-lg bg-gray-200 px-3 py-2 text-sm text-gray-800 focus:bg-gray-300 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+                                            aria-current="page"
+                                        >
+                                            <span>{{ link['label'] }}</span>
+                                        </Link>
+                                        <Link
+                                            :href="
+                                                route('customers.index', {
+                                                    page: link['label'],
+                                                    search_str: form.search_str,
+                                                })
+                                            "
+                                            v-else
+                                            v-show="link['url'] != null"
+                                            type="button"
+                                            class="flex min-h-[38px] min-w-[38px] items-center justify-center rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10"
+                                        >
+                                            <span>{{ link['label'] }}</span>
+                                        </Link>
+                                    </div>
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+
+                    <!-- End Pagination -->
+                </div>
+            </div>
+        </div>
+    </AuthenticatedLayout>
+</template>
+<style scoped>
+.fade-pop-enter-active,
+.fade-pop-leave-active {
+    transition:
+        opacity 0.5s,
+        transform 0.5s;
+}
+.fade-pop-enter-from,
+.fade-pop-leave-to {
+    opacity: 0;
+    transform: scale(0.9);
+}
+.fade-pop-enter-to,
+.fade-pop-leave-from {
+    opacity: 1;
+    transform: scale(1);
+}
+</style>
