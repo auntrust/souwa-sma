@@ -103,9 +103,7 @@ const search_go = () => {
                         該当する顧客はありません。
                     </div>
 
-                    <table
-                        class="m-3 w-10/12 table-auto border border-gray-400"
-                    >
+                    <table class="m-3 table-auto border border-gray-400">
                         <thead>
                             <tr class="bg-gray-100">
                                 <th class="px-4 py-2">ID</th>

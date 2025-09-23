@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Seminar;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Http\Requests\SeminarRequest;
 use Inertia\Inertia;
 
@@ -17,11 +18,12 @@ class SeminarController extends Controller
         if (empty($request->input()['search_str'])) {
             $search_str = null;
             // $seminars = Seminar::all();
-            $seminars = Seminar::paginate(5);
+            $seminars = Seminar::paginate(10);
         } else {
             $search_str = $request->input()['search_str'];
-            // $seminars = Seminar::where('name', 'LIKE', '%' . $search_str . '%')->get();
-            $seminars = Seminar::where('name', 'LIKE', '%' . $search_str . '%')->paginate(5);
+            $seminars = Seminar::where('name', 'LIKE', '%' . $search_str . '%')
+                ->orWhere('unique_key', 'LIKE', '%' . $search_str . '%')
+                ->paginate(10);
         }
         return Inertia::render('Seminars/Index', [
             'seminars' => $seminars,
@@ -44,6 +46,13 @@ class SeminarController extends Controller
     {
         // dd($request->input());
         $seminar = new Seminar($request->input());
+
+        // ユニークキーを生成して設定（12桁英数字）
+        do {
+            $uniqueKey = Str::random(12);
+        } while (Seminar::where('unique_key', $uniqueKey)->exists());
+        $seminar->unique_key = $uniqueKey;
+
         $seminar->save();
         return redirect()->route('seminars.index')->with('success_str', '登録完了しました');
     }

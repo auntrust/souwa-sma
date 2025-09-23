@@ -47,9 +47,6 @@ const deleteSeminar = (id: number, name: string) => {
 const search_go = () => {
     form.get(route('seminars.index'));
 };
-
-console.log(props.seminars?.data.length);
-console.log(props.seminars);
 </script>
 
 <template>
@@ -107,9 +104,7 @@ console.log(props.seminars);
                         該当するセミナーはありません。
                     </div>
 
-                    <table
-                        class="m-3 w-10/12 table-auto border border-gray-400"
-                    >
+                    <table class="m-3 table-auto border border-gray-400">
                         <thead>
                             <tr class="bg-gray-100">
                                 <th class="px-4 py-2">ID</th>
@@ -119,6 +114,7 @@ console.log(props.seminars);
                                 <th class="px-4 py-2">定員</th>
                                 <th class="px-4 py-2">形式</th>
                                 <th class="px-4 py-2">区分</th>
+                                <th class="px-4 py-2">Key</th>
                                 <th class="px-4 py-2"></th>
                                 <th class="px-4 py-2"></th>
                             </tr>
@@ -172,6 +168,13 @@ console.log(props.seminars);
                                 >
                                     {{ isPaidLabel(seminar.is_paid) }}
                                 </td>
+
+                                <td
+                                    class="border border-gray-400 px-4 py-2 text-center"
+                                >
+                                    {{ seminar.unique_key }}
+                                </td>
+
                                 <td
                                     class="border border-gray-400 px-4 py-2 text-center"
                                 >
