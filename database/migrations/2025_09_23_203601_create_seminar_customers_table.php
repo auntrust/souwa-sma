@@ -20,10 +20,28 @@ return new class extends Migration {
 
             // 申込日
             $table->date('entry_date')->nullable()->comment('申込日');
-            // 参加人数
-            $table->unsignedInteger('entry_count')->default(1)->comment('参加人数');
+
+            // 顧客情報
+            $table->string('name')->comment('氏名');
+            $table->string('furigana')->nullable()->comment('ふりがな');
+            $table->string('tel')->nullable()->comment('電話番号');
+            $table->string('email')->comment('メールアドレス');
+            $table->string('todofuken')->nullable()->comment('都道府県');
+
+            // 会社情報
+            $table->string('co_name')->nullable()->comment('会社名');
+            $table->string('co_tel')->nullable()->comment('会社電話番号');
+            $table->string('co_busho')->nullable()->comment('会社部署');
+            $table->string('co_post')->nullable()->comment('役職');
+
+            // 申込人数
+            $table->unsignedInteger('applicant_count')->default(1)->comment('申込人数');
+
             // ご質問・要望
             $table->text('request')->nullable()->comment('ご質問・要望');
+
+            // 顧客情報上書きフラグ
+            $table->boolean('is_overwrite_customer_info')->default(false)->comment('顧客情報を上書きするか');
 
             // 受付完了メール送信日時
             $table->timestamp('mail_sent_at')->nullable()->comment('受付完了メール送信日時');

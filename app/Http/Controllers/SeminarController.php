@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Seminar;
+use App\Models\SeminarCustomer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Http\Requests\SeminarRequest;
@@ -90,5 +91,18 @@ class SeminarController extends Controller
     {
         $seminar->delete();
         return redirect('seminars');
+    }
+
+    /**
+     * セミナーの参加者一覧を表示
+     */
+    public function entryList(Seminar $seminar)
+    {
+        // 参加者一覧を取得
+        $seminarCustomers = SeminarCustomer::where('seminar_id', $seminar->id)->get();
+        return Inertia::render('Seminars/EntryList', [
+            'seminar' => $seminar,
+            'seminarCustomers' => $seminarCustomers,
+        ]);
     }
 }

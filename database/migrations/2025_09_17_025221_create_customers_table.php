@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
+            $table->string('unique_key')->unique();
 
             $table->string('name')->comment('氏名');
             $table->string('furigana')->nullable()->comment('ふりがな');

@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SeminarController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\SeminarCustomerController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -22,8 +23,10 @@ Route::get('/dashboard', function () {
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-Route::get('/entry', function () {
-    return Inertia::render('Entry');
+Route::post('/entry', [SeminarCustomerController::class, 'store'])->name('seminar_customers.store');
+Route::get('/entry/{sid}/{uid?}', [SeminarCustomerController::class, 'entry'])->name('seminar_customers.entry');
+Route::get('/entry_finish', function () {
+    return Inertia::render('EntryFinish');
 });
 
 Route::middleware('auth')->group(function () {
@@ -33,6 +36,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('seminars', SeminarController::class);
     Route::resource('customers', CustomerController::class);
+
+    Route::get('/seminars/entry_list/{seminar}', [SeminarController::class, 'entryList'])->name('seminars.entry_list');
 });
 
 require __DIR__ . '/auth.php';

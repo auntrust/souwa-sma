@@ -117,6 +117,7 @@ const search_go = () => {
                                 <th class="px-4 py-2">Key</th>
                                 <th class="px-4 py-2"></th>
                                 <th class="px-4 py-2"></th>
+                                <th class="px-4 py-2"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -134,7 +135,13 @@ const search_go = () => {
                                     {{ seminar.id }}
                                 </td>
                                 <td class="border border-gray-400 px-4 py-2">
-                                    {{ seminar.name }}
+                                    <a
+                                        :href="`/entry/${seminar.unique_key}`"
+                                        target="_blank"
+                                        class="underline"
+                                    >
+                                        {{ seminar.name }}</a
+                                    >
                                 </td>
                                 <td
                                     class="border border-gray-400 px-4 py-2 text-center"
@@ -168,13 +175,26 @@ const search_go = () => {
                                 >
                                     {{ isPaidLabel(seminar.is_paid) }}
                                 </td>
-
                                 <td
                                     class="border border-gray-400 px-4 py-2 text-center"
                                 >
                                     {{ seminar.unique_key }}
                                 </td>
-
+                                <td
+                                    class="border border-gray-400 px-4 py-2 text-center"
+                                >
+                                    <Link
+                                        :href="
+                                            route(
+                                                'seminars.entry_list',
+                                                seminar.id,
+                                            )
+                                        "
+                                        :class="'rounded-md border bg-blue-400 px-4 py-2 text-xs text-white'"
+                                    >
+                                        <i class="fa-solid fa-list"></i>
+                                    </Link>
+                                </td>
                                 <td
                                     class="border border-gray-400 px-4 py-2 text-center"
                                 >

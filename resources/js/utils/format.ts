@@ -14,3 +14,25 @@ export function seminarTypeLabel(type: string) {
 export function isPaidLabel(isPaid: number) {
     return isPaid === 1 ? '有料' : '無料';
 }
+
+export function getDurationMinutes(start: string, end: string): number {
+    // "HH:mm" 形式を想定
+    const [sh, sm] = start.split(':').map(Number);
+    const [eh, em] = end.split(':').map(Number);
+    return eh * 60 + em - (sh * 60 + sm);
+}
+
+export function formatTime(time: string): string {
+    // "HH:mm:ss" → "HH:mm"
+    return time.split(':').slice(0, 2).join(':');
+}
+
+export function formatDateWithWeekday(dateStr: string): string {
+    const date = new Date(dateStr);
+    const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    const w = weekdays[date.getDay()];
+    return `${y}年${m}月${d}日（${w}）`;
+}

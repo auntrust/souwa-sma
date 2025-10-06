@@ -110,6 +110,7 @@ const search_go = () => {
                                 <th class="w-auto px-4 py-2">氏名</th>
                                 <th class="px-4 py-2">Email</th>
                                 <th class="px-4 py-2">都道府県</th>
+                                <th class="px-4 py-2">Key</th>
                                 <th class="px-4 py-2"></th>
                                 <th class="px-4 py-2"></th>
                             </tr>
@@ -142,6 +143,11 @@ const search_go = () => {
                                 </td>
                                 <td class="border border-gray-400 px-4 py-2">
                                     {{ customer.todofuken }}
+                                </td>
+                                <td
+                                    class="border border-gray-400 px-4 py-2 text-center"
+                                >
+                                    {{ customer.unique_key }}
                                 </td>
                                 <td
                                     class="border border-gray-400 px-4 py-2 text-center"

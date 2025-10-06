@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Http\Requests\CustomerRequest;
 use Inertia\Inertia;
 
@@ -46,6 +47,13 @@ class CustomerController extends Controller
     {
         // dd($request->input());
         $customer = new Customer($request->input());
+
+        // ユニークキーを生成して設定（12桁英数字）
+        do {
+            $uniqueKey = Str::random(12);
+        } while (Customer::where('unique_key', $uniqueKey)->exists());
+        $customer->unique_key = $uniqueKey;
+
         $customer->save();
         return redirect()->route('customers.index')->with('success_str', '登録完了しました');
     }

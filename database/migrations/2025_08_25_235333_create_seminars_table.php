@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('seminars', function (Blueprint $table) {
             $table->id();
-
+            $table->string('unique_key')->unique();
             $table->boolean('is_active')->default(true)->comment('有効無効フラグ');
 
             // セミナー基本情報
