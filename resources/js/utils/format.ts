@@ -27,6 +27,22 @@ export function formatTime(time: string): string {
     return time.split(':').slice(0, 2).join(':');
 }
 
+export function formatDate(time: string): string {
+    // "YYYY-MM-DD" → "YYYY.MM.DD"
+    const date = time.split(' ')[0];
+    const [yyyy, mm, dd] = date.split('-');
+    return `${yyyy}.${mm}.${dd}`;
+}
+
+export function formatDateTimeAt(time: string): string {
+    // "YYYY-MM-DD HH:mm:ss" → "YYYY.MM.DD HH:mm"
+    const [date, t] = time.split(' ');
+    if (!t) return time;
+    const [yyyy, mm, dd] = date.split('-');
+    const [hh, min] = t.split(':');
+    return `${yyyy}.${mm}.${dd} ${hh}:${min}`;
+}
+
 export function formatDateWithWeekday(dateStr: string): string {
     const date = new Date(dateStr);
     const weekdays = ['日', '月', '火', '水', '木', '金', '土'];

@@ -76,7 +76,7 @@ const submit = () => {
         form.customer_id = String(props.customer.id);
     }
 
-    form.post(route('seminar_customers.store'), {
+    form.post(route('seminar_customers.entry_store'), {
         onSuccess: () => {
             form.reset(
                 'seminar_id',

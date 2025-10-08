@@ -15,46 +15,53 @@ const seminarTypes = [
 ];
 
 const form = useForm({
-    seminar_type: '',
+    is_active: '1',
     name: '',
     description: '',
-    seminar_date: '',
-    start_time: '',
-    end_time: '',
+    speaker_info: '',
     benefits: '',
-    capacity: '',
-    company_name: '',
-    company_zip: '',
-    company_address: '',
-    company_building: '',
-    company_tel: '',
-    company_url: '',
-    company_email: '',
-    company_speaker_info: '',
-    is_paid: '',
-    paid_fee: '',
-    is_consult: '',
-    timerex_url: '',
-    is_review: '',
-    google_review_url: '',
-    venue_name: '',
-    venue_zip: '',
-    venue_address: '',
-    venue_building: '',
-    venue_tel: '',
-    venue_map_url: '',
+    detail_url: '',
+    seminar_type: '',
+
+    onsite_name: '',
+    onsite_zip: '',
+    onsite_address: '',
+    onsite_building: '',
+    onsite_map_url: '',
+    onsite_date: '',
+    onsite_start_time: '',
+    onsite_end_time: '',
+    onsite_capacity: '',
+
     online_url: '',
     online_id: '',
     online_pwd: '',
+    online_date: '',
+    online_start_time: '',
+    online_end_time: '',
+    online_capacity: '',
+
     webinar_url: '',
     webinar_start_at: '',
     webinar_end_at: '',
-    back_url: '',
-    finish_url: '',
+
+    organizer_name: '',
+    organizer_tel: '',
+    organizer_email: '',
+
+    is_paid: '',
+    paid_fee: '',
+
+    is_consult: '1',
+    timerex_url: '',
+
+    is_review: '1',
+    google_review_url: '',
 });
 
 const submit = () => {
     // チェックボックス値を0/1に変換
+    form.is_active = form.is_active ? '1' : '0';
     form.is_paid = form.is_paid ? '1' : '0';
     form.is_consult = form.is_consult ? '1' : '0';
     form.is_review = form.is_review ? '1' : '0';
@@ -62,42 +69,48 @@ const submit = () => {
     form.post(route('seminars.store'), {
         onSuccess: () => {
             form.reset(
-                'seminar_type',
+                'is_active',
                 'name',
                 'description',
-                'seminar_date',
-                'start_time',
-                'end_time',
+                'speaker_info',
                 'benefits',
-                'capacity',
-                'company_name',
-                'company_zip',
-                'company_address',
-                'company_building',
-                'company_tel',
-                'company_url',
-                'company_email',
-                'company_speaker_info',
-                'is_paid',
-                'paid_fee',
-                'is_consult',
-                'timerex_url',
-                'is_review',
-                'google_review_url',
-                'venue_name',
-                'venue_zip',
-                'venue_address',
-                'venue_building',
-                'venue_tel',
-                'venue_map_url',
+                'detail_url',
+                'seminar_type',
+
+                'onsite_name',
+                'onsite_zip',
+                'onsite_address',
+                'onsite_building',
+                'onsite_map_url',
+                'onsite_date',
+                'onsite_start_time',
+                'onsite_end_time',
+                'onsite_capacity',
+
                 'online_url',
                 'online_id',
                 'online_pwd',
+                'online_date',
+                'online_start_time',
+                'online_end_time',
+                'online_capacity',
+
                 'webinar_url',
                 'webinar_start_at',
                 'webinar_end_at',
-                'back_url',
-                'finish_url',
+
+                'organizer_name',
+                'organizer_tel',
+                'organizer_email',
+
+                'is_paid',
+                'paid_fee',
+
+                'is_consult',
+                'timerex_url',
+
+                'is_review',
+                'google_review_url',
             );
         },
     });
@@ -123,6 +136,25 @@ const submit = () => {
                         class="mb-4 overflow-hidden bg-white p-6 shadow-sm sm:rounded-lg dark:bg-gray-800"
                     >
                         <div class="">
+                            <label class="mt-1 inline-flex items-center">
+                                <input
+                                    id="is_active"
+                                    type="checkbox"
+                                    class="form-checkbox h-5 w-5 text-blue-600"
+                                    v-model="form.is_active"
+                                    :true-value="1"
+                                    :false-value="0"
+                                />
+                                <span class="ml-2">有効にする</span>
+                            </label>
+
+                            <InputError
+                                class="mt-2"
+                                :message="form.errors.is_active"
+                            />
+                        </div>
+
+                        <div class="mt-4">
                             <InputLabel for="name" value="セミナー名" />
 
                             <TextInput
@@ -131,8 +163,6 @@ const submit = () => {
                                 class="mt-1 block w-full"
                                 v-model="form.name"
                                 required
-                                autocomplete="name"
-                                autofocus
                             />
 
                             <InputError
@@ -151,8 +181,6 @@ const submit = () => {
                                 id="description"
                                 class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 dark:text-gray-100"
                                 v-model="form.description"
-                                required
-                                autocomplete="description"
                                 rows="4"
                             ></textarea>
 
@@ -161,81 +189,21 @@ const submit = () => {
                                 :message="form.errors.description"
                             />
                         </div>
-
                         <div class="mt-4">
-                            <InputLabel for="seminar_date" value="開催日" />
+                            <InputLabel for="speaker_info" value="講師情報" />
 
-                            <TextInput
-                                id="seminar_date"
-                                type="date"
-                                class="mt-1 block w-full"
-                                v-model="form.seminar_date"
-                                required
-                                autocomplete="seminar_date"
-                            />
+                            <textarea
+                                id="speaker_info"
+                                class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 dark:text-gray-100"
+                                v-model="form.speaker_info"
+                                rows="4"
+                            ></textarea>
 
                             <InputError
                                 class="mt-2"
-                                :message="form.errors.seminar_date"
+                                :message="form.errors.speaker_info"
                             />
                         </div>
-
-                        <div class="mt-4 flex gap-4">
-                            <div class="flex-1">
-                                <InputLabel for="start_time" value="開始時間" />
-
-                                <TextInput
-                                    id="start_time"
-                                    type="time"
-                                    class="mt-1 block w-full"
-                                    v-model="form.start_time"
-                                    required
-                                    autocomplete="start_time"
-                                />
-
-                                <InputError
-                                    class="mt-2"
-                                    :message="form.errors.start_time"
-                                />
-                            </div>
-
-                            <div class="flex-1">
-                                <InputLabel for="end_time" value="終了時間" />
-
-                                <TextInput
-                                    id="end_time"
-                                    type="time"
-                                    class="mt-1 block w-full"
-                                    v-model="form.end_time"
-                                    required
-                                    autocomplete="end_time"
-                                />
-
-                                <InputError
-                                    class="mt-2"
-                                    :message="form.errors.end_time"
-                                />
-                            </div>
-
-                            <div class="flex-1">
-                                <InputLabel for="capacity" value="定員" />
-
-                                <TextInput
-                                    id="capacity"
-                                    type="number"
-                                    class="mt-1 block w-full"
-                                    v-model="form.capacity"
-                                    required
-                                    autocomplete="capacity"
-                                />
-
-                                <InputError
-                                    class="mt-2"
-                                    :message="form.errors.capacity"
-                                />
-                            </div>
-                        </div>
-
                         <div class="mt-4">
                             <InputLabel for="benefits" value="特典" />
 
@@ -243,7 +211,6 @@ const submit = () => {
                                 id="benefits"
                                 class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 dark:text-gray-100"
                                 v-model="form.benefits"
-                                autocomplete="benefits"
                                 rows="4"
                             ></textarea>
 
@@ -252,159 +219,22 @@ const submit = () => {
                                 :message="form.errors.benefits"
                             />
                         </div>
-                    </div>
-
-                    <div
-                        class="mb-4 overflow-hidden bg-white p-6 shadow-sm sm:rounded-lg dark:bg-gray-800"
-                    >
-                        <div class="">
-                            <InputLabel for="company_name" value="会社名" />
-
-                            <TextInput
-                                id="company_name"
-                                type="text"
-                                class="mt-1 block w-full"
-                                v-model="form.company_name"
-                                required
-                                autocomplete="company_name"
-                            />
-
-                            <InputError
-                                class="mt-2"
-                                :message="form.errors.company_name"
-                            />
-                        </div>
-
-                        <div class="mt-4">
-                            <InputLabel for="company_zip" value="郵便番号" />
-
-                            <TextInput
-                                id="company_zip"
-                                type="number"
-                                class="mt-1 block w-32"
-                                v-model="form.company_zip"
-                                autocomplete="company_zip"
-                            />
-
-                            <InputError
-                                class="mt-2"
-                                :message="form.errors.company_zip"
-                            />
-                        </div>
-
-                        <div class="mt-4">
-                            <InputLabel for="company_address" value="住所" />
-
-                            <TextInput
-                                id="company_address"
-                                type="text"
-                                class="mt-1 block w-full"
-                                v-model="form.company_address"
-                                autocomplete="company_address"
-                            />
-
-                            <InputError
-                                class="mt-2"
-                                :message="form.errors.company_address"
-                            />
-                        </div>
-
-                        <div class="mt-4">
-                            <InputLabel for="company_building" value="建物名" />
-
-                            <TextInput
-                                id="company_building"
-                                type="text"
-                                class="mt-1 block w-full"
-                                v-model="form.company_building"
-                                autocomplete="company_building"
-                            />
-
-                            <InputError
-                                class="mt-2"
-                                :message="form.errors.company_building"
-                            />
-                        </div>
-
-                        <div class="mt-4 flex gap-4">
-                            <div class="flex-1">
-                                <InputLabel
-                                    for="company_tel"
-                                    value="電話番号"
-                                />
-
-                                <TextInput
-                                    id="company_tel"
-                                    type="text"
-                                    class="mt-1 block w-full"
-                                    v-model="form.company_tel"
-                                    autocomplete="company_tel"
-                                />
-
-                                <InputError
-                                    class="mt-2"
-                                    :message="form.errors.company_tel"
-                                />
-                            </div>
-
-                            <div class="flex-1">
-                                <InputLabel
-                                    for="company_email"
-                                    value="メールアドレス"
-                                />
-
-                                <TextInput
-                                    id="company_email"
-                                    type="text"
-                                    class="mt-1 block w-full"
-                                    v-model="form.company_email"
-                                    autocomplete="company_email"
-                                />
-
-                                <InputError
-                                    class="mt-2"
-                                    :message="form.errors.company_email"
-                                />
-                            </div>
-                        </div>
-
                         <div class="mt-4">
                             <InputLabel
-                                for="company_url"
-                                value="ホームページ"
+                                for="detail_url"
+                                value="セミナー詳細ページのURL"
                             />
 
                             <TextInput
-                                id="company_url"
+                                id="detail_url"
                                 type="text"
                                 class="mt-1 block w-full"
-                                v-model="form.company_url"
-                                autocomplete="company_url"
+                                v-model="form.detail_url"
                             />
 
                             <InputError
                                 class="mt-2"
-                                :message="form.errors.company_url"
-                            />
-                        </div>
-
-                        <div class="mt-4">
-                            <InputLabel
-                                for="company_speaker_info"
-                                value="講師情報"
-                            />
-
-                            <textarea
-                                id="company_speaker_info"
-                                class="mt-1 block w-full rounded-md border-gray-300 dark:bg-gray-700 dark:text-gray-100"
-                                v-model="form.company_speaker_info"
-                                autocomplete="company_speaker_info"
-                                rows="4"
-                            ></textarea>
-
-                            <InputError
-                                class="mt-2"
-                                :message="form.errors.company_speaker_info"
+                                :message="form.errors.detail_url"
                             />
                         </div>
                     </div>
@@ -424,7 +254,6 @@ const submit = () => {
                                 class="mt-1 block w-full"
                                 v-model="form.seminar_type"
                                 required
-                                autocomplete="seminar_type"
                             />
 
                             <InputError
@@ -438,111 +267,174 @@ const submit = () => {
                             v-show="form.seminar_type === 'onsite'"
                         >
                             <div class="mt-4">
-                                <InputLabel for="venue_name" value="会場名" />
+                                <InputLabel for="onsite_date" value="開催日" />
 
                                 <TextInput
-                                    id="venue_name"
-                                    type="text"
+                                    id="onsite_date"
+                                    type="date"
                                     class="mt-1 block w-full"
-                                    v-model="form.venue_name"
+                                    v-model="form.onsite_date"
                                     :required="form.seminar_type === 'onsite'"
-                                    autocomplete="venue_name"
                                 />
 
                                 <InputError
                                     class="mt-2"
-                                    :message="form.errors.venue_name"
+                                    :message="form.errors.onsite_date"
+                                />
+                            </div>
+
+                            <div class="mt-4 flex gap-4">
+                                <div class="flex-1">
+                                    <InputLabel
+                                        for="onsite_start_time"
+                                        value="開始時間"
+                                    />
+
+                                    <TextInput
+                                        id="onsite_start_time"
+                                        type="time"
+                                        class="mt-1 block w-full"
+                                        v-model="form.onsite_start_time"
+                                        :required="
+                                            form.seminar_type === 'onsite'
+                                        "
+                                    />
+
+                                    <InputError
+                                        class="mt-2"
+                                        :message="form.errors.onsite_start_time"
+                                    />
+                                </div>
+
+                                <div class="flex-1">
+                                    <InputLabel
+                                        for="onsite_end_time"
+                                        value="終了時間"
+                                    />
+
+                                    <TextInput
+                                        id="onsite_end_time"
+                                        type="time"
+                                        class="mt-1 block w-full"
+                                        v-model="form.onsite_end_time"
+                                        :required="
+                                            form.seminar_type === 'onsite'
+                                        "
+                                    />
+
+                                    <InputError
+                                        class="mt-2"
+                                        :message="form.errors.onsite_end_time"
+                                    />
+                                </div>
+
+                                <div class="flex-1">
+                                    <InputLabel
+                                        for="onsite_capacity"
+                                        value="定員"
+                                    />
+
+                                    <TextInput
+                                        id="onsite_capacity"
+                                        type="number"
+                                        class="mt-1 block w-full"
+                                        v-model="form.onsite_capacity"
+                                        :required="
+                                            form.seminar_type === 'onsite'
+                                        "
+                                    />
+
+                                    <InputError
+                                        class="mt-2"
+                                        :message="form.errors.onsite_capacity"
+                                    />
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <InputLabel for="onsite_name" value="会場名" />
+
+                                <TextInput
+                                    id="onsite_name"
+                                    type="text"
+                                    class="mt-1 block w-full"
+                                    v-model="form.onsite_name"
+                                    :required="form.seminar_type === 'onsite'"
+                                />
+
+                                <InputError
+                                    class="mt-2"
+                                    :message="form.errors.onsite_name"
                                 />
                             </div>
 
                             <div class="mt-4">
-                                <InputLabel for="venue_zip" value="郵便番号" />
+                                <InputLabel for="onsite_zip" value="郵便番号" />
 
                                 <TextInput
-                                    id="venue_zip"
+                                    id="onsite_zip"
                                     type="number"
                                     class="mt-1 block w-32"
-                                    v-model="form.venue_zip"
-                                    autocomplete="venue_zip"
+                                    v-model="form.onsite_zip"
                                 />
 
                                 <InputError
                                     class="mt-2"
-                                    :message="form.errors.venue_zip"
+                                    :message="form.errors.onsite_zip"
                                 />
                             </div>
 
                             <div class="mt-4">
-                                <InputLabel for="venue_address" value="住所" />
+                                <InputLabel for="onsite_address" value="住所" />
 
                                 <TextInput
-                                    id="venue_address"
+                                    id="onsite_address"
                                     type="text"
                                     class="mt-1 block w-full"
-                                    v-model="form.venue_address"
-                                    autocomplete="venue_address"
+                                    v-model="form.onsite_address"
                                 />
 
                                 <InputError
                                     class="mt-2"
-                                    :message="form.errors.venue_address"
+                                    :message="form.errors.onsite_address"
                                 />
                             </div>
 
                             <div class="mt-4">
                                 <InputLabel
-                                    for="venue_building"
+                                    for="onsite_building"
                                     value="建物名"
                                 />
 
                                 <TextInput
-                                    id="venue_building"
+                                    id="onsite_building"
                                     type="text"
                                     class="mt-1 block w-full"
-                                    v-model="form.venue_building"
-                                    autocomplete="venue_building"
+                                    v-model="form.onsite_building"
                                 />
 
                                 <InputError
                                     class="mt-2"
-                                    :message="form.errors.venue_building"
-                                />
-                            </div>
-
-                            <div class="mt-4">
-                                <InputLabel for="venue_tel" value="TEL" />
-
-                                <TextInput
-                                    id="venue_tel"
-                                    type="text"
-                                    class="mt-1 block w-full"
-                                    v-model="form.venue_tel"
-                                    autocomplete="venue_tel"
-                                />
-
-                                <InputError
-                                    class="mt-2"
-                                    :message="form.errors.venue_tel"
+                                    :message="form.errors.onsite_building"
                                 />
                             </div>
 
                             <div class="mt-4">
                                 <InputLabel
-                                    for="venue_map_url"
+                                    for="onsite_map_url"
                                     value="MAPのURL"
                                 />
 
                                 <TextInput
-                                    id="venue_map_url"
+                                    id="onsite_map_url"
                                     type="text"
                                     class="mt-1 block w-full"
-                                    v-model="form.venue_map_url"
-                                    autocomplete="venue_map_url"
+                                    v-model="form.onsite_map_url"
                                 />
 
                                 <InputError
                                     class="mt-2"
-                                    :message="form.errors.venue_map_url"
+                                    :message="form.errors.onsite_map_url"
                                 />
                             </div>
                         </div>
@@ -550,6 +442,91 @@ const submit = () => {
                             id="boxOnline"
                             v-show="form.seminar_type === 'online'"
                         >
+                            <div class="mt-4">
+                                <InputLabel for="online_date" value="開催日" />
+
+                                <TextInput
+                                    id="online_date"
+                                    type="date"
+                                    class="mt-1 block w-full"
+                                    v-model="form.online_date"
+                                    :required="form.seminar_type === 'online'"
+                                />
+
+                                <InputError
+                                    class="mt-2"
+                                    :message="form.errors.online_date"
+                                />
+                            </div>
+
+                            <div class="mt-4 flex gap-4">
+                                <div class="flex-1">
+                                    <InputLabel
+                                        for="online_start_time"
+                                        value="開始時間"
+                                    />
+
+                                    <TextInput
+                                        id="online_start_time"
+                                        type="time"
+                                        class="mt-1 block w-full"
+                                        v-model="form.online_start_time"
+                                        :required="
+                                            form.seminar_type === 'online'
+                                        "
+                                    />
+
+                                    <InputError
+                                        class="mt-2"
+                                        :message="form.errors.online_start_time"
+                                    />
+                                </div>
+
+                                <div class="flex-1">
+                                    <InputLabel
+                                        for="online_end_time"
+                                        value="終了時間"
+                                    />
+
+                                    <TextInput
+                                        id="online_end_time"
+                                        type="time"
+                                        class="mt-1 block w-full"
+                                        v-model="form.online_end_time"
+                                        :required="
+                                            form.seminar_type === 'online'
+                                        "
+                                    />
+
+                                    <InputError
+                                        class="mt-2"
+                                        :message="form.errors.online_end_time"
+                                    />
+                                </div>
+
+                                <div class="flex-1">
+                                    <InputLabel
+                                        for="online_capacity"
+                                        value="定員"
+                                    />
+
+                                    <TextInput
+                                        id="online_capacity"
+                                        type="number"
+                                        class="mt-1 block w-full"
+                                        v-model="form.online_capacity"
+                                        :required="
+                                            form.seminar_type === 'online'
+                                        "
+                                    />
+
+                                    <InputError
+                                        class="mt-2"
+                                        :message="form.errors.online_capacity"
+                                    />
+                                </div>
+                            </div>
+
                             <div class="mt-4">
                                 <InputLabel
                                     for="online_url"
@@ -562,7 +539,6 @@ const submit = () => {
                                     class="mt-1 block w-full"
                                     v-model="form.online_url"
                                     :required="form.seminar_type === 'online'"
-                                    autocomplete="online_url"
                                 />
 
                                 <InputError
@@ -583,7 +559,6 @@ const submit = () => {
                                     class="mt-1 block w-full"
                                     v-model="form.online_id"
                                     :required="form.seminar_type === 'online'"
-                                    autocomplete="online_id"
                                 />
 
                                 <InputError
@@ -604,7 +579,6 @@ const submit = () => {
                                     class="mt-1 block w-full"
                                     v-model="form.online_pwd"
                                     :required="form.seminar_type === 'online'"
-                                    autocomplete="online_pwd"
                                 />
 
                                 <InputError
@@ -629,7 +603,6 @@ const submit = () => {
                                     class="mt-1 block w-full"
                                     v-model="form.webinar_url"
                                     :required="form.seminar_type === 'webinar'"
-                                    autocomplete="webinar_url"
                                 />
 
                                 <InputError
@@ -653,7 +626,6 @@ const submit = () => {
                                         :required="
                                             form.seminar_type === 'webinar'
                                         "
-                                        autocomplete="webinar_start_at"
                                     />
 
                                     <InputError
@@ -676,7 +648,6 @@ const submit = () => {
                                         :required="
                                             form.seminar_type === 'webinar'
                                         "
-                                        autocomplete="webinar_end_at"
                                     />
 
                                     <InputError
@@ -692,38 +663,62 @@ const submit = () => {
                         class="mb-4 overflow-hidden bg-white p-6 shadow-sm sm:rounded-lg dark:bg-gray-800"
                     >
                         <div class="">
-                            <label class="mt-1 inline-flex items-center">
-                                <input
-                                    id="is_paid"
-                                    type="checkbox"
-                                    class="form-checkbox h-5 w-5 text-blue-600"
-                                    v-model="form.is_paid"
-                                />
-                                <span class="ml-2">有料開催</span>
-                            </label>
+                            <InputLabel
+                                for="organizer_name"
+                                value="主催会社名"
+                            />
+
+                            <TextInput
+                                id="organizer_name"
+                                type="text"
+                                class="mt-1 block w-full"
+                                v-model="form.organizer_name"
+                            />
 
                             <InputError
                                 class="mt-2"
-                                :message="form.errors.is_paid"
+                                :message="form.errors.organizer_name"
                             />
                         </div>
 
-                        <div class="mt-4" v-show="form.is_paid">
-                            <InputLabel for="paid_fee" value="受講料" />
+                        <div class="mt-4 flex gap-4">
+                            <div class="flex-1">
+                                <InputLabel
+                                    for="organizer_tel"
+                                    value="電話番号"
+                                />
 
-                            <TextInput
-                                id="paid_fee"
-                                type="number"
-                                class="mt-1 block w-32"
-                                v-model="form.paid_fee"
-                                :required="form.is_paid == '1'"
-                                autocomplete="paid_fee"
-                            />
+                                <TextInput
+                                    id="organizer_tel"
+                                    type="text"
+                                    class="mt-1 block w-full"
+                                    v-model="form.organizer_tel"
+                                />
 
-                            <InputError
-                                class="mt-2"
-                                :message="form.errors.paid_fee"
-                            />
+                                <InputError
+                                    class="mt-2"
+                                    :message="form.errors.organizer_tel"
+                                />
+                            </div>
+
+                            <div class="flex-1">
+                                <InputLabel
+                                    for="organizer_email"
+                                    value="メールアドレス"
+                                />
+
+                                <TextInput
+                                    id="organizer_email"
+                                    type="text"
+                                    class="mt-1 block w-full"
+                                    v-model="form.organizer_email"
+                                />
+
+                                <InputError
+                                    class="mt-2"
+                                    :message="form.errors.organizer_email"
+                                />
+                            </div>
                         </div>
                     </div>
 
@@ -737,6 +732,8 @@ const submit = () => {
                                     type="checkbox"
                                     class="form-checkbox h-5 w-5 text-blue-600"
                                     v-model="form.is_consult"
+                                    :true-value="1"
+                                    :false-value="0"
                                 />
                                 <span class="ml-2">個別相談の案内をする</span>
                             </label>
@@ -759,7 +756,6 @@ const submit = () => {
                                 class="mt-1 block w-full"
                                 v-model="form.timerex_url"
                                 :required="form.is_consult == '1'"
-                                autocomplete="timerex_url"
                             />
 
                             <InputError
@@ -779,6 +775,8 @@ const submit = () => {
                                     type="checkbox"
                                     class="form-checkbox h-5 w-5 text-blue-600"
                                     v-model="form.is_review"
+                                    :true-value="1"
+                                    :false-value="0"
                                 />
                                 <span class="ml-2"
                                     >評価確認の案内を送信する</span
@@ -803,7 +801,6 @@ const submit = () => {
                                 class="mt-1 block w-full"
                                 v-model="form.google_review_url"
                                 :required="form.is_review == '1'"
-                                autocomplete="google_review_url"
                             />
 
                             <InputError
@@ -817,44 +814,38 @@ const submit = () => {
                         class="mb-4 overflow-hidden bg-white p-6 shadow-sm sm:rounded-lg dark:bg-gray-800"
                     >
                         <div class="">
-                            <InputLabel
-                                for="back_url"
-                                value="戻るボタンを押した時に転送するURL"
-                            />
-
-                            <TextInput
-                                id="back_url"
-                                type="text"
-                                class="mt-1 block w-full"
-                                v-model="form.back_url"
-                                required
-                                autocomplete="back_url"
-                            />
+                            <label class="mt-1 inline-flex items-center">
+                                <input
+                                    id="is_paid"
+                                    type="checkbox"
+                                    class="form-checkbox h-5 w-5 text-blue-600"
+                                    v-model="form.is_paid"
+                                    :true-value="1"
+                                    :false-value="0"
+                                />
+                                <span class="ml-2">有料開催</span>
+                            </label>
 
                             <InputError
                                 class="mt-2"
-                                :message="form.errors.back_url"
+                                :message="form.errors.is_paid"
                             />
                         </div>
 
-                        <div class="mt-4">
-                            <InputLabel
-                                for="finish_url"
-                                value="完了後に転送するURL"
-                            />
+                        <div class="mt-4" v-show="form.is_paid">
+                            <InputLabel for="paid_fee" value="受講料" />
 
                             <TextInput
-                                id="finish_url"
-                                type="text"
-                                class="mt-1 block w-full"
-                                v-model="form.finish_url"
-                                required
-                                autocomplete="finish_url"
+                                id="paid_fee"
+                                type="number"
+                                class="mt-1 block w-32"
+                                v-model="form.paid_fee"
+                                :required="form.is_paid == '1'"
                             />
 
                             <InputError
                                 class="mt-2"
-                                :message="form.errors.finish_url"
+                                :message="form.errors.paid_fee"
                             />
                         </div>
                     </div>

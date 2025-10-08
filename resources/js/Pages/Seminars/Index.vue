@@ -3,9 +3,11 @@ import DangerButton from '@/Components/DangerButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { isPaidLabel, seminarTypeLabel } from '@/utils/format';
-import { calcDuration, formatTime } from '@/utils/time';
+import { formatTime } from '@/utils/time';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ref, watch } from 'vue';
+
+import { formatDate, formatDateTimeAt } from '@/utils/format';
 
 const props = defineProps({
     seminars: { type: Object },
@@ -110,7 +112,6 @@ const search_go = () => {
                                 <th class="px-4 py-2">ID</th>
                                 <th class="w-auto px-4 py-2">タイトル</th>
                                 <th class="px-4 py-2">開催日</th>
-                                <th class="px-4 py-2">時間</th>
                                 <th class="px-4 py-2">定員</th>
                                 <th class="px-4 py-2">形式</th>
                                 <th class="px-4 py-2">区分</th>
@@ -146,24 +147,68 @@ const search_go = () => {
                                 <td
                                     class="border border-gray-400 px-4 py-2 text-center"
                                 >
-                                    {{ seminar.seminar_date }}
+                                    <div
+                                        v-if="seminar.seminar_type == 'onsite'"
+                                    >
+                                        {{ formatDate(seminar.onsite_date)
+                                        }}<br />
+                                        {{
+                                            formatTime(
+                                                seminar.onsite_start_time,
+                                            )
+                                        }}
+                                        -
+                                        {{
+                                            formatTime(seminar.onsite_end_time)
+                                        }}
+                                    </div>
+                                    <div
+                                        v-else-if="
+                                            seminar.seminar_type == 'online'
+                                        "
+                                    >
+                                        {{ formatDate(seminar.online_date)
+                                        }}<br />
+                                        {{
+                                            formatTime(
+                                                seminar.online_start_time,
+                                            )
+                                        }}
+                                        -
+                                        {{
+                                            formatTime(seminar.online_end_time)
+                                        }}
+                                    </div>
+                                    <div
+                                        v-else-if="
+                                            seminar.seminar_type == 'webinar'
+                                        "
+                                    >
+                                        {{
+                                            formatDateTimeAt(
+                                                seminar.webinar_start_at,
+                                            )
+                                        }}<br />〜<br />{{
+                                            formatDateTimeAt(
+                                                seminar.webinar_end_at,
+                                            )
+                                        }}
+                                    </div>
                                 </td>
                                 <td
                                     class="border border-gray-400 px-4 py-2 text-center"
                                 >
-                                    {{ formatTime(seminar.start_time) }} -
-                                    {{ formatTime(seminar.end_time) }}<br />
-                                    （{{
-                                        calcDuration(
-                                            seminar.start_time,
-                                            seminar.end_time,
-                                        )
-                                    }}）
-                                </td>
-                                <td
-                                    class="border border-gray-400 px-4 py-2 text-center"
-                                >
-                                    {{ seminar.capacity }}人
+                                    <span
+                                        v-if="seminar.seminar_type == 'onsite'"
+                                    >
+                                        {{ seminar.online_capacity }}人
+                                    </span>
+                                    <span
+                                        v-if="seminar.seminar_type == 'online'"
+                                    >
+                                        {{ seminar.online_capacity }}人
+                                    </span>
+                                    <span v-else> - </span>
                                 </td>
                                 <td
                                     class="border border-gray-400 px-4 py-2 text-center"

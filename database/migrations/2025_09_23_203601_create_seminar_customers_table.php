@@ -58,15 +58,16 @@ return new class extends Migration {
             // アンケートメール送信日時
             $table->timestamp('mail_sent_survey_at')->nullable()->comment('アンケートメール送信日時');
             // アンケートQ1～Q5回答
-            $table->string('survey_q1')->nullable()->comment('アンケートQ1回答');
-            $table->string('survey_q2')->nullable()->comment('アンケートQ2回答');
-            $table->string('survey_q3')->nullable()->comment('アンケートQ3回答');
-            $table->string('survey_q4')->nullable()->comment('アンケートQ4回答');
-            $table->string('survey_q5')->nullable()->comment('アンケートQ5回答');
+            $table->text('survey_q1')->nullable()->comment('アンケートQ1回答');
+            $table->text('survey_q2')->nullable()->comment('アンケートQ2回答');
+            $table->text('survey_q3')->nullable()->comment('アンケートQ3回答');
+            $table->text('survey_q4')->nullable()->comment('アンケートQ4回答');
+            $table->text('survey_q5')->nullable()->comment('アンケートQ5回答');
             // アンケート意見
             $table->text('survey_opinion')->nullable()->comment('アンケート意見');
             // アンケート評価（0:低評価, 1:高評価）
-            $table->unsignedTinyInteger('survey_rating')->nullable()->comment('アンケート評価（0:低評価, 1:高評価）');
+            $table->string('survey_rating')->nullable()->comment('アンケート評価（low, high）');
+            $table->timestamp('survey_at')->nullable()->comment('アンケート回答日時');
             $table->timestamps();
 
             // 外部キー制約

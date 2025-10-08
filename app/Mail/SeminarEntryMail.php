@@ -8,24 +8,20 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Carbon\Carbon;
 
-class SeminarEntryNotification extends Mailable
+class SeminarEntryMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct($title, $request, $seminar)
     {
-        $this->seminarCustomer = $seminarCustomer;
-        $this->customer = $customer;
+        $this->title = $title;
+        $this->request = $request;
         $this->seminar = $seminar;
-    }
-
-    public function build()
-    {
-        return $this->subject('セミナー申込通知')->markdown('emails.seminar_entry');
     }
 
     /**
@@ -33,7 +29,7 @@ class SeminarEntryNotification extends Mailable
      */
     public function envelope(): Envelope
     {
-        return new Envelope(subject: 'Seminar Entry Notification');
+        return new Envelope(subject: '【' . $this->seminar->name . '】' . $this->title);
     }
 
     /**
@@ -41,7 +37,14 @@ class SeminarEntryNotification extends Mailable
      */
     public function content(): Content
     {
-        return new Content(markdown: 'emails.seminar_entry');
+        return new Content(
+            html: 'emails.seminar_entry',
+            text: 'emails.seminar_entry_plain',
+            with: [
+                'request' => $this->request,
+                'seminar' => $this->seminar,
+            ],
+        );
     }
 
     /**

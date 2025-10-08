@@ -1,16 +1,51 @@
 <script setup lang="ts">
+import DangerButton from '@/Components/DangerButton.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {
     formatDateWithWeekday,
     formatTime,
     getDurationMinutes,
 } from '@/utils/format';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, useForm } from '@inertiajs/vue3';
+import { ref, watch } from 'vue';
 
 const props = defineProps({
     seminar: { type: Object },
     seminarCustomers: { type: Object },
+    successMessage: String,
 });
+
+// successMessageをrefでラップ
+const successMessage = ref(props.successMessage);
+
+watch(
+    () => props.successMessage,
+    (val) => {
+        successMessage.value = val;
+        if (val) {
+            setTimeout(() => {
+                successMessage.value = '';
+            }, 3000);
+        }
+    },
+    { immediate: true },
+);
+
+const form = useForm({
+    id: '',
+});
+
+const deleteEntry = (id: number, name: string) => {
+    if (
+        confirm(
+            '削除したデータは復元できません。\n本当に『' +
+                name +
+                '』を削除しますか？',
+        )
+    ) {
+        form.delete(route('seminar_customers.destroy', id));
+    }
+};
 </script>
 
 <template>
@@ -25,6 +60,17 @@ const props = defineProps({
             </h2>
         </template>
 
+        <Transition name="fade-pop">
+            <div
+                v-if="successMessage"
+                class="alert alert-success mx-auto mt-12 w-fit rounded-lg border-2 border-green-500 bg-green-100 px-8 py-4 text-center text-lg font-bold text-green-800 shadow-lg"
+                style="z-index: 1000"
+            >
+                <i class="fa-solid fa-circle-check mr-2"></i>
+                {{ successMessage }}
+            </div>
+        </Transition>
+
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div
@@ -32,15 +78,15 @@ const props = defineProps({
                 >
                     <h2 class="mb-4 text-xl font-bold">
                         {{ seminar?.name }}<br />
-                        {{ formatDateWithWeekday(seminar?.seminar_date) }}
+                        {{ formatDateWithWeekday(seminar?.online_date) }}
                     </h2>
                     <div class="">
-                        講義時間：{{ formatTime(seminar?.start_time) }}〜{{
-                            formatTime(seminar?.end_time)
-                        }}（{{
+                        講義時間：{{
+                            formatTime(seminar?.online_start_time)
+                        }}〜{{ formatTime(seminar?.online_end_time) }}（{{
                             getDurationMinutes(
-                                seminar?.start_time,
-                                seminar?.end_time,
+                                seminar?.online_start_time,
+                                seminar?.online_end_time,
                             )
                         }}分）<br />
                         受講料：{{
@@ -94,12 +140,14 @@ const props = defineProps({
                         <thead>
                             <tr class="bg-gray-100">
                                 <th class="px-4 py-2">No</th>
-                                <th class="w-auto px-4 py-2">申込日</th>
-                                <th class="w-auto px-4 py-2">参加<br />人数</th>
                                 <th class="px-4 py-2">申込者情報</th>
                                 <th class="px-4 py-2">会社情報</th>
-                                <th class="px-4 py-2">ご質問・ご要望</th>
+                                <th class="px-4 py-2">参加<br />人数</th>
+                                <th class="px-4 py-2" style="font-size: 0.8rem">
+                                    ご質問・ご要望
+                                </th>
                                 <th class="px-4 py-2">メール送信ログ</th>
+                                <th class="px-4 py-2"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -118,16 +166,6 @@ const props = defineProps({
                                     class="border border-gray-400 px-4 py-2 text-center"
                                 >
                                     {{ index + 1 }}
-                                </td>
-                                <td
-                                    class="border border-gray-400 px-4 py-2 text-center"
-                                >
-                                    {{ customer.entry_date }}
-                                </td>
-                                <td
-                                    class="border border-gray-400 px-4 py-2 text-center"
-                                >
-                                    {{ customer.applicant_count }}名
                                 </td>
                                 <td class="border border-gray-400 px-4 py-2">
                                     <span v-if="customer.name"
@@ -160,14 +198,23 @@ const props = defineProps({
                                         >部署：{{ customer.co_busho }}<br
                                     /></span>
                                 </td>
-                                <td class="border border-gray-400 px-4 py-2">
+                                <td
+                                    class="border border-gray-400 px-4 py-2 text-center"
+                                >
+                                    {{ customer.applicant_count }}名
+                                </td>
+                                <td
+                                    class="border border-gray-400 px-4 py-2"
+                                    style="width: 16rem"
+                                >
                                     {{ customer.request }}
                                 </td>
                                 <td
                                     class="border border-gray-400 px-4 py-2 text-center"
                                 >
                                     <span v-if="customer.mail_sent_at"
-                                        >受付完了：{{ customer.mail_sent_at
+                                        >受付完了：{{
+                                            formatTime(customer.mail_sent_at)
                                         }}<br
                                     /></span>
                                     <span
@@ -175,7 +222,9 @@ const props = defineProps({
                                             customer.mail_sent_before_seminar_at
                                         "
                                         >セミナー前日：{{
-                                            customer.mail_sent_before_seminar_at
+                                            formatTime(
+                                                customer.mail_sent_before_seminar_at,
+                                            )
                                         }}<br
                                     /></span>
                                     <span
@@ -183,14 +232,32 @@ const props = defineProps({
                                             customer.mail_sent_individual_consult_at
                                         "
                                         >個別相談案内：{{
-                                            customer.mail_sent_individual_consult_at
+                                            formatTime(
+                                                customer.mail_sent_individual_consult_at,
+                                            )
                                         }}<br
                                     /></span>
                                     <span v-if="customer.mail_sent_survey_at"
                                         >アンケートメール：{{
-                                            customer.mail_sent_survey_at
+                                            formatTime(
+                                                customer.mail_sent_survey_at,
+                                            )
                                         }}</span
                                     >
+                                </td>
+                                <td
+                                    class="border border-gray-400 px-4 py-2 text-center"
+                                >
+                                    <DangerButton
+                                        @click="
+                                            deleteEntry(
+                                                customer.id,
+                                                customer.name,
+                                            )
+                                        "
+                                    >
+                                        <i class="fa-solid fa-trash"></i>
+                                    </DangerButton>
                                 </td>
                             </tr>
                         </tbody>
@@ -208,3 +275,21 @@ const props = defineProps({
         </div>
     </AuthenticatedLayout>
 </template>
+<style scoped>
+.fade-pop-enter-active,
+.fade-pop-leave-active {
+    transition:
+        opacity 0.5s,
+        transform 0.5s;
+}
+.fade-pop-enter-from,
+.fade-pop-leave-to {
+    opacity: 0;
+    transform: scale(0.9);
+}
+.fade-pop-enter-to,
+.fade-pop-leave-from {
+    opacity: 1;
+    transform: scale(1);
+}
+</style>
