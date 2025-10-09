@@ -15,24 +15,46 @@ const props = defineProps<{
     seminar: {
         id: number;
         name: string;
-        seminar_date: string;
+        description: string;
+        speaker_info: string;
+        benefits: string;
+        detail_url: string;
         seminar_type: string;
-        is_paid: string;
-        paid_fee: number;
-        start_time: string;
-        end_time: string;
-        venue_name: string;
-        venue_zip: string;
-        venue_address: string;
-        venue_building: string;
-        venue_tel: string;
-        venue_map_url: string;
+
+        onsite_name: string;
+        onsite_zip: string;
+        onsite_address: string;
+        onsite_building: string;
+        onsite_map_url: string;
+        onsite_date: string;
+        onsite_start_time: string;
+        onsite_end_time: string;
+        onsite_capacity: number | string;
+
         online_url: string;
         online_id: string;
         online_pwd: string;
+        online_date: string;
+        online_start_time: string;
+        online_end_time: string;
+        online_capacity: number | string;
+
         webinar_url: string;
         webinar_start_at: string;
         webinar_end_at: string;
+
+        organizer_name: string;
+        organizer_tel: string;
+        organizer_email: string;
+
+        is_paid: string | boolean;
+        paid_fee: string;
+
+        is_consult: string | boolean;
+        timerex_url: string;
+
+        is_review: string | boolean;
+        google_review_url: string;
     };
     customer: {
         id: number;
@@ -105,32 +127,35 @@ const submit = () => {
         <div class="mx-auto mt-8 max-w-md rounded bg-white p-6 shadow">
             <h2 class="mb-4 text-center text-xl font-bold">
                 【{{ seminar.name }}】<br />
-                {{ formatDateWithWeekday(seminar.seminar_date) }}
+                {{ formatDateWithWeekday(seminar.onsite_date) }}
             </h2>
 
             <div class="mb-4">
-                講義時間：{{ formatTime(seminar.start_time) }}〜{{
-                    formatTime(seminar.end_time)
-                }}（{{
-                    getDurationMinutes(seminar.start_time, seminar.end_time)
-                }}分）<br />
-                受講料：{{
-                    seminar.is_paid == '1'
-                        ? seminar.paid_fee.toLocaleString() + '円'
-                        : '無料'
-                }}<br />
                 <!-- 開催形式ごとの表示切り替え -->
                 <template v-if="seminar.seminar_type === 'onsite'">
+                    ▼講義時間<br />{{
+                        formatTime(seminar.onsite_start_time)
+                    }}〜{{ formatTime(seminar.onsite_end_time) }}（{{
+                        getDurationMinutes(
+                            seminar.onsite_start_time,
+                            seminar.onsite_end_time,
+                        )
+                    }}分）<br /><br />
+                    ▼受講料<br />{{
+                        seminar.is_paid == '1'
+                            ? seminar.paid_fee.toLocaleString() + '円'
+                            : '無料'
+                    }}<br /><br />
+
                     開催形式：現地開催<br />
-                    &nbsp;→ 会場名：{{ seminar.venue_name }}<br />
-                    &nbsp;→ 郵便番号：{{ seminar.venue_zip }}<br />
-                    &nbsp;→ 住所：{{ seminar.venue_address }}
-                    {{ seminar.venue_building }}<br />
-                    &nbsp;→ 電話番号：{{ seminar.venue_tel }}<br />
-                    &nbsp;→ 地図URL：<a
-                        :href="seminar.venue_map_url"
+                    会場名：{{ seminar.onsite_name }}<br />
+                    郵便番号：{{ seminar.onsite_zip }}<br />
+                    住所：{{ seminar.onsite_address }}<br />
+                    {{ seminar.onsite_building }}<br />
+                    地図URL：<a
+                        :href="seminar.onsite_map_url"
                         target="_blank"
-                        >{{ seminar.venue_map_url }}</a
+                        >{{ seminar.onsite_map_url }}</a
                     ><br />
                 </template>
                 <template v-else-if="seminar.seminar_type === 'online'">

@@ -190,8 +190,6 @@ const submit = () => {
                                     type="checkbox"
                                     class="form-checkbox h-5 w-5 text-blue-600"
                                     v-model="form.is_active"
-                                    :true-value="1"
-                                    :false-value="0"
                                 />
                                 <span class="ml-2">有効にする</span>
                             </label>
@@ -821,8 +819,6 @@ const submit = () => {
                                     type="checkbox"
                                     class="form-checkbox h-5 w-5 text-blue-600"
                                     v-model="form.is_review"
-                                    :true-value="1"
-                                    :false-value="0"
                                 />
                                 <span class="ml-2"
                                     >評価確認の案内を送信する</span
@@ -847,8 +843,6 @@ const submit = () => {
                                 class="mt-1 block w-full"
                                 v-model="form.google_review_url"
                                 :required="form.is_review == '1'"
-                                :true-value="1"
-                                :false-value="0"
                             />
 
                             <InputError
@@ -868,8 +862,6 @@ const submit = () => {
                                     type="checkbox"
                                     class="form-checkbox h-5 w-5 text-blue-600"
                                     v-model="form.is_paid"
-                                    :true-value="1"
-                                    :false-value="0"
                                 />
                                 <span class="ml-2">有料開催</span>
                             </label>

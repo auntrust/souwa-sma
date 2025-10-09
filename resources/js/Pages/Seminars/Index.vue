@@ -208,7 +208,11 @@ const search_go = () => {
                                     >
                                         {{ seminar.online_capacity }}人
                                     </span>
-                                    <span v-else> - </span>
+                                    <span
+                                        v-if="seminar.seminar_type == 'webinar'"
+                                    >
+                                        -
+                                    </span>
                                 </td>
                                 <td
                                     class="border border-gray-400 px-4 py-2 text-center"

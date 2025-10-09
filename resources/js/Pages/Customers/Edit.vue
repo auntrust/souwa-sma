@@ -93,8 +93,6 @@ const submit = () => {
                                     type="checkbox"
                                     class="form-checkbox h-5 w-5 text-blue-600"
                                     v-model="form.is_delivery"
-                                    :true-value="1"
-                                    :false-value="0"
                                 />
                                 <span class="ml-2">配信対象にする</span>
                             </label>
