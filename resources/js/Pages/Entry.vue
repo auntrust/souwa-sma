@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import {
-    formatDateWithWeekday,
-    formatTime,
-    getDurationMinutes,
-} from '@/utils/format';
+import OrganizerContact from '@/Components/OrganizerContact.vue';
+import SeminarDetails from '@/Components/SeminarDetails.vue';
+import { nl2br } from '@/utils/format';
 import { getTodofukenList } from '@/utils/todofuken';
 import { Head, useForm } from '@inertiajs/vue3';
 import PublicLayout from '../Layouts/PublicLayout.vue';
@@ -124,48 +122,46 @@ const submit = () => {
 <template>
     <Head title="セミナー申し込み" />
     <PublicLayout>
-        <div class="mx-auto mt-8 max-w-md rounded bg-white p-6 shadow">
-            <h2 class="mb-4 text-center text-xl font-bold">
-                【{{ seminar.name }}】<br />
-                {{ formatDateWithWeekday(seminar.onsite_date) }}
+        <div class="mx-auto mt-8 max-w-xl rounded bg-white p-6 shadow">
+            <h2 class="text-center text-xl font-bold">
+                【{{ seminar.name }}】
             </h2>
+        </div>
+        <div
+            v-if="seminar.description"
+            class="mx-auto mt-8 max-w-xl rounded bg-white p-6 shadow"
+        >
+            ▼セミナー概要<br />
+            <p>{{ seminar.description }}</p>
+        </div>
+        <div class="mx-auto mt-8 max-w-xl rounded bg-white p-6 shadow">
+            <div class="">
+                <SeminarDetails :seminar="seminar" />
 
-            <div class="mb-4">
-                <!-- 開催形式ごとの表示切り替え -->
-                <template v-if="seminar.seminar_type === 'onsite'">
-                    ▼講義時間<br />{{
-                        formatTime(seminar.onsite_start_time)
-                    }}〜{{ formatTime(seminar.onsite_end_time) }}（{{
-                        getDurationMinutes(
-                            seminar.onsite_start_time,
-                            seminar.onsite_end_time,
-                        )
-                    }}分）<br /><br />
-                    ▼受講料<br />{{
-                        seminar.is_paid == '1'
-                            ? seminar.paid_fee.toLocaleString() + '円'
-                            : '無料'
-                    }}<br /><br />
+                <template v-if="seminar.speaker_info">
+                    <br />
+                    ▼講師<br />
+                    <span v-html="nl2br(seminar.speaker_info)"></span><br />
+                </template>
 
-                    開催形式：現地開催<br />
-                    会場名：{{ seminar.onsite_name }}<br />
-                    郵便番号：{{ seminar.onsite_zip }}<br />
-                    住所：{{ seminar.onsite_address }}<br />
-                    {{ seminar.onsite_building }}<br />
-                    地図URL：<a
-                        :href="seminar.onsite_map_url"
-                        target="_blank"
-                        >{{ seminar.onsite_map_url }}</a
-                    ><br />
-                </template>
-                <template v-else-if="seminar.seminar_type === 'online'">
-                    開催形式：オンラインセミナー<br />
-                </template>
-                <template v-else-if="seminar.seminar_type === 'webinar'">
-                    開催形式：ウェビナー<br />
+                <template v-if="seminar.benefits">
+                    <br />▼特典<br />
+                    <span v-html="nl2br(seminar.benefits)"></span>
                 </template>
             </div>
+        </div>
 
+        <OrganizerContact
+            :organizer-name="seminar.organizer_name"
+            :organizer-tel="seminar.organizer_tel"
+            :organizer-email="seminar.organizer_email"
+        />
+
+        <div class="mx-auto mt-8 max-w-xl rounded p-6 text-center">
+            下記、エントリー情報をご入力ください
+        </div>
+
+        <div class="mx-auto mt-8 max-w-xl rounded bg-white p-6 shadow">
             <form @submit.prevent="submit">
                 <div class="mb-5">
                     <h2 class="mb-4 text-center text-xl font-bold">
@@ -283,7 +279,11 @@ const submit = () => {
                     </h2>
 
                     <div class="mb-4">
-                        <label class="mb-1 block font-medium">参加人数</label>
+                        <label class="mb-1 block font-medium"
+                            >参加人数<span class="ml-1 text-xs text-red-600"
+                                >※必須</span
+                            ></label
+                        >
                         <input
                             v-model="form.applicant_count"
                             type="number"
@@ -304,7 +304,11 @@ const submit = () => {
                 </div>
 
                 <p class="mb-4 text-xs text-red-600">
-                    ※ご登録いただいたメールアドレスには、今後関連するセミナー情報をお送りする場合がございます。
+                    ご登録いただいたメールアドレスに、<br />
+                    関連するセミナーのご案内をお送りする場合があります。<br /><br />
+
+                    お預かりした個人情報は、セミナーのご案内以外の目的には使用せず、<br />
+                    第三者に開示・提供することはありません。
                 </p>
 
                 <div class="mb-4 text-center" v-if="props.customer">
@@ -328,7 +332,7 @@ const submit = () => {
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
-                    同意して申し込む
+                    同意してエントリー
                 </button>
             </form>
         </div>

@@ -43,6 +43,23 @@ export function formatDateTimeAt(time: string): string {
     return `${yyyy}.${mm}.${dd} ${hh}:${min}`;
 }
 
+export function formatDateTimeAtWithWeekday(time: string): string {
+    // "YYYY-MM-DD HH:mm:ss" → "YYYY年MM月DD日（曜日） HH時MM分"
+    const [date, t] = time.split(' ');
+    if (!t) return time;
+
+    const dateObj = new Date(date + ' ' + t);
+    const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+
+    const year = dateObj.getFullYear();
+    const month = dateObj.getMonth() + 1;
+    const day = dateObj.getDate();
+    const weekday = weekdays[dateObj.getDay()];
+    const [hh, min] = t.split(':');
+
+    return `${year}年${String(month).padStart(2, '0')}月${String(day).padStart(2, '0')}日（${weekday}）${hh}時${min}分`;
+}
+
 export function formatDateWithWeekday(dateStr: string): string {
     const date = new Date(dateStr);
     const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
@@ -51,4 +68,15 @@ export function formatDateWithWeekday(dateStr: string): string {
     const d = String(date.getDate()).padStart(2, '0');
     const w = weekdays[date.getDay()];
     return `${y}年${m}月${d}日（${w}）`;
+}
+
+export function nl2br(str: string) {
+    if (!str) return '';
+    return str.replace(/\r?\n/g, '<br>');
+}
+
+export function formatPostalCode(postalCode: string | number): string {
+    const code = String(postalCode).replace(/[^\d]/g, '').padStart(7, '0');
+    if (code.length !== 7) return String(postalCode);
+    return `〒${code.slice(0, 3)}-${code.slice(3)}`;
 }

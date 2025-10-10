@@ -19,7 +19,7 @@
 {{ format_time($seminar->start_time) }}〜{{ format_time($seminar->end_time) }}（{{ get_duration_time($seminar->start_time, $seminar->end_time) }}分）
 
 ▼受講料
-{{ $seminar->is_paid == '1' ? $seminar->paid_fee->toLocaleString() . '円' : '無料' }}
+{{ $seminar->is_paid == '1' ? number_format($seminar->paid_fee) . '円' : '無料' }}
 
 @if ($seminar->seminar_type == 'onsite')
 ▼開催形式
@@ -75,28 +75,28 @@
 =================================
  お客様情報
 =================================
-
 @if ($request->name)
+
 ▼氏名
 {{ $request->name }}
 @endif
-
 @if ($request->furigana)
+
 ▼ふりがな
 {{ $request->furigana }}
 @endif
-
 @if ($request->tel)
+
 ▼電話番号
 {{ $request->tel }}
 @endif
-
 @if ($request->email)
+
 ▼メールアドレス
 {{ $request->email }}
 @endif
-
 @if ($request->todofuken)
+
 ▼都道府県
 {{ $request->todofuken }}
 @endif
@@ -104,23 +104,23 @@
 =================================
  会社情報
 =================================
-
 @if ($request->co_name)
+
 ▼会社名
 {{ $request->co_name }}
 @endif
-
 @if ($request->co_tel)
+
 ▼電話番号
 {{ $request->co_tel }}
 @endif
-
 @if ($request->co_busho)
+
 ▼部署
 {{ $request->co_busho }}
 @endif
-
 @if ($request->co_post)
+
 ▼役職
 {{ $request->co_post }}
 @endif
@@ -128,13 +128,13 @@
 =================================
  その他
 =================================
-
 @if ($request->applicant_count)
+
 ▼参加人数
 {{ $request->applicant_count }} 名
 @endif
-
 @if ($request->request)
+
 ▼ご質問・要望
 {!! nl2br(e($request->get('request'))) !!}
 @endif

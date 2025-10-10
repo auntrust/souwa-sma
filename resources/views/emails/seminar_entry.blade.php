@@ -83,7 +83,7 @@
             <tr>
                 <th>受講料</th>
                 <td>
-                    {{ $seminar->is_paid == '1' ? $seminar->paid_fee->toLocaleString() . '円' : '無料' }}
+                    {{ $seminar->is_paid == '1' ? number_format($seminar->paid_fee) . '円' : '無料' }}
                 </td>
             </tr>
             @if ($seminar->seminar_type == 'onsite')

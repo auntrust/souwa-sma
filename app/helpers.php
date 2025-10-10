@@ -1,6 +1,14 @@
 <?php
 use Carbon\Carbon;
 
+// 数値のフォーマット（カンマ区切り）
+if (!function_exists('format_number')) {
+    function format_number($number)
+    {
+        return number_format($number);
+    }
+}
+
 // 日付のフォーマット
 if (!function_exists('format_date')) {
     function format_date($date)

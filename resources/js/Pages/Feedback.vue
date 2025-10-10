@@ -75,7 +75,7 @@ const submit = () => {
 <template>
     <Head title="セミナーの評価をお聞かせください" />
     <PublicLayout>
-        <div class="mx-auto mt-8 max-w-md rounded bg-white p-6 shadow">
+        <div class="mx-auto mt-8 max-w-xl rounded bg-white p-6 shadow">
             <h2 class="mb-4 text-center font-bold">
                 セミナーの評価をお聞かせください
             </h2>

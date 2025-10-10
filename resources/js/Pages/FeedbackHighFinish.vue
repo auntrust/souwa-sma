@@ -27,7 +27,7 @@ const props = defineProps<{
 <template>
     <Head title="ご評価ありがとうございます" />
     <PublicLayout>
-        <div class="mx-auto mt-8 max-w-md rounded bg-white p-6 shadow">
+        <div class="mx-auto mt-8 max-w-xl rounded bg-white p-6 shadow">
             <h2 class="mb-4 text-center text-xl font-bold">
                 【ご評価ありがとうございます】
             </h2>
