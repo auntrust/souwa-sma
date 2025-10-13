@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import DangerButton from '@/Components/DangerButton.vue';
+import SeminarDetails from '@/Components/SeminarDetails.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import {
-    formatDateWithWeekday,
-    formatTime,
-    getDurationMinutes,
-} from '@/utils/format';
+import { formatTime, nl2br } from '@/utils/format';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ref, watch } from 'vue';
 
@@ -76,49 +73,37 @@ const deleteEntry = (id: number, name: string) => {
                 <div
                     class="mb-4 overflow-hidden bg-white p-6 shadow-sm sm:rounded-lg dark:bg-gray-800"
                 >
-                    <h2 class="mb-4 text-xl font-bold">
+                    <h2
+                        class="mb-4 text-xl font-bold"
+                        style="
+                            border-left: 6px solid black;
+                            padding-left: 0.5rem;
+                        "
+                    >
                         {{ seminar?.name }}<br />
-                        {{ formatDateWithWeekday(seminar?.online_date) }}
                     </h2>
-                    <div class="">
-                        講義時間：{{
-                            formatTime(seminar?.online_start_time)
-                        }}〜{{ formatTime(seminar?.online_end_time) }}（{{
-                            getDurationMinutes(
-                                seminar?.online_start_time,
-                                seminar?.online_end_time,
-                            )
-                        }}分）<br />
-                        受講料：{{
-                            seminar?.is_paid == '1'
-                                ? seminar?.paid_fee.toLocaleString() + '円'
-                                : '無料'
-                        }}<br />
-                        <!-- 開催形式ごとの表示切り替え -->
-                        <template v-if="seminar?.seminar_type === 'onsite'">
-                            開催形式：現地開催<br />
-                            &nbsp;→ 会場名：{{ seminar?.venue_name }}<br />
-                            &nbsp;→ 郵便番号：{{ seminar?.venue_zip }}<br />
-                            &nbsp;→ 住所：{{ seminar?.venue_address }}
-                            {{ seminar?.venue_building }}<br />
-                            &nbsp;→ 電話番号：{{ seminar?.venue_tel }}<br />
-                            &nbsp;→ 地図URL：<a
-                                :href="seminar?.venue_map_url"
-                                target="_blank"
-                                >{{ seminar?.venue_map_url }}</a
-                            ><br />
-                        </template>
-                        <template
-                            v-else-if="seminar?.seminar_type === 'online'"
-                        >
-                            開催形式：オンラインセミナー<br />
-                        </template>
-                        <template
-                            v-else-if="seminar?.seminar_type === 'webinar'"
-                        >
-                            開催形式：ウェビナー<br />
-                        </template>
-                    </div>
+
+                    <p>{{ seminar?.description }}</p>
+                    <br />
+
+                    <SeminarDetails :seminar="seminar" />
+
+                    <template v-if="seminar?.speaker_info">
+                        <br />
+                        ▼講師<br />
+                        <span v-html="nl2br(seminar.speaker_info)"></span><br />
+                    </template>
+
+                    <template v-if="seminar?.benefits">
+                        <br />▼特典<br />
+                        <span v-html="nl2br(seminar.benefits)"></span>
+                    </template>
+
+                    <OrganizerContact
+                        :organizer-name="seminar?.organizer_name"
+                        :organizer-tel="seminar?.organizer_tel"
+                        :organizer-email="seminar?.organizer_email"
+                    />
                 </div>
             </div>
 

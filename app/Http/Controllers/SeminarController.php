@@ -19,11 +19,12 @@ class SeminarController extends Controller
         if (empty($request->input()['search_str'])) {
             $search_str = null;
             // $seminars = Seminar::all();
-            $seminars = Seminar::paginate(10);
+            $seminars = Seminar::orderBy('created_at', 'desc')->paginate(10);
         } else {
             $search_str = $request->input()['search_str'];
             $seminars = Seminar::where('name', 'LIKE', '%' . $search_str . '%')
                 ->orWhere('unique_key', 'LIKE', '%' . $search_str . '%')
+                ->orderBy('created_at', 'desc')
                 ->paginate(10);
         }
         return Inertia::render('Seminars/Index', [

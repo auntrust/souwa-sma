@@ -10,6 +10,7 @@ import {
 const props = defineProps<{
     seminar: {
         seminar_type: string;
+        detail_url: string;
         onsite_name?: string;
         onsite_zip?: string;
         onsite_address?: string;
@@ -38,6 +39,15 @@ const props = defineProps<{
 <template>
     <!-- 現地セミナー -->
     <template v-if="seminar.seminar_type === 'onsite'">
+        ▼セミナー詳細<br />
+        <a
+            :href="seminar.detail_url"
+            target="_blank"
+            class="inline-block rounded bg-blue-500 px-3 py-1 text-xs font-bold text-white transition hover:bg-blue-600"
+        >
+            セミナーの詳細はこちら</a
+        ><br /><br />
+
         ▼日程<br />
         講義日：{{ formatDateWithWeekday(seminar.onsite_date ?? '') }}<br />
         講義時間：{{ formatTime(seminar.onsite_start_time ?? '') }}〜{{
@@ -70,6 +80,15 @@ const props = defineProps<{
     </template>
     <!-- オンラインセミナー -->
     <template v-else-if="seminar.seminar_type === 'online'">
+        ▼オンラインセミナー詳細<br />
+        <a
+            :href="seminar.detail_url"
+            target="_blank"
+            class="inline-block rounded bg-blue-500 px-3 py-1 text-xs font-bold text-white transition hover:bg-blue-600"
+        >
+            オンラインセミナーの詳細はこちら</a
+        ><br /><br />
+
         ▼日程<br />
         講義日：{{ formatDateWithWeekday(seminar.online_date ?? '') }}<br />
         講義時間：{{ formatTime(seminar.online_start_time ?? '') }}〜{{
@@ -95,6 +114,14 @@ const props = defineProps<{
     </template>
     <!-- ウェビナー -->
     <template v-else-if="seminar.seminar_type === 'webinar'">
+        ▼ウェビナー詳細<br />
+        <a
+            :href="seminar.detail_url"
+            target="_blank"
+            class="inline-block rounded bg-blue-500 px-3 py-1 text-xs font-bold text-white transition hover:bg-blue-600"
+        >
+            ウェビナーの詳細はこちら</a
+        ><br /><br />
         ▼視聴期間<br />
         {{ formatDateTimeAtWithWeekday(seminar.webinar_start_at ?? '') }}
         〜<br />

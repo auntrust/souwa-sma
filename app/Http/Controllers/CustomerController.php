@@ -17,13 +17,14 @@ class CustomerController extends Controller
     {
         if (empty($request->input()['search_str'])) {
             $search_str = null;
-            $customers = Customer::paginate(10);
+            $customers = Customer::orderBy('created_at', 'desc')->paginate(10);
         } else {
             $search_str = $request->input()['search_str'];
             $customers = Customer::where('name', 'LIKE', '%' . $search_str . '%')
                 ->orWhere('furigana', 'LIKE', '%' . $search_str . '%')
                 ->orWhere('email', 'LIKE', '%' . $search_str . '%')
                 ->orWhere('co_name', 'LIKE', '%' . $search_str . '%')
+                ->orderBy('created_at', 'desc')
                 ->paginate(10);
         }
         return Inertia::render('Customers/Index', [

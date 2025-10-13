@@ -122,16 +122,17 @@ const submit = () => {
 <template>
     <Head title="セミナー申し込み" />
     <PublicLayout>
-        <div class="mx-auto mt-8 max-w-xl rounded bg-white p-6 shadow">
-            <h2 class="text-center text-xl font-bold">
-                【{{ seminar.name }}】
-            </h2>
-        </div>
         <div
             v-if="seminar.description"
             class="mx-auto mt-8 max-w-xl rounded bg-white p-6 shadow"
         >
-            ▼セミナー概要<br />
+            <h2
+                class="mb-4 text-xl font-bold"
+                style="border-left: 6px solid black; padding-left: 0.5rem"
+            >
+                {{ seminar.name }}
+            </h2>
+
             <p>{{ seminar.description }}</p>
         </div>
         <div class="mx-auto mt-8 max-w-xl rounded bg-white p-6 shadow">
