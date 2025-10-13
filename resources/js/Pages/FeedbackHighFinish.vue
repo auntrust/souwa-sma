@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
+import QRCode from 'qrcode';
+import { onMounted, ref } from 'vue';
 import PublicLayout from '../Layouts/PublicLayout.vue';
 
 const props = defineProps<{
@@ -22,6 +24,27 @@ const props = defineProps<{
         co_post: string;
     };
 }>();
+
+const qrCodeDataUrl = ref<string>('');
+
+onMounted(async () => {
+    try {
+        const dataUrl = await QRCode.toDataURL(
+            props.seminar.google_review_url,
+            {
+                width: 200,
+                margin: 2,
+                color: {
+                    dark: '#000000',
+                    light: '#FFFFFF',
+                },
+            },
+        );
+        qrCodeDataUrl.value = dataUrl;
+    } catch (error) {
+        console.error('QRコードの生成に失敗しました:', error);
+    }
+});
 </script>
 
 <template>
@@ -32,12 +55,15 @@ const props = defineProps<{
                 【ご評価ありがとうございます】
             </h2>
             <div class="mb-5 text-center">
-                よろしければ、Googleでご感想を<br />
-                シェアしていただけませんか？<br /><br />
+                よろしければ、Googleで<br />
+                クチコミ投稿をいただけませんか？<br /><br />
                 いただいた評価は、今後のセミナー運営や<br />
                 新しい受講者の参考になります。<br /><br />
                 星評価だけでも大変励みになります。
             </div>
+
+            <hr class="mb-5" />
+
             <div class="mb-5 text-center">
                 <a
                     :href="seminar.google_review_url"
@@ -46,6 +72,19 @@ const props = defineProps<{
                 >
                     クチコミ投稿はこちら
                 </a>
+            </div>
+
+            <!-- QRコード表示エリア -->
+            <div class="mb-5 text-center">
+                <div v-if="qrCodeDataUrl" class="mb-4">
+                    <a :href="seminar.google_review_url" target="_blank">
+                        <img
+                            :src="qrCodeDataUrl"
+                            alt="Google レビューページへのQRコード"
+                            class="mx-auto rounded border bg-white p-2"
+                        />
+                    </a>
+                </div>
             </div>
         </div>
     </PublicLayout>

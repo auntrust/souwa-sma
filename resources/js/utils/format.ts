@@ -15,14 +15,23 @@ export function isPaidLabel(isPaid: number) {
     return isPaid === 1 ? '有料' : '無料';
 }
 
-export function getDurationMinutes(start: string, end: string): number {
+export function getDurationMinutes(
+    start: string | null | undefined,
+    end: string | null | undefined,
+): number {
+    // start または end が undefined, null, または空文字の場合は0を返す
+    if (!start || !end) return 0;
+
     // "HH:mm" 形式を想定
     const [sh, sm] = start.split(':').map(Number);
     const [eh, em] = end.split(':').map(Number);
     return eh * 60 + em - (sh * 60 + sm);
 }
 
-export function formatTime(time: string): string {
+export function formatTime(time: string | null | undefined): string {
+    // time が undefined, null, または空文字の場合は空文字を返す
+    if (!time) return '';
+
     // "HH:mm:ss" → "HH:mm"
     return time.split(':').slice(0, 2).join(':');
 }
