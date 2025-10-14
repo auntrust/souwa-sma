@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
+    // 認証済みの場合はセミナー一覧にリダイレクト
+    if (auth()->check()) {
+        return redirect()->route('seminars.index');
+    }
+
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
