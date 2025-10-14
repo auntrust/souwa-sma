@@ -33,7 +33,9 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        // ログイン後の遷移先をセミナー管理に変更
+        // return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->intended(route('seminars.index', absolute: false));
     }
 
     /**
