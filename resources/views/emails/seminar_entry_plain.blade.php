@@ -12,57 +12,52 @@
 ▼セミナー名
 {{ $seminar->name }}
 
+@if ($seminar->seminar_type == 'onsite')
 ▼開催日
-{{ format_date($seminar->seminar_date) }}
+{{ format_date($seminar->onsite_date) }}
 
 ▼講義時間
-{{ format_time($seminar->start_time) }}〜{{ format_time($seminar->end_time) }}（{{ get_duration_time($seminar->start_time, $seminar->end_time) }}分）
-
-▼受講料
-{{ $seminar->is_paid == '1' ? number_format($seminar->paid_fee) . '円' : '無料' }}
-
-@if ($seminar->seminar_type == 'onsite')
-▼開催形式
-現地開催
+{{ format_time($seminar->onsite_start_time) }}〜{{ format_time($seminar->onsite_end_time) }}（{{ get_duration_time($seminar->onsite_start_time, $seminar->onsite_end_time) }}分）
 
 ▼会場名
-{{ $seminar->venue_name }}
+{{ $seminar->onsite_zip }}
 
 ▼郵便番号
-{{ $seminar->venue_zip }}
+{{ format_postal_code($seminar->onsite_zip) }}
 
 ▼住所
-{{ $seminar->venue_address }}{{ $seminar->venue_building }}
-
-▼電話番号
-{{ $seminar->venue_tel }}
+{{ $seminar->onsite_address }}
+{{ $seminar->onsite_building }}
 
 ▼地図URL
-{{ $seminar->venue_map_url }}
+{{ $seminar->onsite_map_url }}
 
 @elseif ($seminar->seminar_type == 'online')
-▼開催形式
-オンラインセミナー
+▼開催日
+{{ format_date($seminar->online_date) }}
+
+▼講義時間
+{{ format_time($seminar->online_start_time) }}〜{{ format_time($seminar->online_end_time) }}（{{ get_duration_time($seminar->online_start_time, $seminar->online_end_time) }}分）
 
 ▼URL
 {{ $seminar->online_url }}
 
-▼ID
+▼ミーティングID
 {{ $seminar->online_id }}
 
-▼PWD
+▼パスコード
 {{ $seminar->online_pwd }}
 
 @elseif ($seminar->seminar_type == 'webinar')
-▼開催形式
-ウェビナー
-
 ▼視聴URL
 {{ $seminar->webinar_url }}
 
 ▼視聴可能期間
 {{ format_datetime($seminar->webinar_start_at) }}〜{{ format_datetime($seminar->webinar_end_at) }}
+
 @endif
+▼受講料
+{{ $seminar->is_paid == '1' ? number_format($seminar->paid_fee) . '円' : '無料' }}
 
 @if ($seminar->seminar_type == 'online')
 ※開催時刻になりましたら上記のURLよりご参加ください。
@@ -101,6 +96,7 @@
 {{ $request->todofuken }}
 @endif
 
+@if ($request->co_name || $request->co_tel || $request->co_busho || $request->co_post)
 =================================
  会社情報
 =================================
@@ -123,6 +119,7 @@
 
 ▼役職
 {{ $request->co_post }}
+@endif
 @endif
 
 =================================
