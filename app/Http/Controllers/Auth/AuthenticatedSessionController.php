@@ -49,6 +49,8 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        // ログアウト後の遷移先をログイン画面に変更
+        // return redirect('/');
+        return redirect()->route('login');
     }
 }
