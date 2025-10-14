@@ -42,3 +42,22 @@ if (!function_exists('get_duration_time')) {
         return $start->diffInMinutes($end);
     }
 }
+
+// 郵便番号のフォーマット
+if (!function_exists('format_postal_code')) {
+    function format_postal_code($postal_code)
+    {
+        // 数字以外を除去
+        $code = preg_replace('/[^\d]/', '', (string) $postal_code);
+        // 7桁になるよう左側を0で埋める
+        $code = str_pad($code, 7, '0', STR_PAD_LEFT);
+
+        // 7桁でない場合は元の値をそのまま返す
+        if (strlen($code) !== 7) {
+            return (string) $postal_code;
+        }
+
+        // 〒XXX-XXXX の形式で返す
+        return '〒' . substr($code, 0, 3) . '-' . substr($code, 3);
+    }
+}
