@@ -8,5 +8,5 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-// セミナーリマインダーのスケジュール
-Schedule::command('seminar:send-reminders')->dailyAt('11:00')->timezone('Asia/Tokyo')->description('セミナーリマインダーメールを送信');
+// リマインダーメールのスケジュール
+Schedule::command('seminar:send-reminders')->dailyAt('09:00')->timezone('Asia/Tokyo')->description('リマインダーメールを送信');

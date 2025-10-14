@@ -19,7 +19,7 @@ class SendSeminarReminders extends Command
      *
      * @var string
      */
-    protected $description = 'Send reminder emails for seminars happening tomorrow';
+    protected $description = 'リマインダーメールを送信する';
 
     /**
      * Execute the console command.
@@ -28,7 +28,7 @@ class SendSeminarReminders extends Command
     {
         SendSeminarReminderJob::dispatch();
 
-        $this->info('セミナーリマインダーの送信ジョブをキューに追加しました。');
+        $this->info('リマインダーメールの送信ジョブをキューに追加しました。');
 
         return 0;
     }

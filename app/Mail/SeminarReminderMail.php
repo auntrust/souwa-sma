@@ -13,10 +13,7 @@ class SeminarReminderMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public $seminar, public $participant)
-    {
-        //
-    }
+    public function __construct(public $seminar, public $customer) {}
 
     public function envelope(): Envelope
     {
@@ -30,7 +27,7 @@ class SeminarReminderMail extends Mailable implements ShouldQueue
             text: 'emails.seminar_reminder_plain',
             with: [
                 'seminar' => $this->seminar,
-                'participant' => $this->participant,
+                'customer' => $this->customer,
             ],
         );
     }

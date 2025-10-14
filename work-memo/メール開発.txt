@@ -1,0 +1,60 @@
+=============
+= メールが送信されるまでの流れ
+=============
+
+１）毎分CRONが実行される
+* * * * * www-data cd /pathto && php artisan schedule:run >> /dev/null 2>&1
+
+２）その結果、下記ファイルが実行される。
+routes/console.php
+~~~~~~~~~
+Schedule::command('seminar:send-reminders')->dailyAt('09:00')->timezone('Asia/Tokyo')->description('リマインダーメールを送信');
+※定期実行する設定がまとめられている。
+※実行対象の設定があれば実行
+~~~~~~~~~
+
+３）その結果、下記ファイルが実行される。
+app/Console/Commands/SendSeminarReminders.php
+~~~~~~~~~
+SendSeminarReminderJob::dispatch();
+※コマンド本体（直接実行する場合は『php artisan seminar:send-reminders』）
+~~~~~~~~~
+
+４）その結果、下記ファイルが実行される。
+app/Jobs/SendSeminarReminderJob.php
+~~~~~~~~~
+Mail::to($customer->email)->send(new SeminarReminderMail($seminar, $customer));
+※メールに組み込むデータ取得やテンプレートの指定を行う
+~~~~~~~~~
+
+５）その結果、下記ファイルが読み込まれる。
+app/Mail/SeminarReminderMail.php
+resources/views/emails/seminar_reminder_plain.blade.php
+resources/views/emails/seminar_reminder.blade.php
+
+=============
+= メモ
+=============
+
+# スケジュールの設定リスト取得
+php artisan schedule:list
+
+# キューワーカーを起動（開発環境）
+php artisan queue:work
+※これが起動していないとJobに追加されるだけで実行されない
+
+# キューワーカーを起動（本番環境）
+sudo apt-get install supervisor
+sudo vi /etc/supervisor/conf.d/laravel-worker.conf
+~~~~~~~~
+[program:laravel-worker]
+process_name=%(program_name)s_%(process_num)02d
+command=php /path/to/your/project/artisan queue:work --sleep=3 --tries=3 --max-time=3600
+autostart=true
+autorestart=true
+user=www-data
+numprocs=1
+redirect_stderr=true
+stdout_logfile=/path/to/your/project/storage/logs/worker.log
+stopwaitsecs=3600
+~~~~~~~~

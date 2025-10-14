@@ -20,7 +20,7 @@
 {{ format_time($seminar->onsite_start_time) }}〜{{ format_time($seminar->onsite_end_time) }}（{{ get_duration_time($seminar->onsite_start_time, $seminar->onsite_end_time) }}分）
 
 ▼会場名
-{{ $seminar->onsite_zip }}
+{{ $seminar->onsite_name }}
 
 ▼郵便番号
 {{ format_postal_code($seminar->onsite_zip) }}
