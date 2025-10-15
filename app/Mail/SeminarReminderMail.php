@@ -1,0 +1,38 @@
+<?php
+
+namespace App\Mail;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Queue\SerializesModels;
+
+class SeminarReminderMail extends Mailable implements ShouldQueue
+{
+    use Queueable, SerializesModels;
+
+    public function __construct(public $seminar, public $participant) {}
+
+    public function envelope(): Envelope
+    {
+        return new Envelope(subject: '【明日開催・重要】' . $this->seminar->name . ' - 最終確認のお知らせ');
+    }
+
+    public function content(): Content
+    {
+        return new Content(
+            text: 'emails.seminar_reminder_plain',
+            with: [
+                'seminar' => $this->seminar,
+                'participant' => $this->participant,
+            ],
+        );
+    }
+
+    public function attachments(): array
+    {
+        return [];
+    }
+}

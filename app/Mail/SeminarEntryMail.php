@@ -38,7 +38,6 @@ class SeminarEntryMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            html: 'emails.seminar_entry',
             text: 'emails.seminar_entry_plain',
             with: [
                 'request' => $this->request,

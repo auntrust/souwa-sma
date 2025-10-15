@@ -11,4 +11,20 @@ class SeminarCustomer extends Model
     use HasFactory;
 
     protected $fillable = ['seminar_id', 'customer_id', 'entry_date', 'name', 'furigana', 'tel', 'email', 'todofuken', 'co_name', 'co_tel', 'co_busho', 'co_post', 'applicant_count', 'request', 'is_overwrite_customer_info', 'mail_sent_at', 'survey_q1', 'survey_q2', 'survey_q3', 'survey_q4', 'survey_q5', 'survey_rating', 'survey_opinion'];
+
+    /**
+     * セミナーとのリレーション
+     */
+    public function seminar()
+    {
+        return $this->belongsTo(Seminar::class);
+    }
+
+    /**
+     * 顧客とのリレーション
+     */
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
 }

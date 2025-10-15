@@ -10,16 +10,15 @@ class Kernel extends ConsoleKernel
     /**
      * スケジュールの定義
      */
-    protected function schedule(Schedule $schedule)
+    protected function schedule(Schedule $schedule): void
     {
-        // 毎日午前8時に一斉メール送信コマンドを実行
-        $schedule->command('mail:send-bulk')->dailyAt('8:00');
+        // routes/console.phpでスケジュール管理
     }
 
     /**
      * コマンド登録
      */
-    protected function commands()
+    protected function commands(): void
     {
         $this->load(__DIR__ . '/Commands');
         require base_path('routes/console.php');
