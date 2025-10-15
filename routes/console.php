@@ -13,3 +13,6 @@ Schedule::command('seminar:send-reminders')->dailyAt('09:00')->timezone('Asia/To
 
 // リマインダーメールのスケジュール
 Schedule::command('seminar:send-thank-you')->dailyAt('20:00')->timezone('Asia/Tokyo')->description('お礼メールを送信');
+
+// セミナー案内メールのスケジュール
+Schedule::command('seminar:seminar-announcement')->dailyAt('09:00')->timezone('Asia/Tokyo')->description('セミナー案内メールを送信');
