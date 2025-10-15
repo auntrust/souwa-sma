@@ -77,3 +77,15 @@ php artisan queue:work
 php artisan view:clear
 php artisan cache:clear
 php artisan config:clear
+
+===================
+= artisanコマンド
+===================
+# Commandの作成
+php artisan make:command SeminarReminder
+
+# Jobの作成
+php artisan make:job SendSeminarReminderJob
+
+# Mailableの作成
+php artisan make:mail SeminarSeminarReminderMail

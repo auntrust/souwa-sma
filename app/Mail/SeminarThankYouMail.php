@@ -9,24 +9,33 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class SeminarReminderMail extends Mailable implements ShouldQueue
+class SeminarThankYouMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
+    /**
+     * Create a new message instance.
+     */
     public function __construct(public $seminar, public $participant)
     {
         //
     }
 
+    /**
+     * Get the message envelope.
+     */
     public function envelope(): Envelope
     {
-        return new Envelope(subject: '【明日開催・重要】' . $this->seminar->name . ' - 最終確認のお知らせ');
+        return new Envelope(subject: '【お礼】' . $this->seminar->name . ' - ご参加ありがとうございました');
     }
 
+    /**
+     * Get the message content definition.
+     */
     public function content(): Content
     {
         return new Content(
-            text: 'emails.seminar_reminder_plain',
+            text: 'emails.thank_you_plain',
             with: [
                 'seminar' => $this->seminar,
                 'participant' => $this->participant,
@@ -34,6 +43,11 @@ class SeminarReminderMail extends Mailable implements ShouldQueue
         );
     }
 
+    /**
+     * Get the attachments for the message.
+     *
+     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     */
     public function attachments(): array
     {
         return [];
