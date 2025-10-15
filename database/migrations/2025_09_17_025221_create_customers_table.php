@@ -25,9 +25,10 @@ return new class extends Migration {
             $table->string('co_busho')->nullable()->comment('会社部署');
             $table->string('co_post')->nullable()->comment('役職');
 
-            $table->boolean('is_delivery')->default(true)->comment('配信フラグ');
-            $table->string('optin_at')->nullable()->comment('オプトインに同意した日時');
+            $table->boolean('is_unsubscribe')->default(false)->comment('配信停止フラグ');
+            $table->timestamp('unsubscribe_at')->nullable()->comment('配信停止した日時');
             $table->string('optin_method')->nullable()->comment('オプトインへの同意方法');
+            $table->timestamp('optin_at')->nullable()->comment('オプトインに同意した日時');
 
             $table->timestamps();
         });
