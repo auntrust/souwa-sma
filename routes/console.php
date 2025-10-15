@@ -10,3 +10,6 @@ Artisan::command('inspire', function () {
 
 // リマインダーメールのスケジュール
 Schedule::command('seminar:send-reminders')->dailyAt('09:00')->timezone('Asia/Tokyo')->description('リマインダーメールを送信');
+
+// リマインダーメールのスケジュール
+Schedule::command('seminar:send-thank-you')->dailyAt('20:00')->timezone('Asia/Tokyo')->description('お礼メールを送信');
