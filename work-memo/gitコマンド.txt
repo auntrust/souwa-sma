@@ -40,3 +40,18 @@ git branch -d feature/#login-seminar-redirect#
 
 # リモートのfeatureブランチも削除（プルリクエストがマージされた後）
 git push origin --delete feature/#login-seminar-redirect#
+
+===============
+= ブランチを作成（プレフィックスを使用）
+===============
+# 新機能追加
+git checkout -b feature/***
+
+# バグ修正
+git checkout -b fix/***
+
+# 改善
+git checkout -b improvement/***
+
+# リファクタリング
+git checkout -b refactor/***
