@@ -248,12 +248,16 @@ class SeminarCustomerController extends Controller
             abort(404, '該当のユーザーが存在しません');
         }
 
+        // すでに配信停止されているかどうかをチェック
+        $wasAlreadyStopped = $customer->is_delivery === 0;
+
         // is_deliveryを0に設定（配信停止）
         $customer->update(['is_delivery' => 0]);
 
         return Inertia::render('unsubscribe', [
             'customer' => $customer,
             'cid' => $cid,
+            'wasAlreadyStopped' => $wasAlreadyStopped,
         ]);
     }
 
