@@ -139,6 +139,25 @@ const submit = () => {
             <div class="">
                 <SeminarDetails :seminar="seminar" />
 
+                <!-- 現地セミナー -->
+                <template v-if="seminar.seminar_type === 'onsite'"> </template>
+                <!-- オンラインセミナー -->
+                <template v-else-if="seminar.seminar_type === 'online'">
+                    ▼オンラインセミナーへのアクセス方法<br />
+                    <p class="text-sm text-red-600">
+                        オンライン受講に必要なURLやアクセス情報は、<br />
+                        エントリー完了後にメールでご案内いたします。
+                    </p>
+                </template>
+                <!-- ウェビナー -->
+                <template v-else-if="seminar.seminar_type === 'webinar'">
+                    ▼視聴動画へのアクセス方法<br />
+                    <p class="text-sm text-red-600">
+                        視聴に必要なURLやアクセス情報は、<br />
+                        エントリー完了後にメールでご案内いたします。
+                    </p>
+                </template>
+
                 <template v-if="seminar.speaker_info">
                     <br />
                     ▼講師<br />

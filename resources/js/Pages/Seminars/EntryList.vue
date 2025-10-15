@@ -89,7 +89,6 @@ const deleteEntry = (id: number, name: string) => {
                     <SeminarDetails :seminar="seminar" />
 
                     <template v-if="seminar?.speaker_info">
-                        <br />
                         ▼講師<br />
                         <span v-html="nl2br(seminar.speaker_info)"></span><br />
                     </template>
