@@ -39,15 +39,6 @@ const props = defineProps<{
 <template>
     <!-- 現地セミナー -->
     <template v-if="seminar.seminar_type === 'onsite'">
-        ▼セミナー詳細<br />
-        <a
-            :href="seminar.detail_url"
-            target="_blank"
-            class="inline-block rounded bg-blue-500 px-3 py-1 text-xs font-bold text-white transition hover:bg-blue-600"
-        >
-            セミナーの詳細はこちら</a
-        ><br /><br />
-
         ▼日程<br />
         講義日：{{ formatDateWithWeekday(seminar.onsite_date ?? '') }}<br />
         講義時間：{{ formatTime(seminar.onsite_start_time ?? '') }}〜{{
@@ -65,6 +56,15 @@ const props = defineProps<{
         }}<br />
         定員：{{ seminar.onsite_capacity }}人<br /><br />
 
+        ▼セミナー詳細<br />
+        <a
+            :href="seminar.detail_url"
+            target="_blank"
+            class="inline-block rounded bg-blue-500 px-3 py-1 text-xs font-bold text-white transition hover:bg-blue-600"
+        >
+            セミナーの詳細はこちら</a
+        ><br /><br />
+
         ▼会場<br />
         {{ seminar.onsite_name }}<br />
         {{ formatPostalCode(seminar.onsite_zip ?? '') }}<br />
@@ -80,15 +80,6 @@ const props = defineProps<{
     </template>
     <!-- オンラインセミナー -->
     <template v-else-if="seminar.seminar_type === 'online'">
-        ▼オンラインセミナー詳細<br />
-        <a
-            :href="seminar.detail_url"
-            target="_blank"
-            class="inline-block rounded bg-blue-500 px-3 py-1 text-xs font-bold text-white transition hover:bg-blue-600"
-        >
-            オンラインセミナーの詳細はこちら</a
-        ><br /><br />
-
         ▼日程<br />
         講義日：{{ formatDateWithWeekday(seminar.online_date ?? '') }}<br />
         講義時間：{{ formatTime(seminar.online_start_time ?? '') }}〜{{
@@ -99,29 +90,25 @@ const props = defineProps<{
                 seminar.online_end_time ?? '',
             )
         }}分）<br />
+        定員：{{ seminar.online_capacity }}人<br />
         受講料：{{
             seminar.is_paid == '1'
                 ? seminar.paid_fee.toLocaleString() + '円'
                 : '無料'
-        }}<br />
-        定員：{{ seminar.online_capacity }}人<br /><br />
-
-        ▼オンラインセミナーへのアクセス方法<br />
-        <p class="text-sm text-red-600">
-            オンライン受講に必要なURLやアクセス情報は、<br />
-            エントリー完了後にメールでご案内いたします。
-        </p>
+        }}<br /><br />
+        <template v-if="seminar.detail_url">
+            ▼オンラインセミナー詳細<br />
+            <a
+                :href="seminar.detail_url"
+                target="_blank"
+                class="inline-block rounded bg-blue-500 px-3 py-1 text-xs font-bold text-white transition hover:bg-blue-600"
+            >
+                オンラインセミナーの詳細はこちら</a
+            ><br /><br />
+        </template>
     </template>
     <!-- ウェビナー -->
     <template v-else-if="seminar.seminar_type === 'webinar'">
-        ▼ウェビナー詳細<br />
-        <a
-            :href="seminar.detail_url"
-            target="_blank"
-            class="inline-block rounded bg-blue-500 px-3 py-1 text-xs font-bold text-white transition hover:bg-blue-600"
-        >
-            ウェビナーの詳細はこちら</a
-        ><br /><br />
         ▼視聴期間<br />
         {{ formatDateTimeAtWithWeekday(seminar.webinar_start_at ?? '') }}
         〜<br />
@@ -130,18 +117,19 @@ const props = defineProps<{
             視聴期間を過ぎると視聴できなくなりますので、<br />期間中にご視聴ください。
         </p>
         <br />
-
+        ▼ウェビナー詳細<br />
+        <a
+            :href="seminar.detail_url"
+            target="_blank"
+            class="inline-block rounded bg-blue-500 px-3 py-1 text-xs font-bold text-white transition hover:bg-blue-600"
+        >
+            ウェビナーの詳細はこちら</a
+        ><br /><br />
         ▼視聴料<br />
         {{
             seminar.is_paid == '1'
                 ? seminar.paid_fee.toLocaleString() + '円'
                 : '無料'
         }}<br /><br />
-
-        ▼視聴動画へのアクセス方法<br />
-        <p class="text-sm text-red-600">
-            視聴に必要なURLやアクセス情報は、<br />
-            エントリー完了後にメールでご案内いたします。
-        </p>
     </template>
 </template>

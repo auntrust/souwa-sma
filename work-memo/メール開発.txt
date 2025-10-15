@@ -2,10 +2,10 @@
 = メールが送信されるまでの流れ
 =============
 
-１）毎分CRONが実行される
+1）毎分CRONが実行される
 * * * * * www-data cd /pathto && php artisan schedule:run >> /dev/null 2>&1
 
-２）その結果、下記ファイルが実行される。
+2）その結果、下記ファイルが実行される。
 routes/console.php
 ~~~~~~~~~
 Schedule::command('seminar:send-reminders')->dailyAt('09:00')->timezone('Asia/Tokyo')->description('リマインダーメールを送信');
@@ -13,21 +13,21 @@ Schedule::command('seminar:send-reminders')->dailyAt('09:00')->timezone('Asia/To
 ※実行対象の設定があれば実行
 ~~~~~~~~~
 
-３）その結果、下記ファイルが実行される。
+3）その結果、下記ファイルが実行される。
 app/Console/Commands/SendSeminarReminders.php
 ~~~~~~~~~
 SendSeminarReminderJob::dispatch();
 ※コマンド本体（直接実行する場合は『php artisan seminar:send-reminders』）
 ~~~~~~~~~
 
-４）その結果、下記ファイルが実行される。
+4）その結果、下記ファイルが実行される。
 app/Jobs/SendSeminarReminderJob.php
 ~~~~~~~~~
 Mail::to($customer->email)->send(new SeminarReminderMail($seminar, $customer));
 ※メールに組み込むデータ取得やテンプレートの指定を行う
 ~~~~~~~~~
 
-５）その結果、下記ファイルが読み込まれる。
+5）その結果、下記ファイルが読み込まれる。
 app/Mail/SeminarReminderMail.php
 resources/views/emails/seminar_reminder_plain.blade.php
 resources/views/emails/seminar_reminder.blade.php
