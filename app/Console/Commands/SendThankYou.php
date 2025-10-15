@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\SendThankYouJob;
 use Illuminate\Console\Command;
 
 class SendThankYou extends Command
@@ -11,7 +12,7 @@ class SendThankYou extends Command
      *
      * @var string
      */
-    protected $signature = 'app:send-thank-you';
+    protected $signature = 'seminar:send-thank-you';
 
     /**
      * The console command description.
@@ -25,6 +26,10 @@ class SendThankYou extends Command
      */
     public function handle()
     {
-        //
+        SendThankYouJob::dispatch();
+
+        $this->info('セミナー参加のお礼メールの送信ジョブをキューに追加しました。');
+
+        return 0;
     }
 }

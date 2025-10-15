@@ -44,7 +44,7 @@
 お忙しい中恐縮ですが、忌憚のないご意見をお聞かせください。
 
 【アンケートURL】
-{{ url('/feedback/' . $seminar->unique_key . '/' . $participant->unique_key) }}
+{{ url('/feedback/' . $seminar->unique_key . '/' . $participant->customer->unique_key) }}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ■ 今後のセミナー情報について
