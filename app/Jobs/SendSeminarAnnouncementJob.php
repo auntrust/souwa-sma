@@ -53,27 +53,30 @@ class SendSeminarAnnouncementJob implements ShouldQueue
             $targetDates = [$today->copy()->addDays(3)->format('Y-m-d'), $today->copy()->addDays(5)->format('Y-m-d'), $today->copy()->addDays(7)->format('Y-m-d'), $today->copy()->addDays(14)->format('Y-m-d')];
 
             // セミナータイプ別に対象日に開催されるセミナーを取得
-            $seminars = Seminar::with(['seminarCustomers.customer'])
+            $seminars = Seminar::with([
+                'seminarCustomers.customer' => function ($query) {
+                    $query->where('is_delivery', 1);
+                },
+            ])
                 ->where('is_active', true)
-                ->where(function ($query) use ($targetDates, $today) {
-                    foreach ($targetDates as $targetDate) {
-                        // onsite セミナー: onsite_date が対象日
-                        $query
-                            ->orWhere(function ($q) use ($targetDate) {
-                                $q->where('seminar_type', 'onsite')->where('onsite_date', $targetDate);
-                            })
-                            // online セミナー: online_date が対象日
-                            ->orWhere(function ($q) use ($targetDate) {
-                                $q->where('seminar_type', 'online')->where('online_date', $targetDate);
+                ->where(function ($query) use ($targetDates) {
+                    // onsite セミナー
+                    $query
+                        ->where(function ($q) use ($targetDates) {
+                            $q->where('seminar_type', 'onsite')->whereIn('onsite_date', $targetDates);
+                        })
+                        // online セミナー
+                        ->orWhere(function ($q) use ($targetDates) {
+                            $q->where('seminar_type', 'online')->whereIn('online_date', $targetDates);
+                        })
+                        // webinar セミナー
+                        ->orWhere(function ($q) use ($targetDates) {
+                            $q->where('seminar_type', 'webinar')->where(function ($subQ) use ($targetDates) {
+                                foreach ($targetDates as $targetDate) {
+                                    $subQ->orWhereDate('webinar_start_at', $targetDate);
+                                }
                             });
-                    }
-
-                    // webinar セミナー: webinar_start_at が対象日のいずれか
-                    foreach ($targetDates as $targetDate) {
-                        $query->orWhere(function ($q) use ($targetDate) {
-                            $q->where('seminar_type', 'webinar')->whereDate('webinar_start_at', $targetDate);
                         });
-                    }
                 })
                 ->get();
 
