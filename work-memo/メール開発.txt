@@ -58,3 +58,22 @@ redirect_stderr=true
 stdout_logfile=/path/to/your/project/storage/logs/worker.log
 stopwaitsecs=3600
 ~~~~~~~~
+
+===================
+= 本番環境でのワーカーの設定
+===================
+
+# ワーカーを適切に停止
+php artisan queue:restart
+
+# その後、ワーカーを再起動
+php artisan queue:work
+
+
+===================
+= キャッシュクリア
+===================
+
+php artisan view:clear
+php artisan cache:clear
+php artisan config:clear

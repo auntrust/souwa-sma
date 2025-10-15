@@ -13,21 +13,20 @@ class SeminarReminderMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public $seminar, public $customer) {}
+    public function __construct(public $seminar, public $participant) {}
 
     public function envelope(): Envelope
     {
-        return new Envelope(subject: '【明日開催】' . $this->seminar->name . ' のお知らせ');
+        return new Envelope(subject: '【明日開催・重要】' . $this->seminar->name . ' - 最終確認のお知らせ');
     }
 
     public function content(): Content
     {
         return new Content(
-            html: 'emails.seminar_reminder',
             text: 'emails.seminar_reminder_plain',
             with: [
                 'seminar' => $this->seminar,
-                'customer' => $this->customer,
+                'participant' => $this->participant,
             ],
         );
     }
