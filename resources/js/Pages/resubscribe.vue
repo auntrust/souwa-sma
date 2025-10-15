@@ -2,18 +2,33 @@
 import { Head } from '@inertiajs/vue3';
 import PublicLayout from '../Layouts/PublicLayout.vue';
 
-defineProps<{
+const props = defineProps<{
     cid: string | number;
+    customer: {
+        id: number;
+        name: string;
+        email: string;
+        is_delivery: number;
+    };
 }>();
 </script>
 
 <template>
-    <Head title="配信再開完了" />
+    <Head title="再開手続きが完了しました" />
     <PublicLayout>
         <div class="mx-auto mt-8 max-w-xl rounded bg-white p-6 shadow">
             <h2 class="mb-4 text-center text-xl font-bold">
-                【配信再開が完了しました】
+                【再開手続きが完了しました】
             </h2>
+
+            <div class="mb-6 rounded-lg bg-gray-50 p-4">
+                <p class="mb-2 text-center text-sm text-gray-600">
+                    配信再開対象のメールアドレス
+                </p>
+                <p class="text-center font-medium text-gray-800">
+                    {{ customer.email }}
+                </p>
+            </div>
             <p class="mb-2 text-center">
                 メール配信の再開手続きが完了いたしました。
             </p>
