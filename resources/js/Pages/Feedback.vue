@@ -6,6 +6,7 @@ import PublicLayout from '../Layouts/PublicLayout.vue';
 const props = defineProps<{
     seminar: {
         id: number;
+        unique_key: string;
         name: string;
         description: string;
         speaker_info: string;

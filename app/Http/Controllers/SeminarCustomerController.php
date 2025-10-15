@@ -238,6 +238,46 @@ class SeminarCustomerController extends Controller
     }
 
     /**
+     * メール案内の配信停止処理を行う
+     */
+    public function unsubscribe($cid)
+    {
+        $customer = Customer::where('unique_key', $cid)->first();
+
+        if (!$customer) {
+            abort(404, '該当のユーザーが存在しません');
+        }
+
+        // is_deliveryを0に設定（配信停止）
+        $customer->update(['is_delivery' => 0]);
+
+        return Inertia::render('unsubscribe', [
+            'customer' => $customer,
+            'cid' => $cid,
+        ]);
+    }
+
+    /**
+     * メール案内の配信再開処理を行う
+     */
+    public function resubscribe($cid)
+    {
+        $customer = Customer::where('unique_key', $cid)->first();
+
+        if (!$customer) {
+            abort(404, '該当のユーザーが存在しません');
+        }
+
+        // is_deliveryを1に設定（配信再開）
+        $customer->update(['is_delivery' => 1]);
+
+        return Inertia::render('resubscribe', [
+            'customer' => $customer,
+            'cid' => $cid,
+        ]);
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(SeminarCustomer $seminarCustomer)
