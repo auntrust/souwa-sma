@@ -40,6 +40,19 @@ const showingNavigationDropdown = ref(false);
                                     顧客管理
                                 </NavLink>
                             </div>
+                            <!-- 配信履歴 -->
+                            <div
+                                class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
+                            >
+                                <NavLink
+                                    :href="route('email-logs.index')"
+                                    :active="
+                                        route().current('email-logs.index')
+                                    "
+                                >
+                                    配信履歴
+                                </NavLink>
+                            </div>
                         </div>
 
                         <div class="hidden sm:ms-6 sm:flex sm:items-center">
@@ -153,6 +166,14 @@ const showingNavigationDropdown = ref(false);
                             :active="route().current('customers.index')"
                         >
                             顧客管理
+                        </ResponsiveNavLink>
+                    </div>
+                    <div class="space-y-1 pb-3 pt-2">
+                        <ResponsiveNavLink
+                            :href="route('email-logs.index')"
+                            :active="route().current('email-logs.index')"
+                        >
+                            配信履歴
                         </ResponsiveNavLink>
                     </div>
                     <!-- Responsive Settings Options -->

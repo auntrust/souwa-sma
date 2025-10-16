@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Mail\SeminarSeminarAnnouncementMail;
+use App\Models\EmailLog;
 use App\Models\Seminar;
 use App\Models\SeminarCustomer;
 use Carbon\Carbon;
@@ -11,7 +12,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class SendSeminarAnnouncementJob implements ShouldQueue
@@ -55,7 +55,7 @@ class SendSeminarAnnouncementJob implements ShouldQueue
             // セミナータイプ別に対象日に開催されるセミナーを取得
             $seminars = Seminar::with([
                 'seminarCustomers.customer' => function ($query) {
-                    $query->where('is_unsubscribe', 1);
+                    $query->where('is_unsubscribe', 0);
                 },
             ])
                 ->where('is_active', true)
@@ -108,31 +108,41 @@ class SendSeminarAnnouncementJob implements ShouldQueue
                         continue;
                     }
 
+                    // メール配信ログの作成（送信前）
+                    $emailLog = EmailLog::create([
+                        'mail_type' => "{$daysUntilSeminar}日前の案内",
+                        'recipient_email' => $customer->email,
+                        'recipient_name' => $customer->name,
+                        'seminar_id' => $seminar->id,
+                        'customer_id' => $customer->id,
+                        'seminar_customer_id' => $participant->id,
+                        'status' => 'pending',
+                        'sent_at' => null,
+                    ]);
+
                     try {
                         // セミナー案内メール送信
                         Mail::to($customer->email)->send(new SeminarSeminarAnnouncementMail($seminar, $participant));
                         $totalSent++;
 
-                        // 送信成功をログに記録
-                        Log::info("Seminar announcement email sent to {$customer->email} for seminar: {$seminar->name} (type: {$seminar->seminar_type}, {$daysUntilSeminar} days before)");
+                        // 配信ログを成功に更新
+                        $emailLog->update([
+                            'status' => 'success',
+                            'sent_at' => Carbon::now(),
+                        ]);
                     } catch (\Exception $e) {
                         $errors[] = "Failed to send announcement email to {$customer->email}: {$e->getMessage()}";
-                        Log::warning("Failed to send announcement email to {$customer->email}: {$e->getMessage()}");
+
+                        // 配信ログを失敗に更新
+                        $emailLog->update([
+                            'status' => 'failed',
+                            'sent_at' => Carbon::now(),
+                            'error_message' => $e->getMessage(),
+                        ]);
                     }
                 }
             }
-
-            // 結果をログに記録
-            Log::info("SendSeminarAnnouncementJob completed. Sent: {$totalSent}, Errors: " . count($errors));
-
-            if (!empty($errors)) {
-                Log::warning('SendSeminarAnnouncementJob errors: ' . implode('; ', $errors));
-            }
         } catch (\Exception $e) {
-            Log::error('SendSeminarAnnouncementJob failed: ' . $e->getMessage(), [
-                'exception' => $e,
-                'trace' => $e->getTraceAsString(),
-            ]);
             throw $e;
         }
     }
@@ -159,9 +169,6 @@ class SendSeminarAnnouncementJob implements ShouldQueue
      */
     public function failed(\Throwable $exception): void
     {
-        Log::error('SendSeminarAnnouncementJob permanently failed: ' . $exception->getMessage(), [
-            'exception' => $exception,
-            'trace' => $exception->getTraceAsString(),
-        ]);
+        // Job失敗時の処理が必要な場合はここに記述
     }
 }

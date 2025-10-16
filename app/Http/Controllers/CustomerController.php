@@ -25,7 +25,7 @@ class CustomerController extends Controller
                 ->orWhere('email', 'LIKE', '%' . $search_str . '%')
                 ->orWhere('co_name', 'LIKE', '%' . $search_str . '%')
                 ->orderBy('created_at', 'desc')
-                ->paginate(10);
+                ->paginate(50);
         }
         return Inertia::render('Customers/Index', [
             'customers' => $customers,

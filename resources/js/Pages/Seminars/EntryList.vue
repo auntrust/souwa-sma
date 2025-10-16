@@ -132,7 +132,7 @@ const deleteEntry = (id: number, name: string) => {
 
                     <table
                         v-if="props.seminarCustomers?.length != 0"
-                        class="m-3 table-auto border border-gray-400 text-[0.9rem]"
+                        class="m-3 table-auto border border-gray-400 text-sm"
                     >
                         <thead>
                             <tr class="bg-gray-100">
@@ -167,19 +167,16 @@ const deleteEntry = (id: number, name: string) => {
                                 <td class="border border-gray-400 px-4 py-2">
                                     <span v-if="customer.name"
                                         >{{ customer.name }}
-                                        <span v-if="customer.name">
-                                            （{{ customer.furigana }}）</span
-                                        ><br
-                                    /></span>
+                                    </span>
                                     <span v-if="customer.tel"
-                                        >{{ customer.tel }}<br
-                                    /></span>
+                                        ><br />{{ customer.tel }}</span
+                                    >
                                     <span v-if="customer.email"
-                                        >{{ customer.email }}<br
-                                    /></span>
-                                    <span v-if="customer.todofuken">{{
-                                        customer.todofuken
-                                    }}</span>
+                                        ><br />{{ customer.email }}</span
+                                    >
+                                    <span v-if="customer.todofuken"
+                                        ><br />{{ customer.todofuken }}</span
+                                    >
                                 </td>
                                 <td class="border border-gray-400 px-4 py-2">
                                     <span v-if="customer.co_name"
