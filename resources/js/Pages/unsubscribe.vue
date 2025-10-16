@@ -8,7 +8,7 @@ const props = defineProps<{
         id: number;
         name: string;
         email: string;
-        is_delivery: number;
+        is_unsubscribe: number;
     };
     // コントローラーから渡される、すでに停止済みかどうかのフラグ
     wasAlreadyStopped?: boolean;

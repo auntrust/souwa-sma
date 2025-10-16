@@ -196,9 +196,11 @@ const deleteEntry = (id: number, name: string) => {
                                 <td
                                     class="border border-gray-400 px-4 py-2 text-center"
                                 >
-                                    <span v-if="customer.mail_sent_at"
+                                    <span v-if="customer.mail_sent_entry_at"
                                         >受付完了：{{
-                                            formatTime(customer.mail_sent_at)
+                                            formatTime(
+                                                customer.mail_sent_entry_at,
+                                            )
                                         }}<br
                                     /></span>
                                     <span

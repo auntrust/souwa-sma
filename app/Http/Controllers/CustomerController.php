@@ -55,6 +55,11 @@ class CustomerController extends Controller
         } while (Customer::where('unique_key', $uniqueKey)->exists());
         $customer->unique_key = $uniqueKey;
 
+        // 配信停止フラグがオンの場合、unsubscribe_atに現在時刻を設定
+        if ($request->is_unsubscribe == 1) {
+            $customer->unsubscribe_at = now();
+        }
+
         $customer->save();
         return redirect()->route('customers.index')->with('success_str', '登録完了しました');
     }
@@ -80,7 +85,19 @@ class CustomerController extends Controller
      */
     public function update(CustomerRequest $request, Customer $customer)
     {
-        $customer->update($request->input());
+        $data = $request->input();
+
+        // 配信停止の処理
+        if ($request->is_unsubscribe == 1) {
+            // すでにunsubscribe_atに日付が入っている場合は更新しない
+            if (is_null($customer->unsubscribe_at)) {
+                $data['unsubscribe_at'] = now();
+            }
+        } else {
+            // 配信再開の場合はunsubscribe_atをnullにする
+            $data['unsubscribe_at'] = null;
+        }
+        $customer->update($data);
         return redirect()->route('customers.index')->with('success_str', '更新完了しました');
     }
 
@@ -91,5 +108,52 @@ class CustomerController extends Controller
     {
         $customer->delete();
         return redirect('customers');
+    }
+
+    /**
+     * ユニークキーで顧客を検索する
+     */
+    private function findCustomerByUniqueKey($uniqueKey)
+    {
+        $customer = Customer::where('unique_key', $uniqueKey)->first();
+
+        if (!$customer) {
+            abort(404, '指定された顧客が見つかりません。');
+        }
+
+        return $customer;
+    }
+
+    /**
+     * 配信状態を変更する共通メソッド
+     */
+    private function changeSubscriptionStatus($cid, $isSubscribed, $viewName)
+    {
+        $customer = $this->findCustomerByUniqueKey($cid);
+
+        $previousStatus = $customer->is_unsubscribe;
+        $customer->update(['is_unsubscribe' => $isSubscribed ? 0 : 1]);
+
+        return Inertia::render($viewName, [
+            'customer' => $customer,
+            'cid' => $cid,
+            'wasAlreadyInTargetState' => $previousStatus === ($isSubscribed ? 0 : 1),
+        ]);
+    }
+
+    /**
+     * メール案内の配信停止処理を行う
+     */
+    public function unsubscribe($cid)
+    {
+        return $this->changeSubscriptionStatus($cid, false, 'unsubscribe');
+    }
+
+    /**
+     * メール案内の配信再開処理を行う
+     */
+    public function resubscribe($cid)
+    {
+        return $this->changeSubscriptionStatus($cid, true, 'resubscribe');
     }
 }

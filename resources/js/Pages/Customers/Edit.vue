@@ -4,6 +4,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { formatDateTimeAt } from '@/utils/format';
 import { getTodofukenList } from '@/utils/todofuken';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
@@ -20,7 +21,8 @@ interface CustomerForm {
     co_tel: string;
     co_busho: string;
     co_post: string;
-    is_delivery: string | boolean;
+    is_unsubscribe: string | boolean;
+    unsubscribe_at: string;
     optin_at: string;
     optin_method: string;
 }
@@ -38,14 +40,15 @@ const form = useForm<CustomerForm>({
     co_tel: props.customer.co_tel ?? '',
     co_busho: props.customer.co_busho ?? '',
     co_post: props.customer.co_post ?? '',
-    is_delivery: props.customer.is_delivery == '1',
+    is_unsubscribe: props.customer.is_unsubscribe == '1',
+    unsubscribe_at: props.customer.unsubscribe_at ?? '',
     optin_at: props.customer.optin_at ?? '',
     optin_method: props.customer.optin_method ?? '',
 });
 
 const submit = () => {
     // チェックボックス値を0/1に変換
-    form.is_delivery = form.is_delivery ? '1' : '0';
+    form.is_unsubscribe = form.is_unsubscribe ? '1' : '0';
 
     form.patch(route('customers.update', props.customer), {
         onSuccess: () => {
@@ -59,7 +62,7 @@ const submit = () => {
                 'co_tel',
                 'co_busho',
                 'co_post',
-                'is_delivery',
+                'is_unsubscribe',
                 'optin_at',
                 'optin_method',
             );
@@ -89,20 +92,26 @@ const submit = () => {
                         <div class="">
                             <label class="mt-1 inline-flex items-center">
                                 <input
-                                    id="is_delivery"
+                                    id="is_unsubscribe"
                                     type="checkbox"
                                     class="form-checkbox h-5 w-5 text-blue-600"
-                                    v-model="form.is_delivery"
+                                    v-model="form.is_unsubscribe"
                                 />
-                                <span class="ml-2">配信対象にする</span>
+                                <span class="ml-2"
+                                    >新規セミナーの案内メールを配信しない</span
+                                >
                             </label>
 
                             <InputError
                                 class="mt-2"
-                                :message="form.errors.is_delivery"
+                                :message="form.errors.is_unsubscribe"
                             />
                         </div>
-
+                        <div v-if="customer.unsubscribe_at">
+                            ※{{
+                                formatDateTimeAt(customer.unsubscribe_at)
+                            }}に配信停止
+                        </div>
                         <div class="mt-4">
                             <InputLabel for="optin_at" value="オプトイン同意" />
 
