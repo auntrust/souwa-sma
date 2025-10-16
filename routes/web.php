@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SeminarController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\EmailLogController;
 use App\Http\Controllers\SeminarCustomerController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -59,6 +60,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('customers', CustomerController::class);
     Route::delete('/seminar_customers/{seminarCustomer}', [SeminarCustomerController::class, 'destroy'])->name('seminar_customers.destroy');
     Route::get('/seminars/entry_list/{seminar}', [SeminarController::class, 'entryList'])->name('seminars.entry_list');
+
+    Route::resource('email-logs', EmailLogController::class)->only(['index', 'show']);
+    // Route::post('email-logs/{emailLog}/resend', [EmailLogController::class, 'resend'])->name('email-logs.resend');
 });
 
 require __DIR__ . '/auth.php';
