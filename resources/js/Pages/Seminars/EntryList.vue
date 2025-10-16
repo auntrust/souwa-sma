@@ -6,11 +6,24 @@ import { formatShortDateTime, nl2br } from '@/utils/format';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ref, watch } from 'vue';
 
-const props = defineProps({
-    seminar: { type: Object },
-    seminarCustomers: { type: Object },
-    successMessage: String,
-});
+type Seminar = {
+    seminar_type: string;
+    detail_url: string;
+    onsite_name?: string;
+    onsite_zip?: string;
+    onsite_address?: string;
+    onsite_building?: string;
+    // ... add all other required properties here ...
+    is_paid: boolean;
+    paid_fee: string;
+    [key: string]: any; // fallback for any extra properties
+};
+
+const props = defineProps<{
+    seminar: Seminar;
+    seminarCustomers: any;
+    successMessage?: string;
+}>();
 
 // successMessageをrefでラップ
 const successMessage = ref(props.successMessage);
@@ -46,14 +59,14 @@ const deleteEntry = (id: number, name: string) => {
 </script>
 
 <template>
-    <Head title="セミナー管理 | エントリー 一覧" />
+    <Head title="セミナー管理 | エントリー" />
 
     <AuthenticatedLayout>
         <template #header>
             <h2
                 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
             >
-                セミナー管理 | エントリー 一覧
+                セミナー管理 | エントリー
             </h2>
         </template>
 
@@ -86,7 +99,7 @@ const deleteEntry = (id: number, name: string) => {
                     <p>{{ seminar?.description }}</p>
                     <br />
 
-                    <SeminarDetails :seminar="seminar" />
+                    <SeminarDetails :seminar="seminar!" />
 
                     <template v-if="seminar?.speaker_info">
                         ▼講師<br />
@@ -218,11 +231,24 @@ const deleteEntry = (id: number, name: string) => {
                                         }}<br
                                     /></span>
                                     <span v-if="customer.survey_at"
-                                        >アンケート入力：{{
-                                            formatShortDateTime(
-                                                customer.survey_at,
-                                            )
-                                        }}<br
+                                        ><Link
+                                            class="text-blue-600 underline hover:text-blue-800"
+                                            :href="
+                                                route(
+                                                    'seminar_customers.show_feedback',
+                                                    {
+                                                        sid: seminar?.id,
+                                                        cid: customer.customer
+                                                            .id,
+                                                    },
+                                                )
+                                            "
+                                            >アンケート入力：{{
+                                                formatShortDateTime(
+                                                    customer.survey_at,
+                                                )
+                                            }}</Link
+                                        ><br
                                     /></span>
                                 </td>
                                 <td

@@ -99,8 +99,11 @@ class SeminarController extends Controller
      */
     public function entryList(Seminar $seminar)
     {
-        // 参加者一覧を取得
-        $seminarCustomers = SeminarCustomer::where('seminar_id', $seminar->id)->get();
+        // 参加者一覧を取得（customerとseminarのリレーションを含む）
+        $seminarCustomers = SeminarCustomer::where('seminar_id', $seminar->id)
+            ->with(['customer', 'seminar'])
+            ->get();
+
         return Inertia::render('Seminars/EntryList', [
             'seminar' => $seminar,
             'seminarCustomers' => $seminarCustomers,

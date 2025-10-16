@@ -240,6 +240,32 @@ class SeminarCustomerController extends Controller
     }
 
     /**
+     * アンケートの内容を表示する
+     */
+    public function showFeedback($sid, $cid)
+    {
+        $seminar = Seminar::find($sid);
+        $customer = Customer::find($cid);
+
+        if (!$seminar or !$customer or !$seminar->is_review) {
+            abort(404, '該当のアンケートが存在しません');
+        }
+
+        // セミナー顧客情報（アンケート情報を含む）を取得
+        $seminarCustomer = SeminarCustomer::where('seminar_id', $seminar->id)->where('customer_id', $customer->id)->first();
+
+        if (!$seminarCustomer) {
+            abort(404, 'アンケート情報が存在しません');
+        }
+
+        return Inertia::render('SeminarCustomers/showFeedback', [
+            'seminar' => $seminar,
+            'customer' => $customer,
+            'seminarCustomer' => $seminarCustomer, // アンケート情報を追加
+        ]);
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(SeminarCustomer $seminarCustomer)

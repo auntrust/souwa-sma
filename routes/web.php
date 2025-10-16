@@ -48,6 +48,8 @@ Route::post('/feedback_l_input', [SeminarCustomerController::class, 'feedbackLow
 Route::get('/feedback_l_input/{sid}/{cid}', [SeminarCustomerController::class, 'feedbackLowInput'])->name('seminar_customers.feedback_l_input');
 Route::get('/feedback_l_finish/{sid}/{cid}', [SeminarCustomerController::class, 'feedbackLowFinish'])->name('seminar_customers.feedback_l_finish');
 
+Route::get('/seminar_customers/show_feedback/{sid}/{cid}', [SeminarCustomerController::class, 'showFeedback'])->name('seminar_customers.show_feedback');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
