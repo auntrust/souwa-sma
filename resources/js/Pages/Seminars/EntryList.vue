@@ -130,7 +130,7 @@ const deleteEntry = (id: number, name: string) => {
                                 <th class="px-4 py-2" style="font-size: 0.8rem">
                                     ご質問・ご要望
                                 </th>
-                                <th class="px-4 py-2">メール送信ログ</th>
+                                <th class="px-4 py-2">行動記録</th>
                                 <th class="px-4 py-2"></th>
                             </tr>
                         </thead>
@@ -197,28 +197,28 @@ const deleteEntry = (id: number, name: string) => {
                                     class="border border-gray-400 px-4 py-2 text-center"
                                 >
                                     <span v-if="customer.mail_sent_entry_at"
-                                        >受付メール：{{
+                                        >受付メール送信：{{
                                             formatShortDateTime(
                                                 customer.mail_sent_entry_at,
                                             )
                                         }}<br
                                     /></span>
                                     <span v-if="customer.mail_sent_reminder_at"
-                                        >前日メール：{{
+                                        >前日メール送信：{{
                                             formatShortDateTime(
                                                 customer.mail_sent_reminder_at,
                                             )
                                         }}<br
                                     /></span>
                                     <span v-if="customer.mail_sent_thank_you_at"
-                                        >お礼メール：{{
+                                        >お礼メール送信：{{
                                             formatShortDateTime(
                                                 customer.mail_sent_thank_you_at,
                                             )
                                         }}<br
                                     /></span>
                                     <span v-if="customer.survey_at"
-                                        >アンケート：{{
+                                        >アンケート入力：{{
                                             formatShortDateTime(
                                                 customer.survey_at,
                                             )
