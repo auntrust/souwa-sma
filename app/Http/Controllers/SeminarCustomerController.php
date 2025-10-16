@@ -142,6 +142,8 @@ class SeminarCustomerController extends Controller
         } elseif ($survey_q1 >= 5) {
             $request->merge(['survey_rating' => 'high']);
         }
+        // アンケート回答日時をセット
+        $request->merge(['survey_at' => Carbon::now()->format('Y-m-d H:i')]);
 
         // アンケート評価をセット
         $seminarCustomer->update($request->input());

@@ -2,7 +2,7 @@
 import DangerButton from '@/Components/DangerButton.vue';
 import SeminarDetails from '@/Components/SeminarDetails.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { formatTime, nl2br } from '@/utils/format';
+import { formatShortDateTime, nl2br } from '@/utils/format';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ref, watch } from 'vue';
 
@@ -197,39 +197,33 @@ const deleteEntry = (id: number, name: string) => {
                                     class="border border-gray-400 px-4 py-2 text-center"
                                 >
                                     <span v-if="customer.mail_sent_entry_at"
-                                        >受付完了：{{
-                                            formatTime(
+                                        >受付メール：{{
+                                            formatShortDateTime(
                                                 customer.mail_sent_entry_at,
                                             )
                                         }}<br
                                     /></span>
-                                    <span
-                                        v-if="
-                                            customer.mail_sent_before_seminar_at
-                                        "
-                                        >セミナー前日：{{
-                                            formatTime(
-                                                customer.mail_sent_before_seminar_at,
+                                    <span v-if="customer.mail_sent_reminder_at"
+                                        >前日メール：{{
+                                            formatShortDateTime(
+                                                customer.mail_sent_reminder_at,
                                             )
                                         }}<br
                                     /></span>
-                                    <span
-                                        v-if="
-                                            customer.mail_sent_individual_consult_at
-                                        "
-                                        >個別相談案内：{{
-                                            formatTime(
-                                                customer.mail_sent_individual_consult_at,
+                                    <span v-if="customer.mail_sent_thank_you_at"
+                                        >お礼メール：{{
+                                            formatShortDateTime(
+                                                customer.mail_sent_thank_you_at,
                                             )
                                         }}<br
                                     /></span>
-                                    <span v-if="customer.mail_sent_survey_at"
-                                        >アンケートメール：{{
-                                            formatTime(
-                                                customer.mail_sent_survey_at,
+                                    <span v-if="customer.survey_at"
+                                        >アンケート：{{
+                                            formatShortDateTime(
+                                                customer.survey_at,
                                             )
-                                        }}</span
-                                    >
+                                        }}<br
+                                    /></span>
                                 </td>
                                 <td
                                     class="border border-gray-400 px-4 py-2 text-center"
