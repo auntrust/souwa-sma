@@ -88,6 +88,10 @@ class SendSeminarReminderJob implements ShouldQueue
                         Mail::to($customer->email)->send(new SeminarReminderMail($seminar, $participant));
                         $totalSent++;
 
+                        // メール送信日時をセット
+                        $participant->mail_sent_reminder_at = Carbon::now();
+                        $participant->save();
+
                         // 送信成功をログに記録
                         Log::info("Seminar reminder sent to {$customer->email} for seminar: {$seminar->name} (type: {$seminar->seminar_type})");
                     } catch (\Exception $e) {

@@ -39,8 +39,8 @@ Route::get('/entry_finish', function () {
 Route::post('/feedback', [SeminarCustomerController::class, 'feedbackStore'])->name('seminar_customers.feedback_store');
 Route::get('/feedback/{sid}/{cid}', [SeminarCustomerController::class, 'feedback'])->name('seminar_customers.feedback');
 
-Route::post('/resubscribe/{cid}', [SeminarCustomerController::class, 'resubscribe'])->name('seminar_customers.resubscribe');
-Route::get('/unsubscribe/{cid}', [SeminarCustomerController::class, 'unsubscribe'])->name('seminar_customers.unsubscribe');
+Route::post('/resubscribe/{cid}', [CustomerController::class, 'resubscribe'])->name('customers.resubscribe');
+Route::get('/unsubscribe/{cid}', [CustomerController::class, 'unsubscribe'])->name('customers.unsubscribe');
 
 Route::get('/feedback_h_finish/{sid}/{cid}', [SeminarCustomerController::class, 'feedbackHighFinish'])->name('seminar_customers.feedback_h_finish');
 

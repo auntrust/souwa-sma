@@ -28,6 +28,20 @@ export function getDurationMinutes(
     return eh * 60 + em - (sh * 60 + sm);
 }
 
+export function formatShortDateTime(time: string | null | undefined): string {
+    // time が undefined, null, または空文字の場合は空文字を返す
+    if (!time) return '';
+
+    // "YYYY-MM-DD HH:mm:ss" → "MM/DD HH:mm"
+    const [date, t] = time.split(' ');
+    if (!date || !t) return '';
+
+    const [yyyy, mm, dd] = date.split('-');
+    const [hh, min] = t.split(':');
+
+    return `${mm}/${dd} ${hh}:${min}`;
+}
+
 export function formatTime(time: string | null | undefined): string {
     // time が undefined, null, または空文字の場合は空文字を返す
     if (!time) return '';

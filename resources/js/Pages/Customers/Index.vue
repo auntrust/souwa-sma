@@ -121,7 +121,7 @@ const search_go = () => {
                                 :key="customer.id"
                                 :class="{
                                     'text-gray-400 line-through':
-                                        customer.is_delivery === 0,
+                                        customer.is_unsubscribe === 1,
                                 }"
                             >
                                 <td

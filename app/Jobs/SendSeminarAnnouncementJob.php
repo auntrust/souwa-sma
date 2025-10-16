@@ -55,7 +55,7 @@ class SendSeminarAnnouncementJob implements ShouldQueue
             // セミナータイプ別に対象日に開催されるセミナーを取得
             $seminars = Seminar::with([
                 'seminarCustomers.customer' => function ($query) {
-                    $query->where('is_delivery', 1);
+                    $query->where('is_unsubscribe', 1);
                 },
             ])
                 ->where('is_active', true)

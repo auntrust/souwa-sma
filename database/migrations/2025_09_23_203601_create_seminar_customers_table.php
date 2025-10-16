@@ -43,20 +43,13 @@ return new class extends Migration {
             // 顧客情報上書きフラグ
             $table->boolean('is_overwrite_customer_info')->default(false)->comment('顧客情報を上書きするか');
 
-            // 受付完了メール送信日時
-            $table->timestamp('mail_sent_at')->nullable()->comment('受付完了メール送信日時');
-            // セミナー前日メール送信日時
-            $table->timestamp('mail_sent_before_seminar_at')->nullable()->comment('セミナー前日メール送信日時');
-            // 個別相談案内メール送信日時
-            $table->timestamp('mail_sent_individual_consult_at')->nullable()->comment('個別相談案内メール送信日時');
+            // 受付メール送信日時
+            $table->timestamp('mail_sent_entry_at')->nullable()->comment('受付メール送信日時');
+            // 前日メール送信日時
+            $table->timestamp('mail_sent_reminder_at')->nullable()->comment('前日メール送信日時');
+            // お礼メール送信日時
+            $table->timestamp('mail_sent_thank_you_at')->nullable()->comment('お礼メール送信日時');
 
-            // 個別相談日
-            $table->date('individual_consult_date')->nullable()->comment('個別相談日');
-            // 個別相談前日メール送信日時
-            $table->timestamp('mail_sent_before_individual_consult_at')->nullable()->comment('個別相談前日メール送信日時');
-
-            // アンケートメール送信日時
-            $table->timestamp('mail_sent_survey_at')->nullable()->comment('アンケートメール送信日時');
             // アンケートQ1～Q5回答
             $table->text('survey_q1')->nullable()->comment('アンケートQ1回答');
             $table->text('survey_q2')->nullable()->comment('アンケートQ2回答');

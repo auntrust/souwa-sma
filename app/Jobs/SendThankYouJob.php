@@ -88,6 +88,10 @@ class SendThankYouJob implements ShouldQueue
                         Mail::to($customer->email)->send(new SeminarThankYouMail($seminar, $participant));
                         $totalSent++;
 
+                        // メール送信日時をセット
+                        $participant->mail_sent_thank_you_at = Carbon::now();
+                        $participant->save();
+
                         // 送信成功をログに記録
                         Log::info("Seminar thank you email sent to {$customer->email} for seminar: {$seminar->name} (type: {$seminar->seminar_type})");
                     } catch (\Exception $e) {

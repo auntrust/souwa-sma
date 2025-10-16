@@ -27,12 +27,15 @@ TEL: {{ $seminar->organizer_tel }}
 @if ($seminar->organizer_email)
 Email: {{ $seminar->organizer_email }}
 @endif
+@if(isset($participant) && $participant->customer)
 ────────────────────────────────────
 今後のセミナー情報等のご案内が不要な場合は、
 下記URLより配信停止のお手続きをお願いいたします。
-@if(isset($participant) && $participant->customer)
 {{ url('/unsubscribe/' . $participant->customer->unique_key) }}
 @elseif(isset($customer))
+────────────────────────────────────
+今後のセミナー情報等のご案内が不要な場合は、
+下記URLより配信停止のお手続きをお願いいたします。
 {{ url('/unsubscribe/' . $customer->unique_key) }}
 @endif
 ────────────────────────────────────

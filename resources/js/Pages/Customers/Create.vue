@@ -20,14 +20,15 @@ const form = useForm({
     co_tel: '',
     co_busho: '',
     co_post: '',
-    is_delivery: '1',
+    is_unsubscribe: '',
+    unsubscribe_at: '',
     optin_at: '',
     optin_method: '',
 });
 
 const submit = () => {
     // チェックボックス値を0/1に変換
-    form.is_delivery = form.is_delivery ? '1' : '0';
+    form.is_unsubscribe = form.is_unsubscribe ? '1' : '0';
 
     form.post(route('customers.store'), {
         onSuccess: () => {
@@ -41,7 +42,7 @@ const submit = () => {
                 'co_tel',
                 'co_busho',
                 'co_post',
-                'is_delivery',
+                'is_unsubscribe',
                 'optin_at',
                 'optin_method',
             );
@@ -71,19 +72,21 @@ const submit = () => {
                         <div class="">
                             <label class="mt-1 inline-flex items-center">
                                 <input
-                                    id="is_delivery"
+                                    id="is_unsubscribe"
                                     type="checkbox"
                                     class="form-checkbox h-5 w-5 text-blue-600"
-                                    v-model="form.is_delivery"
+                                    v-model="form.is_unsubscribe"
                                     :true-value="1"
                                     :false-value="0"
                                 />
-                                <span class="ml-2">配信対象にする</span>
+                                <span class="ml-2"
+                                    >新規セミナーの案内メールを配信しない</span
+                                >
                             </label>
 
                             <InputError
                                 class="mt-2"
-                                :message="form.errors.is_delivery"
+                                :message="form.errors.is_unsubscribe"
                             />
                         </div>
 
