@@ -51,7 +51,7 @@ onMounted(async () => {
     <Head title="ご評価ありがとうございます" />
     <PublicLayout>
         <div
-            class="mx-auto mt-16 max-w-xl rounded-xl border border-gray-100 bg-white p-10 shadow-lg"
+            class="mx-auto mt-16 max-w-xl rounded-xl border border-gray-100 bg-white p-10 shadow-md"
         >
             <h2
                 class="mb-8 border-b border-blue-100 pb-4 text-center text-2xl font-extrabold text-blue-900"

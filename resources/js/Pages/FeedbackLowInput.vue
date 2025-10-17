@@ -44,7 +44,7 @@ const submit = () => {
     <Head title="ご評価ありがとうございます" />
     <PublicLayout>
         <div
-            class="mx-auto mt-16 max-w-xl rounded-xl border border-gray-100 bg-white p-10 shadow-lg"
+            class="mx-auto mt-16 max-w-xl rounded-xl border border-gray-100 bg-white p-10 shadow-md"
         >
             <form @submit.prevent="submit">
                 <h2

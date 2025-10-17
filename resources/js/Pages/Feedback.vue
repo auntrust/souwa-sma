@@ -93,7 +93,7 @@ const submit = () => {
     <Head title="セミナーの評価をお聞かせください" />
     <PublicLayout>
         <div
-            class="mx-auto mt-12 max-w-xl rounded-xl border border-gray-100 bg-white p-10 shadow-lg"
+            class="mx-auto mt-12 max-w-xl rounded-xl border border-gray-100 bg-white p-10 shadow-md"
         >
             <h1
                 class="mb-6 border-b border-blue-100 pb-3 text-center text-2xl font-extrabold text-blue-900"

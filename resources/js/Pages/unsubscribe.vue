@@ -41,7 +41,7 @@ const handleResubscribe = () => {
     <Head title="停止手続きが完了しました" />
     <PublicLayout>
         <div
-            class="mx-auto mt-16 max-w-xl rounded-xl border border-gray-100 bg-white p-10 shadow-lg"
+            class="mx-auto mt-16 max-w-xl rounded-xl border border-gray-100 bg-white p-10 shadow-md"
         >
             <!-- すでに配信停止されている場合 -->
             <div v-if="wasAlreadyStopped">

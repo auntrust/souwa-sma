@@ -124,7 +124,7 @@ const submit = () => {
     <PublicLayout>
         <div
             v-if="seminar.description"
-            class="mx-auto mt-10 max-w-xl rounded-xl border border-gray-100 bg-white p-8 shadow-lg"
+            class="mx-auto mt-10 max-w-xl rounded-xl border border-gray-100 bg-white p-8 shadow-md"
         >
             <h2
                 class="mb-6 border-l-8 border-blue-600 pl-3 text-2xl font-extrabold text-blue-900"
@@ -136,7 +136,7 @@ const submit = () => {
             </p>
         </div>
         <div
-            class="mx-auto mt-10 max-w-xl rounded-xl border border-gray-100 bg-white p-8 shadow-lg"
+            class="mx-auto mt-10 max-w-xl rounded-xl border border-gray-100 bg-white p-8 shadow-md"
         >
             <div>
                 <SeminarDetails :seminar="seminar" />
@@ -201,7 +201,7 @@ const submit = () => {
         </div>
 
         <div
-            class="mx-auto mt-10 max-w-xl rounded-xl border border-gray-100 bg-white p-8 shadow-lg"
+            class="mx-auto mt-10 max-w-xl rounded-xl border border-gray-100 bg-white p-8 shadow-md"
         >
             <form @submit.prevent="submit">
                 <div class="mb-8">
@@ -266,7 +266,7 @@ const submit = () => {
                         >
                         <select
                             id="todofuken"
-                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-md transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                             v-model="form.todofuken"
                         >
                             <option value="">選択してください</option>
