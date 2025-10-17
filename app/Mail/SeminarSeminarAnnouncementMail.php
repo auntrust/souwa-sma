@@ -16,7 +16,7 @@ class SeminarSeminarAnnouncementMail extends Mailable implements ShouldQueue
     /**
      * Create a new message instance.
      */
-    public function __construct(public $seminar, public $participant)
+    public function __construct(public $seminar, public $customer)
     {
         //
     }
@@ -26,7 +26,10 @@ class SeminarSeminarAnnouncementMail extends Mailable implements ShouldQueue
      */
     public function envelope(): Envelope
     {
-        return new Envelope(subject: '【セミナーのご案内】' . $this->seminar->name . ' - ぜひご参加ください');
+        $seminarDate = \Carbon\Carbon::parse($this->seminar->date)->timezone(config('app.timezone'));
+        $dateLabel = $seminarDate->format('n/j');
+
+        return new Envelope(subject: '【' . $dateLabel . '開催】「' . $this->seminar->name . '」のご案内');
     }
 
     /**
@@ -38,7 +41,7 @@ class SeminarSeminarAnnouncementMail extends Mailable implements ShouldQueue
             text: 'emails.seminar_announcement_plain',
             with: [
                 'seminar' => $this->seminar,
-                'participant' => $this->participant,
+                'customer' => $this->customer,
             ],
         );
     }

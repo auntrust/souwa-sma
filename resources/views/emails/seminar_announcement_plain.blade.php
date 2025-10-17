@@ -1,4 +1,4 @@
-{{ $participant->name }} 様
+{{ $customer->name }} 様
 
 いつもお世話になっております。
 
@@ -65,7 +65,7 @@
 セミナーの詳細についても下記ページよりご確認いただけます。
 
 【お申し込みページ】
-{{ url('/entry/' . $seminar->unique_key . '/' . $participant->customer->unique_key) }}
+{{ url('/entry/' . $seminar->unique_key . '/' . $customer->unique_key) }}
 
 【お申し込み期限】
 @if ($seminar->seminar_type == 'onsite')

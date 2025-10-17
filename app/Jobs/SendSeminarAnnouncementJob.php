@@ -5,7 +5,7 @@ namespace App\Jobs;
 use App\Mail\SeminarSeminarAnnouncementMail;
 use App\Models\EmailLog;
 use App\Models\Seminar;
-use App\Models\SeminarCustomer;
+use App\Models\Customer;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -54,12 +54,7 @@ class SendSeminarAnnouncementJob implements ShouldQueue
             $targetDates = [$today->copy()->addDays(3)->format('Y-m-d'), $today->copy()->addDays(5)->format('Y-m-d'), $today->copy()->addDays(7)->format('Y-m-d'), $today->copy()->addDays(14)->format('Y-m-d')];
 
             // セミナータイプ別に対象日に開催されるセミナーを取得
-            $seminars = Seminar::with([
-                'seminarCustomers.customer' => function ($query) {
-                    $query->where('is_unsubscribe', 0);
-                },
-            ])
-                ->where('is_active', true)
+            $seminars = Seminar::where('is_active', true)
                 ->where(function ($query) use ($targetDates) {
                     // onsite セミナー
                     $query
@@ -81,6 +76,9 @@ class SendSeminarAnnouncementJob implements ShouldQueue
                 })
                 ->get();
 
+            // 配信対象の全顧客を取得（is_unsubscribe = 0 のみ）
+            $customers = Customer::where('is_unsubscribe', 0)->get();
+
             $totalSent = 0;
             $errors = [];
 
@@ -100,12 +98,10 @@ class SendSeminarAnnouncementJob implements ShouldQueue
                     continue;
                 }
 
-                foreach ($seminar->seminarCustomers as $participant) {
-                    $customer = $participant->customer;
-
+                foreach ($customers as $customer) {
                     // 顧客データとメールアドレスの検証
-                    if (!$customer || !$customer->email || !filter_var($customer->email, FILTER_VALIDATE_EMAIL)) {
-                        $errors[] = "Invalid customer data or email for participant ID: {$participant->id}";
+                    if (!$customer->email || !filter_var($customer->email, FILTER_VALIDATE_EMAIL)) {
+                        $errors[] = "Invalid email for customer ID: {$customer->id}";
                         continue;
                     }
 
@@ -121,14 +117,14 @@ class SendSeminarAnnouncementJob implements ShouldQueue
                         'recipient_name' => $customer->name,
                         'seminar_id' => $seminar->id,
                         'customer_id' => $customer->id,
-                        'seminar_customer_id' => $participant->id,
+                        'seminar_customer_id' => null,
                         'status' => 'pending',
                         'sent_at' => null,
                     ]);
 
                     try {
                         // セミナー案内メール送信
-                        Mail::to($customer->email)->send(new SeminarSeminarAnnouncementMail($seminar, $participant));
+                        Mail::to($customer->email)->send(new SeminarSeminarAnnouncementMail($seminar, $customer));
                         $totalSent++;
 
                         // 配信ログを成功に更新

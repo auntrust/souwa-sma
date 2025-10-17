@@ -52,7 +52,7 @@ class EmailLogController extends Controller
             $query->whereDate('sent_at', '<=', $date_to);
         }
 
-        $emailLogs = $query->orderBy('sent_at', 'desc')->paginate(20);
+        $emailLogs = $query->orderByDesc('sent_at')->orderByDesc('id')->paginate(20);
 
         return Inertia::render('EmailLogs/Index', [
             'emailLogs' => $emailLogs,
