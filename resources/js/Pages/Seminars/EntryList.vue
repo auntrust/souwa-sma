@@ -2,7 +2,7 @@
 import DangerButton from '@/Components/DangerButton.vue';
 import SeminarDetails from '@/Components/SeminarDetails.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { formatShortDateTime, nl2br } from '@/utils/format';
+import { formatShortDateTime } from '@/utils/format';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ref, watch } from 'vue';
 
@@ -92,31 +92,6 @@ const deleteEntry = (id: number, name: string) => {
                     </h2>
 
                     <SeminarDetails :seminar="seminar!" />
-
-                    <template v-if="seminar?.speaker_info">
-                        <div class="mt-4 text-gray-800">
-                            <span class="font-semibold text-blue-700"
-                                >▼講師</span
-                            ><br />
-                            <span v-html="nl2br(seminar.speaker_info)"></span
-                            ><br />
-                        </div>
-                    </template>
-
-                    <template v-if="seminar?.benefits">
-                        <div class="mt-4 text-gray-800">
-                            <span class="font-semibold text-blue-700"
-                                >▼特典</span
-                            ><br />
-                            <span v-html="nl2br(seminar.benefits)"></span>
-                        </div>
-                    </template>
-
-                    <OrganizerContact
-                        :organizer-name="seminar?.organizer_name"
-                        :organizer-tel="seminar?.organizer_tel"
-                        :organizer-email="seminar?.organizer_email"
-                    />
                 </div>
             </div>
 
