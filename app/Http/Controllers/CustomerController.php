@@ -132,7 +132,23 @@ class CustomerController extends Controller
         $customer = $this->findCustomerByUniqueKey($cid);
 
         $previousStatus = $customer->is_unsubscribe;
-        $customer->update(['is_unsubscribe' => $isSubscribed ? 0 : 1]);
+
+        // フラグと日時の整合を取る
+        $data = [
+            'is_unsubscribe' => $isSubscribed ? 0 : 1,
+        ];
+
+        if ($isSubscribed) {
+            // 配信再開
+            $data['unsubscribe_at'] = null;
+        } else {
+            // 配信停止（未設定のときのみタイムスタンプを付与）
+            if (is_null($customer->unsubscribe_at)) {
+                $data['unsubscribe_at'] = now();
+            }
+        }
+
+        $customer->update($data);
 
         return Inertia::render($viewName, [
             'customer' => $customer,
