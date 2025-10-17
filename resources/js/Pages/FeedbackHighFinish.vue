@@ -50,11 +50,17 @@ onMounted(async () => {
 <template>
     <Head title="ご評価ありがとうございます" />
     <PublicLayout>
-        <div class="mx-auto mt-8 max-w-xl rounded bg-white p-6 shadow">
-            <h2 class="mb-4 text-center text-xl font-bold">
+        <div
+            class="mx-auto mt-16 max-w-xl rounded-xl border border-gray-100 bg-white p-10 shadow-md"
+        >
+            <h2
+                class="mb-8 border-b border-blue-100 pb-4 text-center text-2xl font-extrabold text-blue-900"
+            >
                 【ご評価ありがとうございます】
             </h2>
-            <div class="mb-5 text-center">
+            <div
+                class="mb-8 text-center text-lg font-semibold leading-relaxed text-gray-800"
+            >
                 よろしければ、Googleで<br />
                 クチコミ投稿をいただけませんか？<br /><br />
                 いただいた評価は、今後のセミナー運営や<br />
@@ -62,28 +68,31 @@ onMounted(async () => {
                 星評価だけでも大変励みになります。
             </div>
 
-            <hr class="mb-5" />
+            <hr class="mb-8 border-blue-100" />
 
-            <div class="mb-5 text-center">
+            <div class="mb-8 text-center">
                 <a
                     :href="seminar.google_review_url"
                     target="_blank"
-                    class="inline-block rounded bg-blue-600 px-6 py-2 font-bold text-white transition hover:bg-blue-700"
+                    class="inline-block rounded-lg bg-blue-600 px-8 py-3 text-lg font-bold text-white shadow transition hover:bg-blue-700"
                 >
                     クチコミ投稿はこちら
                 </a>
             </div>
 
             <!-- QRコード表示エリア -->
-            <div class="mb-5 text-center">
+            <div class="mb-8 text-center">
                 <div v-if="qrCodeDataUrl" class="mb-4">
                     <a :href="seminar.google_review_url" target="_blank">
                         <img
                             :src="qrCodeDataUrl"
                             alt="Google レビューページへのQRコード"
-                            class="mx-auto rounded border bg-white p-2"
+                            class="mx-auto rounded-lg border border-blue-100 bg-white p-3 shadow"
                         />
                     </a>
+                    <div class="mt-2 text-sm text-gray-500">
+                        スマートフォンでQRコードを読み取ると<br />クチコミ投稿ページが開きます
+                    </div>
                 </div>
             </div>
         </div>

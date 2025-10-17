@@ -77,70 +77,67 @@ const submit = () => {
     <AuthenticatedLayout>
         <template #header>
             <h2
-                class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
+                class="text-2xl font-bold leading-tight tracking-wide text-gray-800 dark:text-gray-200"
             >
                 顧客管理
             </h2>
         </template>
 
         <div class="py-12">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <div class="mx-auto max-w-4xl sm:px-6 lg:px-8">
                 <form @submit.prevent="submit">
                     <div
-                        class="mb-4 overflow-hidden bg-white p-6 shadow-sm sm:rounded-lg dark:bg-gray-800"
+                        class="mb-6 overflow-hidden border border-gray-200 bg-white p-8 shadow-xl sm:rounded-2xl"
                     >
-                        <div class="">
-                            <label class="mt-1 inline-flex items-center">
+                        <div>
+                            <label class="mt-1 inline-flex items-center gap-2">
                                 <input
                                     id="is_unsubscribe"
                                     type="checkbox"
-                                    class="form-checkbox h-5 w-5 text-blue-600"
+                                    class="form-checkbox h-5 w-5 text-blue-600 accent-blue-500 focus:ring-blue-400"
                                     v-model="form.is_unsubscribe"
                                 />
-                                <span class="ml-2"
+                                <span class="ml-2 font-semibold text-gray-700"
                                     >新規セミナーの案内メールを配信しない</span
                                 >
                             </label>
-
                             <InputError
                                 class="mt-2"
                                 :message="form.errors.is_unsubscribe"
                             />
                         </div>
-                        <div v-if="customer.unsubscribe_at">
+                        <div
+                            v-if="customer.unsubscribe_at"
+                            class="mt-2 text-sm text-gray-500"
+                        >
                             ※{{
                                 formatDateTimeAt(customer.unsubscribe_at)
                             }}に配信停止
                         </div>
-                        <div class="mt-4">
+                        <div class="mt-6">
                             <InputLabel for="optin_at" value="オプトイン同意" />
-
                             <TextInput
                                 id="optin_at"
                                 type="datetime-local"
-                                class="mt-1 block w-full"
+                                class="mt-1 block w-full rounded-lg border-gray-300 px-4 py-2 shadow transition focus:border-blue-400 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                                 v-model="form.optin_at"
                             />
-
                             <InputError
                                 class="mt-2"
                                 :message="form.errors.optin_at"
                             />
                         </div>
-
-                        <div class="mt-4">
+                        <div class="mt-6">
                             <InputLabel
                                 for="optin_method"
                                 value="オプトインの方法"
                             />
-
                             <TextInput
                                 id="optin_method"
                                 type="text"
-                                class="mt-1 block w-full"
+                                class="mt-1 block w-full rounded-lg border-gray-300 px-4 py-2 shadow transition focus:border-blue-400 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                                 v-model="form.optin_method"
                             />
-
                             <InputError
                                 class="mt-2"
                                 :message="form.errors.optin_method"
@@ -149,83 +146,70 @@ const submit = () => {
                     </div>
 
                     <div
-                        class="mb-4 overflow-hidden bg-white p-6 shadow-sm sm:rounded-lg dark:bg-gray-800"
+                        class="mb-6 overflow-hidden border border-gray-200 bg-white p-8 shadow-xl sm:rounded-2xl"
                     >
-                        <div class="mt-4 flex gap-4">
+                        <div class="mt-6 flex gap-6">
                             <div class="flex-1">
                                 <InputLabel for="name" value="氏名" />
-
                                 <TextInput
                                     id="name"
                                     type="text"
-                                    class="mt-1 block w-full"
+                                    class="mt-1 block w-full rounded-lg border-gray-300 px-4 py-2 shadow transition focus:border-blue-400 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                                     v-model="form.name"
                                     required
                                     autocomplete="name"
                                 />
-
                                 <InputError
                                     class="mt-2"
                                     :message="form.errors.name"
                                 />
                             </div>
-
                             <div class="flex-1">
                                 <InputLabel for="furigana" value="ふりがな" />
-
                                 <TextInput
                                     id="furigana"
                                     type="text"
-                                    class="mt-1 block w-full"
+                                    class="mt-1 block w-full rounded-lg border-gray-300 px-4 py-2 shadow transition focus:border-blue-400 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                                     v-model="form.furigana"
                                 />
-
                                 <InputError
                                     class="mt-2"
                                     :message="form.errors.furigana"
                                 />
                             </div>
                         </div>
-
-                        <div class="mt-4">
+                        <div class="mt-6">
                             <InputLabel for="tel" value="電話番号" />
-
                             <TextInput
                                 id="tel"
                                 type="text"
-                                class="mt-1 block w-full"
+                                class="mt-1 block w-full rounded-lg border-gray-300 px-4 py-2 shadow transition focus:border-blue-400 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                                 v-model="form.tel"
                             />
-
                             <InputError
                                 class="mt-2"
                                 :message="form.errors.tel"
                             />
                         </div>
-
-                        <div class="mt-4">
+                        <div class="mt-6">
                             <InputLabel for="email" value="Email" />
-
                             <TextInput
                                 id="email"
                                 type="text"
-                                class="mt-1 block w-full"
+                                class="mt-1 block w-full rounded-lg border-gray-300 px-4 py-2 shadow transition focus:border-blue-400 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                                 v-model="form.email"
                                 required
                             />
-
                             <InputError
                                 class="mt-2"
                                 :message="form.errors.email"
                             />
                         </div>
-
-                        <div class="mt-4">
+                        <div class="mt-6">
                             <InputLabel for="todofuken" value="都道府県" />
-
                             <select
                                 id="todofuken"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                class="mt-1 block w-full rounded-lg border-gray-300 px-4 py-2 shadow transition focus:border-blue-400 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                                 v-model="form.todofuken"
                             >
                                 <option value="">選択してください</option>
@@ -237,7 +221,6 @@ const submit = () => {
                                     {{ todofuken }}
                                 </option>
                             </select>
-
                             <InputError
                                 class="mt-2"
                                 :message="form.errors.todofuken"
@@ -246,69 +229,58 @@ const submit = () => {
                     </div>
 
                     <div
-                        class="mb-4 overflow-hidden bg-white p-6 shadow-sm sm:rounded-lg dark:bg-gray-800"
+                        class="mb-6 overflow-hidden border border-gray-200 bg-white p-8 shadow-xl sm:rounded-2xl"
                     >
-                        <div class="mt-4 flex gap-4">
+                        <div class="mt-6 flex gap-6">
                             <div class="flex-1">
                                 <InputLabel for="co_name" value="会社名" />
-
                                 <TextInput
                                     id="co_name"
                                     type="text"
-                                    class="mt-1 block w-full"
+                                    class="mt-1 block w-full rounded-lg border-gray-300 px-4 py-2 shadow transition focus:border-blue-400 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                                     v-model="form.co_name"
                                 />
-
                                 <InputError
                                     class="mt-2"
                                     :message="form.errors.co_name"
                                 />
                             </div>
-
                             <div class="flex-1">
                                 <InputLabel for="co_tel" value="電話番号" />
-
                                 <TextInput
                                     id="co_tel"
                                     type="text"
-                                    class="mt-1 block w-full"
+                                    class="mt-1 block w-full rounded-lg border-gray-300 px-4 py-2 shadow transition focus:border-blue-400 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                                     v-model="form.co_tel"
                                 />
-
                                 <InputError
                                     class="mt-2"
                                     :message="form.errors.co_tel"
                                 />
                             </div>
                         </div>
-
-                        <div class="mt-4 flex gap-4">
+                        <div class="mt-6 flex gap-6">
                             <div class="flex-1">
                                 <InputLabel for="co_busho" value="部署" />
-
                                 <TextInput
                                     id="co_busho"
                                     type="text"
-                                    class="mt-1 block w-full"
+                                    class="mt-1 block w-full rounded-lg border-gray-300 px-4 py-2 shadow transition focus:border-blue-400 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                                     v-model="form.co_busho"
                                 />
-
                                 <InputError
                                     class="mt-2"
                                     :message="form.errors.co_busho"
                                 />
                             </div>
-
                             <div class="flex-1">
                                 <InputLabel for="co_post" value="役職" />
-
                                 <TextInput
                                     id="co_post"
                                     type="text"
-                                    class="mt-1 block w-full"
+                                    class="mt-1 block w-full rounded-lg border-gray-300 px-4 py-2 shadow transition focus:border-blue-400 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                                     v-model="form.co_post"
                                 />
-
                                 <InputError
                                     class="mt-2"
                                     :message="form.errors.co_post"
@@ -317,9 +289,9 @@ const submit = () => {
                         </div>
                     </div>
 
-                    <div class="mt-4 flex items-center justify-end">
+                    <div class="mt-8 flex items-center justify-end">
                         <PrimaryButton
-                            class="ms-4"
+                            class="ms-4 rounded-lg bg-gradient-to-r from-blue-500 to-blue-400 px-8 py-3 font-bold text-white shadow transition hover:from-blue-600 hover:to-blue-500"
                             :class="{ 'opacity-25': form.processing }"
                             :disabled="form.processing"
                         >
@@ -327,12 +299,12 @@ const submit = () => {
                         </PrimaryButton>
                     </div>
 
-                    <div class="mt-4 flex items-center justify-center">
+                    <div class="mt-8 flex items-center justify-center">
                         <Link
                             :href="route('customers.index')"
-                            :class="'rounded-md border bg-gray-500 px-4 py-2 text-xs font-semibold text-white'"
+                            class="rounded-lg bg-gradient-to-r from-gray-500 to-gray-400 px-6 py-3 text-xs font-bold text-white shadow transition hover:from-gray-600 hover:to-gray-500"
                         >
-                            <i class="fa-solid fa-backward"></i> 戻る
+                            <i class="fa-solid fa-backward mr-2"></i> 戻る
                         </Link>
                     </div>
                 </form>

@@ -88,7 +88,7 @@ const formatSentAt = (sentAt: string | null) => {
     <AuthenticatedLayout>
         <template #header>
             <h2
-                class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
+                class="text-2xl font-bold leading-tight tracking-wide text-gray-800 dark:text-gray-200"
             >
                 配信履歴
             </h2>
@@ -97,8 +97,7 @@ const formatSentAt = (sentAt: string | null) => {
         <Transition name="fade-pop">
             <div
                 v-if="successMessage"
-                class="alert alert-success mx-auto mt-12 w-fit rounded-lg border-2 border-green-500 bg-green-100 px-8 py-4 text-center text-lg font-bold text-green-800 shadow-lg"
-                style="z-index: 1000"
+                class="alert alert-success animate-fadeIn fixed left-1/2 top-20 z-50 mx-auto w-fit -translate-x-1/2 rounded-xl border-2 border-green-500 bg-gradient-to-r from-green-100 to-green-200 px-10 py-5 text-center text-lg font-bold text-green-800 shadow-2xl"
             >
                 <i class="fa-solid fa-circle-check mr-2"></i>
                 {{ successMessage }}
@@ -108,20 +107,20 @@ const formatSentAt = (sentAt: string | null) => {
         <div class="py-12">
             <div class="m-3 mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div
-                    class="overflow-hidden bg-white p-2 shadow-sm sm:rounded-lg"
+                    class="overflow-hidden border border-gray-200 bg-white p-6 shadow-xl sm:rounded-2xl"
                 >
                     <!-- 検索・フィルター -->
-                    <div class="mb-4 rounded-lg bg-gray-50 p-4">
-                        <div class="grid grid-cols-1 gap-4 md:grid-cols-6">
+                    <div class="mb-6 rounded-xl bg-gray-50 p-6 shadow">
+                        <div class="grid grid-cols-1 gap-6 md:grid-cols-6">
                             <div>
                                 <label
-                                    class="block text-sm font-medium text-gray-700"
+                                    class="block text-sm font-bold text-gray-700"
                                     >検索</label
                                 >
                                 <TextInput
                                     id="search_str"
                                     type="text"
-                                    class="mt-1 block w-full"
+                                    class="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2 shadow transition focus:border-blue-400 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                                     v-model="form.search_str"
                                     placeholder="メール、名前、セミナー名"
                                     @blur="search_go"
@@ -129,13 +128,13 @@ const formatSentAt = (sentAt: string | null) => {
                             </div>
                             <div>
                                 <label
-                                    class="block text-sm font-medium text-gray-700"
+                                    class="block text-sm font-bold text-gray-700"
                                     >送信状態</label
                                 >
                                 <select
                                     v-model="form.status"
                                     @change="search_go"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                    class="mt-1 block w-full rounded-lg border-gray-300 px-4 py-2 shadow transition focus:border-blue-400 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                                 >
                                     <option value="">すべて</option>
                                     <option value="success">送信成功</option>
@@ -144,33 +143,33 @@ const formatSentAt = (sentAt: string | null) => {
                             </div>
                             <div>
                                 <label
-                                    class="block text-sm font-medium text-gray-700"
+                                    class="block text-sm font-bold text-gray-700"
                                     >開始日</label
                                 >
                                 <input
                                     type="date"
                                     v-model="form.date_from"
                                     @change="search_go"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                    class="mt-1 block w-full rounded-lg border-gray-300 px-4 py-2 shadow transition focus:border-blue-400 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                                 />
                             </div>
                             <div>
                                 <label
-                                    class="block text-sm font-medium text-gray-700"
+                                    class="block text-sm font-bold text-gray-700"
                                     >終了日</label
                                 >
                                 <input
                                     type="date"
                                     v-model="form.date_to"
                                     @change="search_go"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                    class="mt-1 block w-full rounded-lg border-gray-300 px-4 py-2 shadow transition focus:border-blue-400 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                                 />
                             </div>
                             <div class="flex items-end">
                                 <button
                                     @click="clearFilters"
                                     type="button"
-                                    class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                                    class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-bold text-gray-700 shadow transition hover:bg-blue-100"
                                 >
                                     クリア
                                 </button>
@@ -181,7 +180,7 @@ const formatSentAt = (sentAt: string | null) => {
                     <!-- データなしメッセージ -->
                     <div
                         v-if="props.emailLogs?.data.length === 0"
-                        class="m-2 p-4 text-center text-gray-500"
+                        class="m-2 p-6 text-center text-gray-500"
                     >
                         該当する配信履歴はありません。
                     </div>
@@ -189,42 +188,44 @@ const formatSentAt = (sentAt: string | null) => {
                     <!-- テーブル -->
                     <div v-else class="overflow-x-auto">
                         <table
-                            class="min-w-full table-auto border border-gray-400 text-sm"
+                            class="min-w-full table-auto overflow-hidden rounded-xl border border-gray-300 text-sm shadow"
                         >
                             <thead>
-                                <tr class="bg-gray-100">
+                                <tr
+                                    class="bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700"
+                                >
                                     <th
-                                        class="border border-gray-400 px-4 py-2 text-left"
+                                        class="border border-gray-200 px-4 py-3 text-left font-semibold"
                                     >
                                         ID
                                     </th>
                                     <th
-                                        class="border border-gray-400 px-4 py-2 text-left"
+                                        class="border border-gray-200 px-4 py-3 text-left font-semibold"
                                     >
                                         送信日時
                                     </th>
                                     <th
-                                        class="border border-gray-400 px-4 py-2 text-left"
+                                        class="border border-gray-200 px-4 py-3 text-left font-semibold"
                                     >
                                         種別
                                     </th>
                                     <th
-                                        class="border border-gray-400 px-4 py-2 text-left"
+                                        class="border border-gray-200 px-4 py-3 text-left font-semibold"
                                     >
                                         送信先
                                     </th>
                                     <th
-                                        class="border border-gray-400 px-4 py-2 text-left"
+                                        class="border border-gray-200 px-4 py-3 text-left font-semibold"
                                     >
                                         セミナー名
                                     </th>
                                     <th
-                                        class="border border-gray-400 px-4 py-2 text-left"
+                                        class="border border-gray-200 px-4 py-3 text-left font-semibold"
                                     >
                                         顧客名
                                     </th>
                                     <th
-                                        class="border border-gray-400 px-4 py-2 text-center"
+                                        class="border border-gray-200 px-4 py-3 text-center font-semibold"
                                     >
                                         送信状態
                                     </th>
@@ -234,15 +235,15 @@ const formatSentAt = (sentAt: string | null) => {
                                 <tr
                                     v-for="log in emailLogs?.data"
                                     :key="log.id"
-                                    class="hover:bg-gray-50"
+                                    class="transition hover:bg-blue-50"
                                 >
                                     <td
-                                        class="border border-gray-400 px-4 py-2 text-center"
+                                        class="border border-gray-200 px-4 py-3 text-center"
                                     >
                                         {{ log.id }}
                                     </td>
                                     <td
-                                        class="border border-gray-400 px-4 py-2"
+                                        class="border border-gray-200 px-4 py-3"
                                     >
                                         <template
                                             v-if="
@@ -269,7 +270,7 @@ const formatSentAt = (sentAt: string | null) => {
                                         </template>
                                     </td>
                                     <td
-                                        class="border border-gray-400 px-4 py-2"
+                                        class="border border-gray-200 px-4 py-3"
                                     >
                                         <span
                                             class="rounded-full bg-blue-100 px-2 py-1 text-xs text-blue-800"
@@ -278,7 +279,7 @@ const formatSentAt = (sentAt: string | null) => {
                                         </span>
                                     </td>
                                     <td
-                                        class="border border-gray-400 px-4 py-2"
+                                        class="border border-gray-200 px-4 py-3"
                                     >
                                         <div class="text-sm font-medium">
                                             {{ log.recipient_name || '-' }}
@@ -288,17 +289,17 @@ const formatSentAt = (sentAt: string | null) => {
                                         </div>
                                     </td>
                                     <td
-                                        class="border border-gray-400 px-4 py-2"
+                                        class="border border-gray-200 px-4 py-3"
                                     >
                                         {{ log.seminar?.name || '-' }}
                                     </td>
                                     <td
-                                        class="border border-gray-400 px-4 py-2"
+                                        class="border border-gray-200 px-4 py-3"
                                     >
                                         {{ log.customer?.name || '-' }}
                                     </td>
                                     <td
-                                        class="border border-gray-400 px-4 py-2 text-center"
+                                        class="border border-gray-200 px-4 py-3 text-center"
                                     >
                                         <span
                                             class="rounded-full px-2 py-1 text-xs font-medium"
@@ -313,7 +314,10 @@ const formatSentAt = (sentAt: string | null) => {
                     </div>
 
                     <!-- ページネーション -->
-                    <div class="mt-4" v-if="emailLogs?.links">
+                    <div
+                        class="mt-6 flex justify-center"
+                        v-if="emailLogs?.links"
+                    >
                         <nav
                             class="flex items-center gap-x-1"
                             aria-label="Pagination"
@@ -339,10 +343,10 @@ const formatSentAt = (sentAt: string | null) => {
                                             "
                                             v-show="link['url'] != null"
                                             type="button"
-                                            class="flex min-h-[38px] min-w-[38px] items-center justify-center rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+                                            class="flex min-h-[38px] min-w-[38px] items-center justify-center rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 shadow transition hover:bg-blue-100 focus:bg-blue-200 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
                                         >
                                             <svg
-                                                class="size-3.5 shrink-0"
+                                                class="mr-1 size-3.5 shrink-0"
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 width="24"
                                                 height="24"
@@ -355,7 +359,7 @@ const formatSentAt = (sentAt: string | null) => {
                                             >
                                                 <path d="m15 18-6-6 6-6"></path>
                                             </svg>
-                                            <span>Previous</span>
+                                            <span>前へ</span>
                                         </Link>
                                     </div>
                                     <div
@@ -378,11 +382,11 @@ const formatSentAt = (sentAt: string | null) => {
                                             "
                                             v-show="link['url'] != null"
                                             type="button"
-                                            class="flex min-h-[38px] min-w-[38px] items-center justify-center rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+                                            class="flex min-h-[38px] min-w-[38px] items-center justify-center rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 shadow transition hover:bg-blue-100 focus:bg-blue-200 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
                                         >
-                                            <span>Next</span>
+                                            <span>次へ</span>
                                             <svg
-                                                class="size-3.5 shrink-0"
+                                                class="ml-1 size-3.5 shrink-0"
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 width="24"
                                                 height="24"
@@ -412,7 +416,7 @@ const formatSentAt = (sentAt: string | null) => {
                                             v-if="link['active'] === true"
                                             v-show="link['url'] != null"
                                             type="button"
-                                            class="flex min-h-[38px] min-w-[38px] items-center justify-center rounded-lg bg-gray-200 px-3 py-2 text-sm text-gray-800 focus:bg-gray-300 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+                                            class="flex min-h-[38px] min-w-[38px] items-center justify-center rounded-lg border border-blue-300 bg-blue-200 px-3 py-2 text-sm text-blue-800 shadow focus:bg-blue-300 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
                                             aria-current="page"
                                         >
                                             <span>{{ link['label'] }}</span>
@@ -431,7 +435,7 @@ const formatSentAt = (sentAt: string | null) => {
                                             v-else
                                             v-show="link['url'] != null"
                                             type="button"
-                                            class="flex min-h-[38px] min-w-[38px] items-center justify-center rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+                                            class="flex min-h-[38px] min-w-[38px] items-center justify-center rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 shadow transition hover:bg-blue-100 focus:bg-blue-200 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
                                         >
                                             <span>{{ link['label'] }}</span>
                                         </Link>
@@ -462,5 +466,18 @@ const formatSentAt = (sentAt: string | null) => {
 .fade-pop-leave-from {
     opacity: 1;
     transform: scale(1);
+}
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+.animate-fadeIn {
+    animation: fadeIn 0.7s;
 }
 </style>

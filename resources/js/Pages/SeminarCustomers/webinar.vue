@@ -76,11 +76,13 @@ const errorMessage = page.props.flash?.error as string | undefined;
     <Head title="ウェビナー詳細" />
 
     <PublicLayout>
-        <div class="mx-auto max-w-4xl bg-white p-8 shadow-lg">
+        <div
+            class="mx-auto mt-12 max-w-3xl rounded-xl border border-gray-100 bg-white p-10 shadow-lg"
+        >
             <!-- エラーメッセージ -->
             <div
                 v-if="errorMessage"
-                class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4"
+                class="mb-8 rounded-xl border border-red-200 bg-red-50 p-4"
             >
                 <div class="flex items-center">
                     <svg
@@ -101,22 +103,20 @@ const errorMessage = page.props.flash?.error as string | undefined;
             </div>
 
             <!-- ヘッダー -->
-            <div class="mb-8 border-b pb-6">
-                <h1 class="mb-4 text-3xl font-bold text-gray-800">
+            <div class="mb-10 border-b border-blue-100 pb-6">
+                <h1 class="mb-4 text-3xl font-extrabold text-blue-900">
                     {{ seminar.name }}
                 </h1>
-                <div class="text-sm text-gray-600">
+                <div class="text-base font-semibold text-gray-600">
                     参加者様：{{ customer.name }}
                 </div>
             </div>
 
             <!-- 視聴期間の表示 -->
-            <div class="mb-8">
-                <h2 class="mb-4 text-xl font-semibold text-gray-800">
-                    視聴期間
-                </h2>
-                <div class="rounded-lg bg-blue-50 p-4">
-                    <div class="text-lg font-medium text-blue-800">
+            <div class="mb-10">
+                <h2 class="mb-4 text-xl font-bold text-blue-900">視聴期間</h2>
+                <div class="rounded-xl border border-blue-100 bg-blue-50 p-6">
+                    <div class="text-lg font-semibold text-blue-800">
                         {{
                             formatDateTimeAtWithWeekday(
                                 seminar.webinar_start_at,
@@ -130,49 +130,57 @@ const errorMessage = page.props.flash?.error as string | undefined;
                     <div class="mt-2 text-sm text-red-600">
                         視聴期間を過ぎると視聴できなくなりますので、期間中にご視聴ください。
                     </div>
-                    <div class="mt-2 text-sm font-medium text-red-600">
+                    <div class="mt-2 text-sm font-bold text-red-600">
                         ※ このウェビナーは1回限りの視聴となります。
                     </div>
                 </div>
             </div>
 
             <!-- 視聴状況の表示 -->
-            <div class="mb-8">
-                <h2 class="mb-4 text-xl font-semibold text-gray-800">
-                    視聴状況
-                </h2>
+            <div class="mb-10">
+                <h2 class="mb-4 text-xl font-bold text-blue-900">視聴状況</h2>
                 <div
                     v-if="isAlreadyViewed"
-                    class="rounded-lg border border-orange-200 bg-orange-50 p-4"
+                    class="rounded-xl border border-orange-200 bg-orange-50 p-6"
                 >
-                    <div class="font-medium text-orange-800">
+                    <div class="text-lg font-bold text-orange-800">
                         ✅ 視聴済み（視聴完了）
                     </div>
-                    <div class="mt-2 text-sm text-gray-600">
+                    <div class="mt-2 text-base text-gray-700">
                         視聴日時：{{
                             formatDateTimeAtWithWeekday(
                                 seminarCustomer.webinar_view_at!,
                             )
                         }}
                     </div>
-                    <div class="mt-2 text-sm font-medium text-red-600">
+                    <div class="mt-2 text-sm font-bold text-red-600">
                         このウェビナーは1回限りの視聴のため、再視聴はできません。
                     </div>
                 </div>
                 <div
                     v-else-if="isNotStarted"
-                    class="rounded-lg bg-yellow-50 p-4"
+                    class="rounded-xl border border-yellow-100 bg-yellow-50 p-6"
                 >
-                    <div class="text-yellow-800">
+                    <div class="text-lg font-bold text-yellow-800">
                         ⏰ 視聴開始前です。開始時刻までお待ちください。
                     </div>
                 </div>
-                <div v-else-if="isExpired" class="rounded-lg bg-red-50 p-4">
-                    <div class="text-red-800">❌ 視聴期間が終了しました。</div>
+                <div
+                    v-else-if="isExpired"
+                    class="rounded-xl border border-red-100 bg-red-50 p-6"
+                >
+                    <div class="text-lg font-bold text-red-800">
+                        ❌ 視聴期間が終了しました。
+                    </div>
                 </div>
-                <div v-else class="rounded-lg bg-green-50 p-4">
-                    <div class="text-green-800">✅ 現在視聴可能です。</div>
-                    <div class="mt-2 text-sm font-medium text-blue-600">
+                <div
+                    v-else
+                    class="rounded-xl border border-green-100 bg-green-50 p-6"
+                >
+                    <div class="text-lg font-bold text-green-800">
+                        ✅ 現在視聴可能です。
+                    </div>
+                    <div class="mt-2 text-sm font-bold text-blue-600">
                         ⚠️
                         一度視聴を開始すると再視聴はできませんのでご注意ください。
                     </div>
@@ -180,14 +188,16 @@ const errorMessage = page.props.flash?.error as string | undefined;
             </div>
 
             <!-- セミナー詳細情報 -->
-            <div class="mb-8">
-                <h2 class="mb-4 text-xl font-semibold text-gray-800">
+            <div class="mb-10">
+                <h2 class="mb-4 text-xl font-bold text-blue-900">
                     セミナー詳細
                 </h2>
 
                 <!-- セミナー説明 -->
                 <div v-if="seminar.description" class="mb-6">
-                    <h3 class="mb-2 text-lg font-medium text-gray-700">概要</h3>
+                    <h3 class="mb-2 text-lg font-semibold text-gray-700">
+                        概要
+                    </h3>
                     <div class="whitespace-pre-line text-gray-600">
                         {{ seminar.description }}
                     </div>
@@ -195,7 +205,7 @@ const errorMessage = page.props.flash?.error as string | undefined;
 
                 <!-- 講師情報 -->
                 <div v-if="seminar.speaker_info" class="mb-6">
-                    <h3 class="mb-2 text-lg font-medium text-gray-700">
+                    <h3 class="mb-2 text-lg font-semibold text-gray-700">
                         講師情報
                     </h3>
                     <div class="whitespace-pre-line text-gray-600">
@@ -205,7 +215,7 @@ const errorMessage = page.props.flash?.error as string | undefined;
 
                 <!-- 参加特典 -->
                 <div v-if="seminar.benefits" class="mb-6">
-                    <h3 class="mb-2 text-lg font-medium text-gray-700">
+                    <h3 class="mb-2 text-lg font-semibold text-gray-700">
                         参加特典
                     </h3>
                     <div class="text-gray-600">
@@ -215,10 +225,10 @@ const errorMessage = page.props.flash?.error as string | undefined;
 
                 <!-- 受講料 -->
                 <div class="mb-6">
-                    <h3 class="mb-2 text-lg font-medium text-gray-700">
+                    <h3 class="mb-2 text-lg font-semibold text-gray-700">
                         受講料
                     </h3>
-                    <div class="text-lg font-semibold text-gray-800">
+                    <div class="text-lg font-bold text-gray-800">
                         {{
                             seminar.is_paid === '1' || seminar.is_paid === true
                                 ? `${Number(seminar.paid_fee).toLocaleString()}円`
@@ -232,7 +242,7 @@ const errorMessage = page.props.flash?.error as string | undefined;
                     <a
                         :href="seminar.detail_url"
                         target="_blank"
-                        class="inline-flex items-center rounded-lg bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600"
+                        class="inline-flex items-center rounded-lg bg-blue-600 px-5 py-2 text-base font-bold text-white shadow transition hover:bg-blue-700"
                     >
                         📄 詳細ページを見る
                         <svg
@@ -253,10 +263,10 @@ const errorMessage = page.props.flash?.error as string | undefined;
             </div>
 
             <!-- ウェビナー視聴ボタン -->
-            <div class="mb-8 text-center">
+            <div class="mb-10 text-center">
                 <!-- 視聴済みの場合 -->
                 <div v-if="isAlreadyViewed" class="space-y-4">
-                    <div class="text-lg font-semibold text-gray-600">
+                    <div class="text-lg font-bold text-gray-600">
                         ウェビナー視聴
                     </div>
                     <button
@@ -271,14 +281,14 @@ const errorMessage = page.props.flash?.error as string | undefined;
                 </div>
                 <!-- 視聴可能な場合 -->
                 <div v-else-if="isViewable" class="space-y-4">
-                    <div class="text-lg font-semibold text-gray-800">
+                    <div class="text-lg font-bold text-gray-800">
                         ウェビナーを視聴する
                     </div>
                     <!-- 注意喚起 -->
                     <div
-                        class="mb-4 rounded-lg border border-yellow-200 bg-yellow-50 p-4"
+                        class="mb-4 rounded-xl border border-yellow-200 bg-yellow-50 p-4"
                     >
-                        <div class="text-sm font-medium text-yellow-800">
+                        <div class="text-base font-bold text-yellow-800">
                             ⚠️ 重要なお知らせ
                         </div>
                         <div class="mt-1 text-sm text-yellow-700">
@@ -288,7 +298,7 @@ const errorMessage = page.props.flash?.error as string | undefined;
                     </div>
                     <a
                         :href="webinarViewUrl"
-                        class="inline-flex items-center rounded-lg bg-red-500 px-8 py-4 text-xl font-bold text-white transition hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-300"
+                        class="inline-flex items-center rounded-xl bg-red-600 px-8 py-4 text-xl font-bold text-white shadow transition hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300"
                         onclick="return confirm('このウェビナーは1回限りの視聴となります。一度視聴を開始すると再視聴はできません。視聴を開始してもよろしいですか？');"
                     >
                         🎥 ウェビナーを視聴する
@@ -312,7 +322,7 @@ const errorMessage = page.props.flash?.error as string | undefined;
                 </div>
                 <!-- 視聴開始前の場合 -->
                 <div v-else-if="isNotStarted" class="space-y-4">
-                    <div class="text-lg font-semibold text-gray-600">
+                    <div class="text-lg font-bold text-gray-600">
                         ウェビナー視聴
                     </div>
                     <button
@@ -327,7 +337,7 @@ const errorMessage = page.props.flash?.error as string | undefined;
                 </div>
                 <!-- 視聴期間終了の場合 -->
                 <div v-else-if="isExpired" class="space-y-4">
-                    <div class="text-lg font-semibold text-gray-600">
+                    <div class="text-lg font-bold text-gray-600">
                         ウェビナー視聴
                     </div>
                     <button
@@ -343,29 +353,29 @@ const errorMessage = page.props.flash?.error as string | undefined;
             </div>
 
             <!-- 主催者情報 -->
-            <div class="border-t pt-6">
-                <h2 class="mb-4 text-xl font-semibold text-gray-800">
+            <div class="border-t border-blue-100 pt-8">
+                <h2 class="mb-4 text-xl font-bold text-blue-900">
                     お問い合わせ
                 </h2>
-                <div class="rounded-lg bg-gray-50 p-4">
+                <div class="rounded-xl border border-blue-100 bg-blue-50 p-6">
                     <div class="mb-2">
-                        <span class="font-medium">主催：</span
+                        <span class="font-semibold">主催：</span
                         >{{ seminar.organizer_name }}
                     </div>
                     <div v-if="seminar.organizer_tel" class="mb-2">
-                        <span class="font-medium">電話：</span>
+                        <span class="font-semibold">電話：</span>
                         <a
                             :href="`tel:${seminar.organizer_tel}`"
-                            class="text-blue-600 hover:underline"
+                            class="font-semibold text-blue-600 hover:underline"
                         >
                             {{ seminar.organizer_tel }}
                         </a>
                     </div>
                     <div v-if="seminar.organizer_email" class="mb-2">
-                        <span class="font-medium">メール：</span>
+                        <span class="font-semibold">メール：</span>
                         <a
                             :href="`mailto:${seminar.organizer_email}`"
-                            class="text-blue-600 hover:underline"
+                            class="font-semibold text-blue-600 hover:underline"
                         >
                             {{ seminar.organizer_email }}
                         </a>
