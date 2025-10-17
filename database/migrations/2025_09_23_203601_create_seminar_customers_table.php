@@ -61,6 +61,10 @@ return new class extends Migration {
             // アンケート評価（0:低評価, 1:高評価）
             $table->string('survey_rating')->nullable()->comment('アンケート評価（low, high）');
             $table->timestamp('survey_at')->nullable()->comment('アンケート回答日時');
+
+            // ウェビナー視聴日時
+            $table->timestamp('webinar_view_at')->nullable()->comment('ウェビナー視聴日時');
+
             $table->timestamps();
 
             // 外部キー制約

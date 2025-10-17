@@ -51,6 +51,9 @@ Route::get('/feedback_l_finish/{sid}/{cid}', [SeminarCustomerController::class, 
 
 Route::get('/seminar_customers/show_feedback/{sid}/{cid}', [SeminarCustomerController::class, 'showFeedback'])->name('seminar_customers.show_feedback');
 
+Route::get('/webinar/{sid}/{cid}', [SeminarCustomerController::class, 'Webinar'])->name('seminar_customers.webinar');
+Route::get('/to_webinar/{sid}/{cid}', [SeminarCustomerController::class, 'toWebinar'])->name('seminar_customers.to_webinar');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

@@ -266,6 +266,69 @@ class SeminarCustomerController extends Controller
     }
 
     /**
+     * ウェビナー切り分けページ
+     */
+    public function webinar($sid, $cid)
+    {
+        $seminar = Seminar::where('unique_key', $sid)->first();
+        $customer = Customer::where('unique_key', $cid)->first();
+
+        // セミナー顧客情報（アンケート情報を含む）を取得
+        $seminarCustomer = SeminarCustomer::where('seminar_id', $seminar->id)->where('customer_id', $customer->id)->first();
+        if (!$seminarCustomer) {
+            abort(404, 'ウェビナー情報が存在しません');
+        }
+        return Inertia::render('SeminarCustomers/webinar', [
+            'seminar' => $seminar,
+            'customer' => $customer,
+            'seminarCustomer' => $seminarCustomer, // アンケート情報を追加
+        ]);
+    }
+
+    /**
+     * ウェビナー用URLへ転送する
+     */
+    public function toWebinar($sid, $cid)
+    {
+        $seminar = Seminar::where('unique_key', $sid)->first();
+        $customer = Customer::where('unique_key', $cid)->first();
+
+        // セミナー顧客情報（アンケート情報を含む）を取得
+        $seminarCustomer = SeminarCustomer::where('seminar_id', $seminar->id)->where('customer_id', $customer->id)->first();
+        if (!$seminarCustomer) {
+            abort(404, 'ウェビナー情報が存在しません');
+        }
+
+        // 既に視聴済みの場合はエラーページに遷移
+        if ($seminarCustomer->webinar_view_at !== null) {
+            return redirect()
+                ->route('seminar_customers.webinar', [
+                    'sid' => $sid,
+                    'cid' => $cid,
+                ])
+                ->with('error', 'このウェビナーは既に視聴済みです。視聴は1回限りとなっております。');
+        }
+
+        // 視聴期間チェック
+        $now = Carbon::now();
+        $startDate = Carbon::parse($seminar->webinar_start_at);
+        $endDate = Carbon::parse($seminar->webinar_end_at);
+
+        if ($now < $startDate || $now > $endDate) {
+            return redirect()
+                ->route('seminar_customers.webinar', [
+                    'sid' => $sid,
+                    'cid' => $cid,
+                ])
+                ->with('error', '視聴期間外です。');
+        }
+
+        // ウェビナー視聴日時をセット（初回のみ）
+        $seminarCustomer->update(['webinar_view_at' => $now]);
+        return redirect($seminar->webinar_url);
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(SeminarCustomer $seminarCustomer)
