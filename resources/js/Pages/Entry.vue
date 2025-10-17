@@ -131,9 +131,10 @@ const submit = () => {
             >
                 {{ seminar.name }}
             </h2>
-            <p class="leading-relaxed text-gray-700">
-                {{ seminar.description }}
-            </p>
+            <p
+                class="leading-relaxed text-gray-700"
+                v-html="nl2br(seminar.description)"
+            ></p>
         </div>
         <div
             class="mx-auto mt-10 max-w-xl rounded-xl border border-gray-100 bg-white p-8 shadow-md"
