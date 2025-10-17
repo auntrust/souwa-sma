@@ -101,7 +101,7 @@ const submit = () => {
                 【{{ seminar.name }}】
             </h1>
 
-            <SeminarDetails :seminar="seminar" />
+            <SeminarDetails :seminar="seminar" :customer="customer" />
 
             <h2
                 class="my-8 rounded-xl border border-blue-100 bg-blue-50 py-5 text-center text-xl font-bold text-blue-800"

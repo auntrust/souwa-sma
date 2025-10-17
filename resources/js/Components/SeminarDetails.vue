@@ -9,6 +9,7 @@ import {
 
 const props = defineProps<{
     seminar: {
+        unique_key?: string;
         seminar_type: string;
         detail_url: string;
         onsite_name?: string;
@@ -33,7 +34,32 @@ const props = defineProps<{
         is_paid: string | boolean;
         paid_fee: string;
     };
+    customer?: {
+        unique_key?: string;
+        [key: string]: any;
+    };
 }>();
+
+/**
+ * URL に sma_c（customer.unique_key）を追加して返す
+ * - customer が渡されていない場合はそのまま返す
+ * - 既に sma_c が含まれている場合は追加しない
+ */
+function appendSmaParams(url?: string | null) {
+    if (!url) return '';
+
+    // customer がない、または unique_key がない場合はそのまま返す
+    if (!props.customer?.unique_key) {
+        return url;
+    }
+
+    const sep = url.includes('?') ? '&' : '?';
+    return (
+        url +
+        sep +
+        `sma_c=${encodeURIComponent(String(props.customer.unique_key))}`
+    );
+}
 </script>
 
 <template>
@@ -58,7 +84,7 @@ const props = defineProps<{
 
         ▼セミナー詳細<br />
         <a
-            :href="seminar.detail_url"
+            :href="appendSmaParams(seminar.detail_url)"
             target="_blank"
             class="inline-block rounded bg-blue-500 px-3 py-1 text-xs font-bold text-white transition hover:bg-blue-600"
         >
@@ -99,7 +125,7 @@ const props = defineProps<{
         <template v-if="seminar.detail_url">
             ▼オンラインセミナー詳細<br />
             <a
-                :href="seminar.detail_url"
+                :href="appendSmaParams(seminar.detail_url)"
                 target="_blank"
                 class="inline-block rounded bg-blue-500 px-3 py-1 text-xs font-bold text-white transition hover:bg-blue-600"
             >
@@ -119,7 +145,7 @@ const props = defineProps<{
         <br />
         ▼ウェビナー詳細<br />
         <a
-            :href="seminar.detail_url"
+            :href="appendSmaParams(seminar.detail_url)"
             target="_blank"
             class="inline-block rounded bg-blue-500 px-3 py-1 text-xs font-bold text-white transition hover:bg-blue-600"
         >

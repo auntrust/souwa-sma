@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import DangerButton from '@/Components/DangerButton.vue';
+import Modal from '@/Components/Modal.vue'; // ← モーダルを追加
 import TextInput from '@/Components/TextInput.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { isPaidLabel, seminarTypeLabel } from '@/utils/format';
 import { formatTime } from '@/utils/time';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue'; // ← computed を追加
 
 import { formatDate, formatDateTimeAt } from '@/utils/format';
 
@@ -48,6 +49,82 @@ const deleteSeminar = (id: number, name: string) => {
 
 const search_go = () => {
     form.get(route('seminars.index'));
+};
+
+const showTagModal = ref(false);
+const selectedSeminar = ref<any | null>(null);
+
+const openTagModal = (s: any) => {
+    selectedSeminar.value = s;
+    showTagModal.value = true;
+};
+const closeTagModal = () => {
+    showTagModal.value = false;
+};
+
+// 完全URLを生成（SSR想定で window が無い場合は相対URL）
+const embedOrigin = typeof window !== 'undefined' ? window.location.origin : '';
+const embedUrl = computed(() =>
+    selectedSeminar.value
+        ? `${embedOrigin}/entry/${selectedSeminar.value.unique_key}`
+        : '',
+);
+
+const headIncludeHtml = [
+    "<link rel='stylesheet' href='" + embedOrigin + "/assets/css/sma.css' />",
+    "<script src='" + embedOrigin + "/assets/js/sma.js'><\/script>",
+].join('\n');
+
+// 小さめピル型ボタンの設置用タグ（インラインCSSで完結）
+const embedButtonHtml = computed(() =>
+    selectedSeminar.value
+        ? `<a href="${embedUrl.value}" target="_blank" rel="noopener" class="SmaGotoSeminar">お申し込みはこちら</a>`
+        : '',
+);
+
+const copyButtonText_head = ref('COPY');
+const copyButtonText_button = ref('COPY');
+const copyButtonText_url = ref('COPY');
+
+const changeCopyButtonText = (type: 'head' | 'button' | 'url') => {
+    if (type === 'head') {
+        copyButtonText_head.value = 'OK!';
+        setTimeout(() => {
+            copyButtonText_head.value = 'COPY';
+        }, 1500);
+    } else if (type === 'button') {
+        copyButtonText_button.value = 'OK!';
+        setTimeout(() => {
+            copyButtonText_button.value = 'COPY';
+        }, 1500);
+    } else if (type === 'url') {
+        copyButtonText_url.value = 'OK!';
+        setTimeout(() => {
+            copyButtonText_url.value = 'COPY';
+        }, 1500);
+    }
+};
+
+const copyToClipboard = async (
+    text: string,
+    type: 'head' | 'button' | 'url',
+) => {
+    try {
+        await navigator.clipboard.writeText(text);
+        changeCopyButtonText(type); // ボタンのテキストを変更
+        setTimeout(() => (successMessage.value = ''), 1500);
+    } catch {
+        // フォールバック
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        successMessage.value = 'クリップボードにCOPYしました';
+        changeCopyButtonText(type); // ボタンのテキストを変更
+        setTimeout(() => (successMessage.value = ''), 1500);
+    }
 };
 </script>
 
@@ -151,6 +228,19 @@ const search_go = () => {
                                     >
                                         {{ seminar.name }}
                                     </a>
+                                    <div class="mt-1">
+                                        <button
+                                            type="button"
+                                            class="inline-flex items-center gap-1 rounded-full border border-gray-300 bg-white px-2.5 py-0.5 text-xs font-medium text-gray-700 shadow-sm hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100"
+                                            title="設置用タグを表示"
+                                            @click="openTagModal(seminar)"
+                                        >
+                                            <i
+                                                class="fa-solid fa-code text-[10px]"
+                                            ></i>
+                                            設置用タグ
+                                        </button>
+                                    </div>
                                 </td>
                                 <td
                                     class="border border-gray-200 px-4 py-3 text-center"
@@ -400,6 +490,106 @@ const search_go = () => {
             </div>
         </div>
     </AuthenticatedLayout>
+
+    <!-- ==== 設置用タグモーダル ==== -->
+    <Modal :show="showTagModal" max-width="xl" @close="closeTagModal">
+        <div class="p-6">
+            <div class="mb-4">
+                <h3 class="text-lg font-semibold text-gray-900">設置用タグ</h3>
+                <p class="mt-1 text-sm text-gray-500">
+                    セミナー:
+                    <span class="font-medium">{{ selectedSeminar?.name }}</span>
+                    （Key: {{ selectedSeminar?.unique_key }}）
+                </p>
+            </div>
+
+            <div
+                class="mb-4 rounded-md border border-yellow-200 bg-yellow-50 p-4"
+            >
+                <h4 class="text-sm font-semibold text-yellow-800">
+                    重要 — &lt;head&gt; に必ず追加してください
+                </h4>
+                <p class="mt-1 text-sm text-yellow-700">
+                    設置ボタンを正しく表示・動作させるため、以下の CSS
+                    とスクリプトをサイトの HTML の
+                    <code>&lt;head&gt;</code> セクション内に追加してください。
+                </p>
+
+                <label class="mt-3 block text-sm font-medium text-gray-700"
+                    >head に追加するコード</label
+                >
+                <div class="mt-1 flex items-center gap-2">
+                    <textarea
+                        readonly
+                        rows="3"
+                        class="flex-1 rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-xs text-gray-800"
+                        :value="headIncludeHtml"
+                    />
+                    <!-- head用COPY -->
+                    <button
+                        type="button"
+                        class="inline-flex items-center gap-1 rounded-md bg-blue-500 px-2.5 py-1 text-xs font-semibold text-white shadow hover:bg-blue-600"
+                        @click="copyToClipboard(headIncludeHtml, 'head')"
+                    >
+                        <i class="fa-solid fa-copy"></i>
+                        {{ copyButtonText_head }}
+                    </button>
+                </div>
+            </div>
+
+            <label class="mt-4 block text-sm font-medium text-gray-700"
+                >ボタンHTML</label
+            >
+            <div class="mt-1 flex items-center gap-2">
+                <textarea
+                    readonly
+                    rows="3"
+                    class="flex-1 rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-xs text-gray-800"
+                    :value="embedButtonHtml"
+                />
+                <!-- ボタンHTML用COPY -->
+                <button
+                    type="button"
+                    class="inline-flex items-center gap-1 rounded-md bg-blue-500 px-2.5 py-1 text-xs font-semibold text-white shadow hover:bg-blue-600"
+                    @click="copyToClipboard(embedButtonHtml, 'button')"
+                >
+                    <i class="fa-solid fa-copy"></i>
+                    {{ copyButtonText_button }}
+                </button>
+            </div>
+
+            <label class="mt-4 block text-sm font-medium text-gray-700"
+                >直リンクURL</label
+            >
+            <div class="mt-1 flex items-center gap-2">
+                <input
+                    readonly
+                    class="flex-1 rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-xs text-gray-800"
+                    :value="embedUrl"
+                />
+                <!-- URL用COPY -->
+                <button
+                    type="button"
+                    class="inline-flex items-center gap-1 rounded-md bg-blue-500 px-2.5 py-1 text-xs font-semibold text-white shadow hover:bg-blue-600"
+                    @click="copyToClipboard(embedUrl, 'url')"
+                >
+                    <i class="fa-solid fa-copy"></i>
+                    {{ copyButtonText_url }}
+                </button>
+            </div>
+
+            <div class="mt-6 flex justify-end">
+                <button
+                    type="button"
+                    class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 shadow-sm hover:bg-gray-50"
+                    @click="closeTagModal"
+                >
+                    閉じる
+                </button>
+            </div>
+        </div>
+    </Modal>
+    <!-- ==== 追加ここまで ==== -->
 </template>
 <style scoped>
 .fade-pop-enter-active,

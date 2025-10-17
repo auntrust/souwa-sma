@@ -86,7 +86,7 @@ const getRatingText = (rating: number) => {
                     <p>{{ seminar?.description }}</p>
                     <br />
 
-                    <SeminarDetails :seminar="seminar" />
+                    <SeminarDetails :seminar="seminar" :customer="customer" />
                 </div>
 
                 <!-- 顧客情報 -->

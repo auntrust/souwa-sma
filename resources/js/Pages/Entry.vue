@@ -140,7 +140,7 @@ const submit = () => {
             class="mx-auto mt-10 max-w-xl rounded-xl border border-gray-100 bg-white p-8 shadow-md"
         >
             <div>
-                <SeminarDetails :seminar="seminar" />
+                <SeminarDetails :seminar="seminar" :customer="customer" />
 
                 <!-- 現地セミナー -->
                 <template v-if="seminar.seminar_type === 'onsite'"> </template>

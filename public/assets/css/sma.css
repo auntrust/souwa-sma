@@ -1,0 +1,25 @@
+/* ボタンの基本デザイン */
+.SmaGotoSeminar {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #3e51a9;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+/* ホバー時の効果 */
+.SmaGotoSeminar:hover {
+    background-color: #5767af;
+}
+
+/* 無効時のスタイル */
+.SmaGotoSeminar.disabled {
+    background-color: #aaa;
+    pointer-events: none; /* クリック不可 */
+    opacity: 0.6;
+    cursor: not-allowed;
+}
