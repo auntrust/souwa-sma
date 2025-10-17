@@ -21,12 +21,11 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Forgot Password" />
+        <Head title="パスワードを忘れた方はこちら" />
 
         <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-            Forgot your password? No problem. Just let us know your email
-            address and we will email you a password reset link that will allow
-            you to choose a new one.
+            パスワードをお忘れの場合は、ご登録のメールアドレスを入力してください。<br /><br />
+            パスワード再設定用のリンクをメールでお送りします。
         </div>
 
         <div
@@ -58,7 +57,7 @@ const submit = () => {
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
-                    Email Password Reset Link
+                    パスワードの再設定をする
                 </PrimaryButton>
             </div>
         </form>

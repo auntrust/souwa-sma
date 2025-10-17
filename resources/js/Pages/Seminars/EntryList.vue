@@ -64,7 +64,7 @@ const deleteEntry = (id: number, name: string) => {
     <AuthenticatedLayout>
         <template #header>
             <h2
-                class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
+                class="text-2xl font-bold leading-tight tracking-wide text-gray-800 dark:text-gray-200"
             >
                 セミナー管理 | エントリー
             </h2>
@@ -73,8 +73,7 @@ const deleteEntry = (id: number, name: string) => {
         <Transition name="fade-pop">
             <div
                 v-if="successMessage"
-                class="alert alert-success mx-auto mt-12 w-fit rounded-lg border-2 border-green-500 bg-green-100 px-8 py-4 text-center text-lg font-bold text-green-800 shadow-lg"
-                style="z-index: 1000"
+                class="alert alert-success animate-fadeIn fixed left-1/2 top-20 z-50 mx-auto w-fit -translate-x-1/2 rounded-xl border-2 border-green-500 bg-gradient-to-r from-green-100 to-green-200 px-10 py-5 text-center text-lg font-bold text-green-800 shadow-2xl"
             >
                 <i class="fa-solid fa-circle-check mr-2"></i>
                 {{ successMessage }}
@@ -84,31 +83,36 @@ const deleteEntry = (id: number, name: string) => {
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div
-                    class="mb-4 overflow-hidden bg-white p-6 shadow-sm sm:rounded-lg dark:bg-gray-800"
+                    class="mb-4 overflow-hidden border border-gray-200 bg-white p-8 shadow-xl sm:rounded-2xl"
                 >
                     <h2
-                        class="mb-4 text-xl font-bold"
-                        style="
-                            border-left: 6px solid black;
-                            padding-left: 0.5rem;
-                        "
+                        class="mb-4 border-l-8 border-blue-500 pl-3 text-xl font-bold"
                     >
                         {{ seminar?.name }}<br />
                     </h2>
 
-                    <p>{{ seminar?.description }}</p>
+                    <p class="mb-2 text-gray-700">{{ seminar?.description }}</p>
                     <br />
 
                     <SeminarDetails :seminar="seminar!" />
 
                     <template v-if="seminar?.speaker_info">
-                        ▼講師<br />
-                        <span v-html="nl2br(seminar.speaker_info)"></span><br />
+                        <div class="mt-4 text-gray-800">
+                            <span class="font-semibold text-blue-700"
+                                >▼講師</span
+                            ><br />
+                            <span v-html="nl2br(seminar.speaker_info)"></span
+                            ><br />
+                        </div>
                     </template>
 
                     <template v-if="seminar?.benefits">
-                        <br />▼特典<br />
-                        <span v-html="nl2br(seminar.benefits)"></span>
+                        <div class="mt-4 text-gray-800">
+                            <span class="font-semibold text-blue-700"
+                                >▼特典</span
+                            ><br />
+                            <span v-html="nl2br(seminar.benefits)"></span>
+                        </div>
                     </template>
 
                     <OrganizerContact
@@ -121,30 +125,43 @@ const deleteEntry = (id: number, name: string) => {
 
             <div class="m-3 mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div
-                    class="overflow-hidden bg-white p-2 shadow-sm sm:rounded-lg"
+                    class="overflow-hidden border border-gray-200 bg-white p-6 shadow-xl sm:rounded-2xl"
                 >
                     <div
                         v-if="props.seminarCustomers?.length == 0"
-                        class="m-2 p-4"
+                        class="m-2 p-6 text-center text-gray-500"
                     >
                         エントリーはありません
                     </div>
 
                     <table
                         v-if="props.seminarCustomers?.length != 0"
-                        class="m-3 table-auto border border-gray-400 text-sm"
+                        class="m-3 w-full table-auto overflow-hidden rounded-xl border border-gray-300 text-sm shadow"
                     >
                         <thead>
-                            <tr class="bg-gray-100">
-                                <th class="px-4 py-2">No</th>
-                                <th class="px-4 py-2">申込者情報</th>
-                                <th class="px-4 py-2">会社情報</th>
-                                <th class="px-4 py-2">参加<br />人数</th>
-                                <th class="px-4 py-2" style="font-size: 0.8rem">
+                            <tr
+                                class="bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700"
+                            >
+                                <th class="px-4 py-3 font-semibold">No</th>
+                                <th class="px-4 py-3 font-semibold">
+                                    申込者情報
+                                </th>
+                                <th class="px-4 py-3 font-semibold">
+                                    会社情報
+                                </th>
+                                <th class="px-4 py-3 font-semibold">
+                                    参加<br />人数
+                                </th>
+                                <th
+                                    class="px-4 py-3 font-semibold"
+                                    style="font-size: 0.8rem"
+                                >
                                     ご質問・ご要望
                                 </th>
-                                <th class="px-4 py-2">行動記録</th>
-                                <th class="px-4 py-2"></th>
+                                <th class="px-4 py-3 font-semibold">
+                                    行動記録
+                                </th>
+                                <th class="px-4 py-3"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -153,21 +170,22 @@ const deleteEntry = (id: number, name: string) => {
                                     customer, index
                                 ) in props.seminarCustomers"
                                 :key="customer.id"
-                                :class="
+                                :class="[
                                     Number(index) % 2 === 0
                                         ? 'bg-white'
-                                        : 'bg-gray-100'
-                                "
+                                        : 'bg-gray-50',
+                                    'transition hover:bg-blue-50',
+                                ]"
                             >
                                 <td
-                                    class="border border-gray-400 px-4 py-2 text-center"
+                                    class="border border-gray-200 px-4 py-3 text-center"
                                 >
                                     {{ index + 1 }}
                                 </td>
-                                <td class="border border-gray-400 px-4 py-2">
-                                    <span v-if="customer.name"
-                                        >{{ customer.name }}
-                                    </span>
+                                <td class="border border-gray-200 px-4 py-3">
+                                    <span v-if="customer.name">{{
+                                        customer.name
+                                    }}</span>
                                     <span v-if="customer.tel"
                                         ><br />{{ customer.tel }}</span
                                     >
@@ -178,7 +196,7 @@ const deleteEntry = (id: number, name: string) => {
                                         ><br />{{ customer.todofuken }}</span
                                     >
                                 </td>
-                                <td class="border border-gray-400 px-4 py-2">
+                                <td class="border border-gray-200 px-4 py-3">
                                     <span v-if="customer.co_name"
                                         >{{ customer.co_name }}<br
                                     /></span>
@@ -193,18 +211,18 @@ const deleteEntry = (id: number, name: string) => {
                                     /></span>
                                 </td>
                                 <td
-                                    class="border border-gray-400 px-4 py-2 text-center"
+                                    class="border border-gray-200 px-4 py-3 text-center"
                                 >
                                     {{ customer.applicant_count }}名
                                 </td>
                                 <td
-                                    class="border border-gray-400 px-4 py-2"
+                                    class="border border-gray-200 px-4 py-3"
                                     style="width: 16rem"
                                 >
                                     {{ customer.request }}
                                 </td>
                                 <td
-                                    class="border border-gray-400 px-4 py-2 text-center"
+                                    class="border border-gray-200 px-4 py-3 text-center"
                                 >
                                     <span v-if="customer.mail_sent_entry_at"
                                         >受付メール送信：{{
@@ -236,7 +254,7 @@ const deleteEntry = (id: number, name: string) => {
                                     /></span>
                                     <span v-if="customer.survey_at"
                                         ><Link
-                                            class="text-blue-600 underline hover:text-blue-800"
+                                            class="font-semibold text-blue-600 underline hover:text-blue-800"
                                             :href="
                                                 route(
                                                     'seminar_customers.show_feedback',
@@ -256,7 +274,7 @@ const deleteEntry = (id: number, name: string) => {
                                     /></span>
                                 </td>
                                 <td
-                                    class="border border-gray-400 px-4 py-2 text-center"
+                                    class="border border-gray-200 px-4 py-3 text-center"
                                 >
                                     <DangerButton
                                         @click="
@@ -265,6 +283,7 @@ const deleteEntry = (id: number, name: string) => {
                                                 customer.name,
                                             )
                                         "
+                                        class="rounded-lg px-3 py-2 shadow transition hover:bg-red-600"
                                     >
                                         <i class="fa-solid fa-trash"></i>
                                     </DangerButton>
@@ -273,12 +292,12 @@ const deleteEntry = (id: number, name: string) => {
                         </tbody>
                     </table>
                 </div>
-                <div class="mt-4 flex items-center justify-center">
+                <div class="mt-6 flex items-center justify-center">
                     <Link
                         :href="route('seminars.index')"
-                        :class="'rounded-md border bg-gray-500 px-4 py-2 text-xs font-semibold text-white'"
+                        class="rounded-lg bg-gradient-to-r from-gray-500 to-gray-400 px-6 py-3 text-xs font-bold text-white shadow transition hover:from-gray-600 hover:to-gray-500"
                     >
-                        <i class="fa-solid fa-backward"></i> 戻る
+                        <i class="fa-solid fa-backward mr-2"></i> 戻る
                     </Link>
                 </div>
             </div>
@@ -301,5 +320,18 @@ const deleteEntry = (id: number, name: string) => {
 .fade-pop-leave-from {
     opacity: 1;
     transform: scale(1);
+}
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+.animate-fadeIn {
+    animation: fadeIn 0.7s;
 }
 </style>

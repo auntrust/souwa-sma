@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import DeleteUserForm from './Partials/DeleteUserForm.vue';
+import { Head } from '@inertiajs/vue3';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
-import { Head } from '@inertiajs/vue3';
 
 defineProps<{
     mustVerifyEmail?: boolean;
@@ -17,16 +16,16 @@ defineProps<{
     <AuthenticatedLayout>
         <template #header>
             <h2
-                class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
+                class="text-2xl font-bold leading-tight tracking-wide text-gray-800 dark:text-gray-200"
             >
-                Profile
+                プロフィール
             </h2>
         </template>
 
         <div class="py-12">
-            <div class="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+            <div class="mx-auto max-w-3xl space-y-8 sm:px-6 lg:px-8">
                 <div
-                    class="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800"
+                    class="overflow-hidden border border-gray-200 bg-white p-8 shadow-xl sm:rounded-2xl dark:bg-gray-800"
                 >
                     <UpdateProfileInformationForm
                         :must-verify-email="mustVerifyEmail"
@@ -36,15 +35,9 @@ defineProps<{
                 </div>
 
                 <div
-                    class="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800"
+                    class="overflow-hidden border border-gray-200 bg-white p-8 shadow-xl sm:rounded-2xl dark:bg-gray-800"
                 >
                     <UpdatePasswordForm class="max-w-xl" />
-                </div>
-
-                <div
-                    class="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800"
-                >
-                    <DeleteUserForm class="max-w-xl" />
                 </div>
             </div>
         </div>
