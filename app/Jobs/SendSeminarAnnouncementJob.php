@@ -13,6 +13,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
 
 class SendSeminarAnnouncementJob implements ShouldQueue
 {
@@ -106,6 +107,11 @@ class SendSeminarAnnouncementJob implements ShouldQueue
                     if (!$customer || !$customer->email || !filter_var($customer->email, FILTER_VALIDATE_EMAIL)) {
                         $errors[] = "Invalid customer data or email for participant ID: {$participant->id}";
                         continue;
+                    }
+
+                    // すでに参加している顧客かチェック
+                    if (DB::table('seminar_customers')->where('seminar_id', $seminar->id)->where('customer_id', $customer->id)->exists()) {
+                        continue; // 参加している場合はスキップ
                     }
 
                     // メール配信ログの作成（送信前）
