@@ -220,6 +220,13 @@ const deleteEntry = (id: number, name: string) => {
                                             )
                                         }}<br
                                     /></span>
+                                    <span v-if="customer.webinar_view_at"
+                                        >ウェビナー視聴：{{
+                                            formatShortDateTime(
+                                                customer.webinar_view_at,
+                                            )
+                                        }}<br
+                                    /></span>
                                     <span v-if="customer.mail_sent_thank_you_at"
                                         >お礼メール送信：{{
                                             formatShortDateTime(
