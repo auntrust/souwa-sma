@@ -25,12 +25,6 @@ Route::get('/', function () {
     abort(404);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
-
 Route::post('/entry', [SeminarCustomerController::class, 'entryStore'])->name('seminar_customers.entry_store');
 Route::get('/entry/{sid}/{cid?}', [SeminarCustomerController::class, 'entry'])->name('seminar_customers.entry');
 Route::get('/entry_finish', function () {
