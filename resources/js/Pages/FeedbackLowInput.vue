@@ -43,34 +43,41 @@ const submit = () => {
 <template>
     <Head title="ご評価ありがとうございます" />
     <PublicLayout>
-        <div class="mx-auto mt-8 max-w-xl rounded bg-white p-6 shadow">
+        <div
+            class="mx-auto mt-16 max-w-xl rounded-xl border border-gray-100 bg-white p-10 shadow-lg"
+        >
             <form @submit.prevent="submit">
-                <h2 class="mb-4 text-center text-xl font-bold">
+                <h2
+                    class="mb-8 border-b border-blue-100 pb-4 text-center text-2xl font-extrabold text-blue-900"
+                >
                     【ご評価ありがとうございます】
                 </h2>
-                <div class="mb-5 text-center">
+                <div
+                    class="mb-8 text-center text-lg font-semibold text-gray-800"
+                >
                     ご満足いただけなかった点があれば、<br />
                     ぜひお聞かせください
                 </div>
-                <div class="mb-5 text-center">
-                    <label class="mb-1 block font-medium"
+                <div class="mb-8 text-center">
+                    <label
+                        class="mb-3 block text-base font-medium text-gray-700"
                         >今後の改善に活かすため、<br />
                         率直なご意見をお待ちしております。</label
                     >
                     <textarea
                         v-model="form.survey_opinion"
-                        class="w-full rounded border px-3 py-2"
-                        rows="4"
+                        class="w-full rounded-lg border px-3 py-2 transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                        rows="5"
                     ></textarea>
-                    <button
-                        type="submit"
-                        class="w-full rounded bg-blue-600 py-2 text-white"
-                        :class="{ 'opacity-25': form.processing }"
-                        :disabled="form.processing"
-                    >
-                        ご意見を送信する
-                    </button>
                 </div>
+                <button
+                    type="submit"
+                    class="w-full rounded-lg bg-blue-600 py-3 text-lg font-bold text-white shadow transition hover:bg-blue-700 disabled:opacity-40"
+                    :class="{ 'opacity-25': form.processing }"
+                    :disabled="form.processing"
+                >
+                    ご意見を送信する
+                </button>
             </form>
         </div>
     </PublicLayout>
