@@ -90,12 +90,6 @@ const deleteEntry = (id: number, name: string) => {
                     >
                         {{ seminar?.name }}<br />
                     </h2>
-                    <p
-                        class="leading-relaxed text-gray-700"
-                        v-html="nl2br(seminar.description)"
-                    ></p>
-
-                    <br />
 
                     <SeminarDetails :seminar="seminar!" />
 
