@@ -166,7 +166,19 @@ const deleteEntry = (id: number, name: string) => {
                                     >
                                     <span v-if="customer.todofuken"
                                         ><br />{{ customer.todofuken }}</span
+                                    ><br />
+                                    <!-- アンケートフォーム -->
+                                    <a
+                                        :href="`/feedback/${seminar.unique_key}/${customer.customer.unique_key}`"
+                                        target="_blank"
+                                        class="inline-flex items-center gap-1 rounded-full border border-gray-300 bg-white px-2.5 py-0.5 text-xs font-medium text-gray-700 shadow-sm hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100"
+                                        title="アンケートフォーム"
                                     >
+                                        <i
+                                            class="fa-solid fa-file-lines text-[10px]"
+                                        ></i>
+                                        アンケートフォーム
+                                    </a>
                                 </td>
                                 <td class="border border-gray-200 px-4 py-3">
                                     <span v-if="customer.co_name"
