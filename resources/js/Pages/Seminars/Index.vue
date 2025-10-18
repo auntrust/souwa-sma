@@ -519,8 +519,7 @@ const copyToClipboard = async (
                     重要 — &lt;head&gt; に必ず追加してください
                 </h4>
                 <p class="mt-1 text-sm text-yellow-700">
-                    設置ボタンを正しく表示・動作させるため、以下の CSS
-                    とスクリプトをサイトの HTML の
+                    設置ボタンを正しく表示・動作させるため、CSSとスクリプトを
                     <code>&lt;head&gt;</code> セクション内に追加してください。
                 </p>
 
