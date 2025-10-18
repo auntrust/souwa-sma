@@ -72,7 +72,7 @@ const embedUrl = computed(() =>
 
 const headIncludeHtml = [
     "<link rel='stylesheet' href='" + embedOrigin + "/assets/css/sma.css' />",
-    "<script src='" + embedOrigin + "/assets/js/sma.js'><\/script>",
+    "<script src='" + embedOrigin + "/assets/js/sma.js'></" + 'script>',
 ].join('\n');
 
 // 小さめピル型ボタンの設置用タグ（インラインCSSで完結）
