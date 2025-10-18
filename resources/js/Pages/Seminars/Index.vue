@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import DangerButton from '@/Components/DangerButton.vue';
-import Modal from '@/Components/Modal.vue'; // ← モーダルを追加
+import Modal from '@/Components/Modal.vue';
 import TextInput from '@/Components/TextInput.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { isPaidLabel, seminarTypeLabel } from '@/utils/format';
 import { formatTime } from '@/utils/time';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import { computed, ref, watch } from 'vue'; // ← computed を追加
+import { computed, ref, watch } from 'vue';
 
 import { formatDate, formatDateTimeAt } from '@/utils/format';
 
@@ -221,14 +221,24 @@ const copyToClipboard = async (
                                     {{ seminar.id }}
                                 </td>
                                 <td class="border border-gray-200 px-4 py-3">
-                                    <a
-                                        :href="`/entry/${seminar.unique_key}`"
-                                        target="_blank"
-                                        class="font-medium text-blue-600 underline hover:text-blue-800"
-                                    >
-                                        {{ seminar.name }}
-                                    </a>
-                                    <div class="mt-1">
+                                    <span class="font-bold">{{
+                                        seminar.name
+                                    }}</span>
+
+                                    <div class="mt-1 flex gap-2">
+                                        <!-- 申し込みフォームボタン -->
+                                        <a
+                                            :href="`/entry/${seminar.unique_key}`"
+                                            target="_blank"
+                                            class="inline-flex items-center gap-1 rounded-full border border-gray-300 bg-white px-2.5 py-0.5 text-xs font-medium text-gray-700 shadow-sm hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100"
+                                            title="申し込みフォーム"
+                                        >
+                                            <i
+                                                class="fa-solid fa-file-lines text-[10px]"
+                                            ></i>
+                                            申し込みフォーム
+                                        </a>
+                                        <!-- 設置用タグボタン -->
                                         <button
                                             type="button"
                                             class="inline-flex items-center gap-1 rounded-full border border-gray-300 bg-white px-2.5 py-0.5 text-xs font-medium text-gray-700 shadow-sm hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100"
@@ -495,10 +505,9 @@ const copyToClipboard = async (
     <Modal :show="showTagModal" max-width="xl" @close="closeTagModal">
         <div class="p-6">
             <div class="mb-4">
-                <h3 class="text-lg font-semibold text-gray-900">設置用タグ</h3>
-                <p class="mt-1 text-sm text-gray-500">
-                    セミナー:
-                    <span class="font-medium">{{ selectedSeminar?.name }}</span>
+                <h3 class="text-lg font-semibold text-gray-500">設置用タグ</h3>
+                <p class="mt-1 text-sm text-gray-900">
+                    <span class="font-bold">{{ selectedSeminar?.name }}</span>
                     （Key: {{ selectedSeminar?.unique_key }}）
                 </p>
             </div>
@@ -589,7 +598,6 @@ const copyToClipboard = async (
             </div>
         </div>
     </Modal>
-    <!-- ==== 追加ここまで ==== -->
 </template>
 <style scoped>
 .fade-pop-enter-active,

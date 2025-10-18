@@ -65,7 +65,11 @@
 セミナーの詳細についても下記ページよりご確認いただけます。
 
 【お申し込みページ】
+@if (!empty($seminar->detail_url))
+{{ $seminar->detail_url . '?sma_c=' . $customer->unique_key }}
+@else
 {{ url('/entry/' . $seminar->unique_key . '/' . $customer->unique_key) }}
+@endif
 
 【お申し込み期限】
 @if ($seminar->seminar_type == 'onsite')
