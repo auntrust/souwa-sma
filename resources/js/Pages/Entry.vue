@@ -397,5 +397,11 @@ const submit = () => {
                 </button>
             </form>
         </div>
+
+        <div class="m-5 text-center">
+            <a :href="seminar.detail_url" target="_blank"
+                >セミナーサイトへ戻る</a
+            >
+        </div>
     </PublicLayout>
 </template>
