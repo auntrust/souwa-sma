@@ -14,6 +14,8 @@
 /* ホバー時の効果 */
 .SmaGotoSeminar:hover {
     background-color: #5767af;
+    color: #fff;
+    text-decoration: none;
 }
 
 /* 無効時のスタイル */
