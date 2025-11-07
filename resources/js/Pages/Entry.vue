@@ -363,14 +363,21 @@ const submit = () => {
                     </div>
                 </div>
 
-                <p
-                    class="mb-6 rounded border border-red-100 bg-red-50 px-4 py-3 text-xs leading-relaxed text-red-700"
+                <div
+                    class="mb-6 rounded border border-blue-200 bg-blue-50 px-4 py-4"
                 >
-                    ご登録いただいたメールアドレスに、<br />
-                    関連するセミナーのご案内をお送りする場合があります。<br /><br />
-                    お預かりした個人情報は、セミナーのご案内以外の目的には使用せず、<br />
-                    第三者に開示・提供することはありません。
-                </p>
+                    <div class="mb-3 font-semibold text-blue-800">
+                        【メール配信について】
+                    </div>
+                    <p class="text-xs leading-relaxed text-blue-700">
+                        エントリー後、ご登録のメールアドレスに以下の情報をお送りします<br />
+                        • セミナー関連情報（参加確認、リマインダー等）<br />
+                        • 今後のセミナー・イベント情報<br />
+                        • 節税に役立つ情報のご案内<br /><br />
+                        配信停止はメール本文のリンクからいつでも可能です。<br />
+                        個人情報は適切に管理し、第三者への開示・提供は行いません。
+                    </p>
+                </div>
 
                 <div class="mb-6 text-center" v-if="props.customer">
                     <label class="inline-flex items-center">
@@ -378,7 +385,7 @@ const submit = () => {
                             type="checkbox"
                             v-model="form.is_overwrite_customer_info"
                             class="form-checkbox accent-blue-600"
-                            :true-value="'1'"
+                            :true-value="1"
                             :false-value="''"
                         />
                         <span class="ml-2 text-gray-700"
@@ -393,7 +400,7 @@ const submit = () => {
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
-                    同意してエントリー
+                    上記に同意してエントリーする
                 </button>
             </form>
         </div>
